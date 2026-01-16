@@ -72,9 +72,11 @@ const Layout = ({ children }) => {
             <BackgroundEffects />
             {/* Top Bar for Mobile */}
             <div className={`md:hidden p-4 shadow-sm flex justify-between items-center sticky top-0 z-40 ${isDarkMode ? 'bg-gray-800/90 backdrop-blur-md' : 'bg-white/80 backdrop-blur-md'}`}>
-                <Link to="/" className="font-black text-3xl gradient-text flex items-center leading-none tracking-tight">
-                    <Search className="w-8 h-8 mr-2 stroke-[3]" />
-                    Lost&Found
+                <Link to="/" className="font-extrabold text-xl flex items-center leading-none tracking-tight">
+                    <Search className="w-6 h-6 mr-2 stroke-[2.5] text-indigo-600" />
+                    <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600">
+                        Lost&Found
+                    </span>
                 </Link>
                 <div className="flex items-center gap-4">
                     {isAuthenticated && (
