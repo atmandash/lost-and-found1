@@ -4,6 +4,7 @@ import axios from 'axios';
 import { Send, Phone, CheckCircle, AlertCircle, Shield, Lock, Unlock } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
+import API_URL from '../../config/api';
 
 const ChatRoom = () => {
     const { id } = useParams();

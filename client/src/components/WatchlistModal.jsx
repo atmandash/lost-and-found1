@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { X, Bell, Loader, ChevronDown } from 'lucide-react';
 import axios from 'axios';
 import { useTheme } from '../context/ThemeContext';
+import API_URL from '../config/api';
 
 const WatchlistModal = ({ isOpen, onClose, type, prefillItem }) => {
     const [keywords, setKeywords] = useState('');

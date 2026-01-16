@@ -4,6 +4,7 @@ import axios from 'axios';
 import { MapPin, Calendar, Tag, Shield, MessageCircle, Share2, CheckCircle, ThumbsUp, ThumbsDown, Award, Activity } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
+import API_URL from '../../config/api';
 import MapView from '../../components/MapView';
 import ClaimModal from '../../components/ClaimModal';
 

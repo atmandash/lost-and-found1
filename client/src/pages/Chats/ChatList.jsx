@@ -4,6 +4,7 @@ import axios from 'axios';
 import { MessageCircle } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
+import API_URL from '../../config/api';
 
 const ChatList = () => {
     const [chats, setChats] = useState([]);

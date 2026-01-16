@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Bell } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useTheme } from '../context/ThemeContext';
+import API_URL from '../config/api';
 import { useAuth } from '../context/AuthContext';
 
 const NotificationBell = () => {
@@ -40,7 +42,7 @@ const NotificationBell = () => {
     const fetchNotifications = async () => {
         try {
             const token = localStorage.getItem('token');
-            const res = await axios.get(`${API_URL}/api/notifications`, {
+            const res = await axios.get(`${API_URL} /api/notifications`, {
                 headers: { 'x-auth-token': token }
             });
             setNotifications(res.data.slice(0, 5)); // Show only 5 most recent
@@ -52,7 +54,7 @@ const NotificationBell = () => {
     const fetchUnreadCount = async () => {
         try {
             const token = localStorage.getItem('token');
-            const res = await axios.get(`${API_URL}/api/notifications/unread-count`, {
+            const res = await axios.get(`${API_URL} /api/notifications / unread - count`, {
                 headers: { 'x-auth-token': token }
             });
             setUnreadCount(res.data.count);
@@ -67,7 +69,7 @@ const NotificationBell = () => {
 
             // Mark as read
             if (!notification.read) {
-                await axios.put(`${API_URL}/api/notifications/${notification._id}/read`, {}, {
+                await axios.put(`${API_URL} /api/notifications / ${notification._id}/read`, {}, {
                     headers: { 'x-auth-token': token }
                 });
                 fetchUnreadCount();

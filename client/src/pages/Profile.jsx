@@ -4,6 +4,7 @@ import axios from 'axios';
 import { Award, CheckCircle, MapPin, Calendar, TrendingUp, Phone, Shield, Activity } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
+import API_URL from '../config/api';
 import ItemCard from '../components/ItemCard';
 import { useCountAnimation } from '../hooks/useCountAnimation';
 

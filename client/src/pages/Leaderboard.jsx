@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import API_URL from '../config/api';
 import { Trophy, Award, TrendingUp, Medal } from 'lucide-react';
 import axios from 'axios';
 

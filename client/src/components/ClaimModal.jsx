@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { X, Award } from 'lucide-react';
+import { useTheme } from '../context/ThemeContext';
+import API_URL from '../config/api';
 import axios from 'axios';
 
 const ClaimModal = ({ item, onClose, onSuccess }) => {

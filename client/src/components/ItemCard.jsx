@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { MapPin, Calendar, MessageCircle } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import API_URL from '../config/api';
 import { useTheme } from '../context/ThemeContext';
 import axios from 'axios';
 import MapView from './MapView';
