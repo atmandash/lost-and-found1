@@ -11,22 +11,31 @@ const BackgroundEffects = () => {
     // Debug log
     console.log('Current Path:', location.pathname, 'Show Blobs:', showBlobs);
 
-    // Mouse Parallax Logic
+    // Mouse Parallax Logic (Throttled for performance)
     const [mousePosition, setMousePosition] = React.useState({ x: 0, y: 0 });
 
     React.useEffect(() => {
+        let throttleTimer;
         const handleMouseMove = (e) => {
-            // Calculate position relative to center of screen (values -1 to 1)
-            const x = (e.clientX - window.innerWidth / 2) / (window.innerWidth / 2);
-            const y = (e.clientY - window.innerHeight / 2) / (window.innerHeight / 2);
-            setMousePosition({ x, y });
+            if (throttleTimer) return; // Skip if throttle is active
+
+            throttleTimer = setTimeout(() => {
+                // Calculate position relative to center of screen (values -1 to 1)
+                const x = (e.clientX - window.innerWidth / 2) / (window.innerWidth / 2);
+                const y = (e.clientY - window.innerHeight / 2) / (window.innerHeight / 2);
+                setMousePosition({ x, y });
+                throttleTimer = null;
+            }, 50); // Update at most every 50ms (20fps, smooth enough for parallax)
         };
 
         if (showBlobs) {
             window.addEventListener('mousemove', handleMouseMove);
         }
 
-        return () => window.removeEventListener('mousemove', handleMouseMove);
+        return () => {
+            window.removeEventListener('mousemove', handleMouseMove);
+            if (throttleTimer) clearTimeout(throttleTimer);
+        };
     }, [showBlobs]);
 
     return (
