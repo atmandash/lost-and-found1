@@ -13,18 +13,14 @@ const BackgroundEffects = () => {
 
     return (
         <div key={location.pathname} className="fixed inset-0 -z-10 overflow-hidden pointer-events-none h-full w-full">
-            {/* Background Gradient - Soft & Premium */}
-            <div className="absolute inset-0 bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900"></div>
+            {/* Background Gradient - Base Layer */}
+            <div className="absolute inset-0 bg-slate-50 dark:bg-gray-900"></div>
 
-            {/* Dot Grid Pattern - The "Beautify" Upgrade */}
-            <div className="absolute inset-0 z-0 opacity-[0.4]"
-                style={{
-                    backgroundImage: `radial-gradient(#6366f1 1px, transparent 1px)`,
-                    backgroundSize: '32px 32px',
-                    maskImage: 'linear-gradient(to bottom, black 60%, transparent 100%)',
-                    WebkitMaskImage: 'linear-gradient(to bottom, black 60%, transparent 100%)'
-                }}
-            ></div>
+            {/* Aurora Mesh Gradient - The "Something Else" */}
+            <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-purple-400/30 blur-[100px] animate-blob mix-blend-multiply filter"></div>
+            <div className="absolute top-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-indigo-400/30 blur-[100px] animate-blob animation-delay-2000 mix-blend-multiply filter"></div>
+            <div className="absolute bottom-[-20%] left-[20%] w-[60%] h-[60%] rounded-full bg-pink-400/30 blur-[100px] animate-blob animation-delay-4000 mix-blend-multiply filter"></div>
+            <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-blue-400/30 blur-[100px] animate-blob animation-delay-2000 mix-blend-multiply filter"></div>
 
             {/* Floating Icons - Visible Opacity */}
             <div className="absolute top-20 left-[10%] animate-float" style={{ animationDelay: '0s' }}>
