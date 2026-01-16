@@ -91,7 +91,7 @@ const LandingPage = () => {
             </div>
 
             {/* FEATURES GRID */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 px-4 max-w-6xl mt-24 w-full animate-stagger">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 px-4 max-w-6xl mx-auto mt-24 w-full animate-stagger">
                 {features.map((feat, idx) => (
                     <div key={idx} className={`p-6 rounded-2xl border transition-all hover:-translate-y-1 hover:shadow-lg hover-scale ${isDarkMode ? 'bg-gray-800 border-gray-700 hover:bg-gray-750' : 'bg-white/60 border-indigo-50 backdrop-blur-sm hover:bg-white'}`}>
                         <div className="mb-4 bg-gray-50 dark:bg-gray-700 w-12 h-12 rounded-xl flex items-center justify-center">
