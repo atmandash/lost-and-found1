@@ -77,6 +77,14 @@ const Layout = ({ children }) => {
                         <div className="flex-shrink-0 flex items-center">
                             <NotificationBell />
                         </div>
+                    )}\n                    {!isAuthenticated && (
+                        <Link
+                            to="/login"
+                            className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-full text-sm font-semibold shadow-md hover:shadow-lg transition-all"
+                        >
+                            <LogIn className="w-4 h-4" />
+                            Login
+                        </Link>
                     )}
                 </div>
             </div>

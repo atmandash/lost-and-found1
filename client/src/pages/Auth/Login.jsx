@@ -58,8 +58,8 @@ const Login = () => {
 
                     <div className="space-y-2">
                         <label className={`text-sm font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>Password</label>
-                        <div className="relative">
-                            <Lock className={`absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 ${isDarkMode ? 'text-gray-500' : 'text-gray-400'}`} />
+                        <div className="relative flex items-center">
+                            <Lock className={`absolute left-3 w-5 h-5 pointer-events-none ${isDarkMode ? 'text-gray-500' : 'text-gray-400'}`} />
                             <input
                                 type={showPassword ? "text" : "password"}
                                 name="password"
@@ -72,7 +72,7 @@ const Login = () => {
                             <button
                                 type="button"
                                 onClick={() => setShowPassword(!showPassword)}
-                                className={`absolute right-3 top-1/2 -translate-y-1/2 focus:outline-none ${isDarkMode ? 'text-gray-400 hover:text-gray-300' : 'text-gray-400 hover:text-gray-600'}`}
+                                className={`absolute right-3 focus:outline-none ${isDarkMode ? 'text-gray-400 hover:text-gray-300' : 'text-gray-400 hover:text-gray-600'}`}
                             >
                                 {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                             </button>
