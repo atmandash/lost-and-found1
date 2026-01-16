@@ -6,15 +6,13 @@
     </linearGradient>
   </defs>
   
-  <!-- Main Glass Ring (Thicker for visibility) -->
-  <path d="M11 3a8 8 0 1 0 0 16 8 8 0 0 0 0-16z" stroke="url(#grad1)" stroke-width="3.5" />
+  <!-- Location Pin Shape -->
+  <!-- Using a thick stroke for visibility and the gradient -->
+  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" stroke="url(#grad1)" stroke-width="3" />
   
-  <!-- Handle (Connected smoothly) -->
-  <path d="m21 21-4.3-4.3" stroke="url(#grad1)" stroke-width="3.5" />
+  <!-- Inner Circle (The 'Found' spot) -->
+  <circle cx="12" cy="10" r="3.5" stroke="url(#grad1)" stroke-width="3" fill="none" />
   
-  <!-- Reflection Glint (The 'Beautiful' touch) -->
-  <path d="M15 7a6 6 0 0 0-6 6" stroke="white" stroke-width="2" stroke-opacity="0.2" />
-  <path d="M14 7c0 .5-.5 1-1 1" stroke="url(#grad1)" stroke-width="0" fill="url(#grad1)" opacity="0" /> 
-  <!-- Decorative Sparkle/Glint using gradient opacity -->
-  <path d="M11 5.5a5.5 5.5 0 0 1 5.5 5.5" stroke="url(#grad1)" stroke-width="1.5" stroke-opacity="0.6" stroke-linecap="round" />
+  <!-- Shine/Glint for the 'Beautiful' glassy look -->
+  <path d="M12 2a8 8 0 0 1 7.4 5" stroke="white" stroke-width="1.5" stroke-opacity="0.3" fill="none" />
 </svg>
