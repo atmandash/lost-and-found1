@@ -1,7 +1,12 @@
 @import "tailwindcss";
 @import "./animations.css";
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
 
 @layer base {
+
+  html {
+    font-family: 'Outfit', sans-serif;
+  }
 
   /* Smooth dark mode transitions */
   * {
