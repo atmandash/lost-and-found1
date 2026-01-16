@@ -151,7 +151,7 @@ const ChatRoom = () => {
             return;
         }
 
-        if (!window.confirm('🎉 Mark as resolved?\n\nThis will:\n• Remove the item from listings\n• Award +50 points to both of you\n• Send email confirmation\n\nThis action cannot be undone.')) {
+        if (!window.confirm('🎉 Mark as resolved?\n\nThis will:\n• Remove the item from active listings\n• Award +50 points to the finder\n• Mark the chat as resolved\n\nThis action cannot be undone.')) {
             return;
         }
 
@@ -197,18 +197,16 @@ const ChatRoom = () => {
                             <Phone className="w-4 h-4" />
                             {phoneStatus.myPhoneShared ? 'Shared ✓' : 'Share Contact'}
                         </button>
-                        <button
-                            onClick={handleResolve}
-                            disabled={!canResolve}
-                            className={`px-4 py-2 text-sm rounded-lg transition-colors flex items-center gap-2 ${canResolve
-                                ? 'bg-indigo-600 text-white hover:bg-indigo-700'
-                                : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                                }`}
-                            title={canResolve ? 'Mark as resolved' : 'Both parties must share contact first'}
-                        >
-                            {canResolve ? <Unlock className="w-4 h-4" /> : <Lock className="w-4 h-4" />}
-                            Resolve
-                        </button>
+                        {canResolve && (
+                            <button
+                                onClick={handleResolve}
+                                className="px-4 py-2 text-sm rounded-lg transition-colors flex items-center gap-2 bg-indigo-600 text-white hover:bg-indigo-700"
+                                title="Mark as resolved"
+                            >
+                                <Unlock className="w-4 h-4" />
+                                Resolve
+                            </button>
+                        )}
                     </div>
                 </div>
 
@@ -285,12 +283,12 @@ const ChatRoom = () => {
                                 >
                                     <p className="break-words leading-relaxed">{msg.content}</p>
                                     <div className={`text-[10px] mt-1 text-right ${isPhoneShare
-                                            ? 'text-green-700'
-                                            : isMe
-                                                ? 'text-indigo-200'
-                                                : isDarkMode
-                                                    ? 'text-gray-400'
-                                                    : 'text-gray-400'
+                                        ? 'text-green-700'
+                                        : isMe
+                                            ? 'text-indigo-200'
+                                            : isDarkMode
+                                                ? 'text-gray-400'
+                                                : 'text-gray-400'
                                         }`}>
                                         {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                     </div>

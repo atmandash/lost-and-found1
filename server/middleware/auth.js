@@ -15,6 +15,12 @@ module.exports = function (req, res, next) {
 
     // Verify token
     try {
+        // CRITICAL: Check if JWT_SECRET exists before attempting verification
+        if (!process.env.JWT_SECRET) {
+            console.error('CRITICAL: JWT_SECRET environment variable is not set!');
+            return res.status(500).json({ message: 'Server configuration error: JWT_SECRET missing' });
+        }
+
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         req.user = decoded.user;
 
@@ -75,6 +81,7 @@ module.exports = function (req, res, next) {
 
         next();
     } catch (err) {
-        res.status(401).json({ message: 'Token is not valid' });
+        console.error('JWT Verification Error:', err.message);
+        res.status(401).json({ message: 'Token is not valid', error: err.message });
     }
 };

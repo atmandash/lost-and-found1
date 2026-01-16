@@ -35,10 +35,10 @@ class ErrorBoundary extends React.Component {
                         Reload Page
                     </button>
 
-                    {process.env.NODE_ENV !== 'production' && this.state.error && (
+                    {this.state.error && (
                         <div className="mt-8 text-left bg-gray-900 text-red-300 p-4 rounded-lg overflow-auto max-w-full text-xs font-mono">
                             <p className="font-bold mb-2">{this.state.error.toString()}</p>
-                            <pre>{this.state.errorInfo.componentStack}</pre>
+                            <pre>{this.state.errorInfo?.componentStack}</pre>
                         </div>
                     )}
                 </div>

@@ -107,18 +107,35 @@ const ItemsPage = ({ type }) => {
         checkActiveReport();
     }, [isAuthenticated, user, type]); // Re-check if type/user changes
 
-    const filteredItems = items.filter(item => {
+    const filteredItems = (Array.isArray(items) ? items : []).filter(item => {
+        // ULTRA-STRICT SAFE VALIDATION
         if (!item) return false;
 
-        // Status Filter
-        const isResolved = ['resolved', 'claimed', 'reunited', 'closed'].includes(item.status);
-        if (view === 'active' && isResolved) return false;
-        if (view === 'resolved' && !isResolved) return false;
+        // Ensure essential properties exist to prevent crashes in ItemCard
+        // We accept if properties are missing but return a safe fallback in the UI
+        // But for filtering logic, we must be safe:
 
-        // Search Filter
-        const titleMatch = item.title?.toLowerCase().includes(filter.toLowerCase()) || false;
-        const locationMatch = item.location?.main?.toLowerCase().includes(filter.toLowerCase()) || false;
-        return titleMatch || locationMatch;
+        try {
+            // Status Filter - Safely check status
+            const status = item.status || 'active'; // Default to active if missing
+            const isResolved = ['resolved', 'claimed', 'reunited', 'closed'].includes(status);
+
+            if (view === 'active' && isResolved) return false;
+            if (view === 'resolved' && !isResolved) return false;
+
+            // Search Filter - Safely check title and location
+            const filterText = filter.toLowerCase();
+            const title = (item.title || '').toLowerCase();
+            const locationMain = (item.location?.main || '').toLowerCase();
+
+            const titleMatch = title.includes(filterText);
+            const locationMatch = locationMain.includes(filterText);
+
+            return titleMatch || locationMatch;
+        } catch (err) {
+            console.error("Error filtering item:", item, err);
+            return false; // Skip crashing items
+        }
     });
 
     return (
@@ -197,7 +214,7 @@ const ItemsPage = ({ type }) => {
                     <button
                         onClick={() => setView('resolved')}
                         className={`px-6 py-2 rounded-lg text-sm font-semibold transition-all ${view === 'resolved'
-                            ? 'bg-green-600 text-white shadow-md'
+                            ? `${type === 'lost' ? 'bg-red-600' : 'bg-green-600'} text-white shadow-md`
                             : `${isDarkMode ? 'text-gray-400 hover:text-gray-200' : 'text-gray-500 hover:text-gray-700'}`
                             }`}
                     >

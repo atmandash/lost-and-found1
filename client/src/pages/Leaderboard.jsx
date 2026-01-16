@@ -109,7 +109,7 @@ const Leaderboard = () => {
 
                             {/* Badges */}
                             {user.badges && user.badges.length > 0 && (
-                                <div className="flex-shrink-0 flex gap-1">
+                                <div className="hidden sm:flex flex-shrink-0 gap-1">
                                     {user.badges.slice(0, 3).map((badge, idx) => (
                                         <div
                                             key={idx}

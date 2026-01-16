@@ -9,10 +9,10 @@ const globalLimiter = rateLimit({
     legacyHeaders: false,
 });
 
-// Strict rate limiter for auth endpoints - 5 requests per 15 minutes
+// Strict rate limiter for auth endpoints - 30 requests per 15 minutes (increased for reliability)
 const authLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
-    max: process.env.NODE_ENV === 'production' ? 5 : 100,
+    max: process.env.NODE_ENV === 'production' ? 30 : 100, // Increased from 5 to 30
     message: 'Too many authentication attempts, please try again after 15 minutes.',
     standardHeaders: true,
     legacyHeaders: false,
