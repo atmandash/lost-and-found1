@@ -187,15 +187,15 @@ exports.login = async (req, res) => {
             // Increment failed attempts
             user.loginAttempts = (user.loginAttempts || 0) + 1;
 
-            // Lock account after 5 failed attempts for 12 hours
+            // Lock account after 5 failed attempts for 15 minutes
             if (user.loginAttempts >= 5) {
-                user.lockoutUntil = new Date(Date.now() + 12 * 60 * 60 * 1000); // 12 hours
+                user.lockoutUntil = new Date(Date.now() + 15 * 60 * 1000); // 15 minutes
                 await user.save();
 
                 console.log(`🔒 Account locked for ${email} after ${user.loginAttempts} failed attempts`);
 
                 return res.status(429).json({
-                    message: 'Account locked due to multiple failed login attempts. Please try again after 12 hours or reset your password.',
+                    message: 'Account locked due to multiple failed login attempts. Please try again after 15 minutes or reset your password.',
                     lockoutUntil: user.lockoutUntil
                 });
             }

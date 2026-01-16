@@ -13,6 +13,24 @@ export const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         loadUser();
+
+        // Global Axios Interceptor for 401 Unauthorized
+        // This failsafe ensures that if the ID token expires or is invalid,
+        // the user is immediately logged out to prevent bad states.
+        const interceptor = axios.interceptors.response.use(
+            (response) => response,
+            (error) => {
+                if (error.response && error.response.status === 401) {
+                    console.warn('Session expired or invalid token. Logging out...');
+                    logout();
+                }
+                return Promise.reject(error);
+            }
+        );
+
+        return () => {
+            axios.interceptors.response.eject(interceptor);
+        };
     }, []);
 
     const loadUser = async () => {
@@ -32,20 +50,20 @@ export const AuthProvider = ({ children }) => {
             setIsAuthenticated(true);
         } catch (err) {
             console.error('Auth Error:', err);
-            // Only remove token if it's strictly an auth error (401) or User Not Found (404)
-            if (err.response && (err.response.status === 401 || err.response.status === 404)) {
-                localStorage.removeItem('token');
-                setIsAuthenticated(false);
-                setUser(null);
-            }
-            // For other errors (like 500 or network), we keep the token
-            // This prevents logging out users when server restarts
+            localStorage.removeItem('token');
+            setIsAuthenticated(false);
+            setUser(null);
         } finally {
             setLoading(false);
         }
     };
 
     const login = async (email, password) => {
+        // Clear any old tokens/state before attempting new login
+        localStorage.removeItem('token');
+        setUser(null);
+        setIsAuthenticated(false);
+
         const res = await axios.post(`${API_URL}/api/auth/login`, { email, password });
         localStorage.setItem('token', res.data.token);
         setUser(res.data.user);
