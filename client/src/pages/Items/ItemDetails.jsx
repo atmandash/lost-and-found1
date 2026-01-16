@@ -91,7 +91,8 @@ const ItemDetails = () => {
     if (!item) return <div className="text-center py-20">Item not found</div>;
 
     const itemUserId = item.user?._id || item.user;
-    const isMyItem = user && itemUserId && String(itemUserId) === String(user.id);
+    const currentUserId = user?._id || user?.id;
+    const isMyItem = user && itemUserId && currentUserId && String(itemUserId) === String(currentUserId);
 
     return (
         <div className="max-w-4xl mx-auto space-y-6">
