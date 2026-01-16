@@ -65,17 +65,62 @@ const ItemsPage = ({ type }) => {
         }
     };
 
-    // Update useEffect to use the new fetchItems
+    // Update useEffect to use the new fetchItems and Socket.IO
     useEffect(() => {
         let isMounted = true;
         fetchItems(true);
+
+        // Real-time updates with Socket.IO
+        import('socket.io-client').then(({ io }) => {
+            const socket = io(API_URL, {
+                transports: ['websocket'],
+                reconnection: true,
+            });
+
+            socket.on('connect', () => {
+                console.log('ItemsPage connected to socket');
+            });
+
+            // Handle New Item
+            socket.on('item_added', (newItem) => {
+                // Check if new item matches current filters (rudimentary check on type/status)
+                if (newItem.type === type && newItem.status === 'active') {
+                    setItems(prevItems => {
+                        // Avoid duplicates
+                        if (prevItems.some(i => i._id === newItem._id)) return prevItems;
+                        // Add to top and sort by date descending
+                        const updated = [newItem, ...prevItems].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+                        setLastUpdated(new Date());
+                        return updated;
+                    });
+                }
+            });
+
+            // Handle Updated Item (Resolved/Edited)
+            socket.on('item_updated', (updatedItem) => {
+                setItems(prevItems => {
+                    return prevItems.map(item =>
+                        item._id === updatedItem._id ? { ...item, ...updatedItem } : item
+                    ).filter(item => {
+                        // If view is active, remove resolved items
+                        if (view === 'active' && item.status !== 'active') return false;
+                        return true;
+                    });
+                });
+                setLastUpdated(new Date());
+            });
+
+            return () => {
+                socket.disconnect();
+            };
+        });
 
         const interval = setInterval(() => {
             if (document.visibilityState === 'visible') fetchItems(false);
         }, 60000);
 
         return () => clearInterval(interval);
-    }, [type]);
+    }, [type, view]); // Re-run if type or view changes
 
     const [view, setView] = useState('active');
     const [activeReportItem, setActiveReportItem] = useState(null);

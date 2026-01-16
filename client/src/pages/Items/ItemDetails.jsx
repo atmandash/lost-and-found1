@@ -181,41 +181,6 @@ const ItemDetails = () => {
 
                                             {claim.status === 'pending' && (
                                                 <div className="flex flex-col gap-2">
-                                                    <div className="flex gap-2">
-                                                        <button
-                                                            onClick={async () => {
-                                                                try {
-                                                                    const token = localStorage.getItem('token');
-                                                                    await axios.put(`${API_URL}/api/items/${item._id}/claim/${claim._id}/approve`, {}, {
-                                                                        headers: { 'x-auth-token': token }
-                                                                    });
-                                                                    alert('Claim Approved!');
-                                                                    fetchItem();
-                                                                } catch (err) {
-                                                                    alert('Error approving claim');
-                                                                }
-                                                            }}
-                                                            className="px-3 py-1 bg-green-500 text-white text-sm rounded hover:bg-green-600"
-                                                        >
-                                                            Approve
-                                                        </button>
-                                                        <button
-                                                            onClick={async () => {
-                                                                try {
-                                                                    const token = localStorage.getItem('token');
-                                                                    await axios.put(`${API_URL}/api/items/${item._id}/claim/${claim._id}/reject`, {}, {
-                                                                        headers: { 'x-auth-token': token }
-                                                                    });
-                                                                    fetchItem();
-                                                                } catch (err) {
-                                                                    alert('Error rejecting claim');
-                                                                }
-                                                            }}
-                                                            className="px-3 py-1 bg-red-500 text-white text-sm rounded hover:bg-red-600"
-                                                        >
-                                                            Reject
-                                                        </button>
-                                                    </div>
                                                     <button
                                                         onClick={async () => {
                                                             try {
@@ -232,9 +197,9 @@ const ItemDetails = () => {
                                                                 console.error('Error creating chat:', err);
                                                             }
                                                         }}
-                                                        className="px-3 py-1 bg-indigo-500 text-white text-sm rounded hover:bg-indigo-600 flex items-center justify-center"
+                                                        className="px-4 py-2 bg-gradient-to-r from-indigo-500 to-purple-600 text-white text-sm font-bold rounded-lg hover:from-indigo-600 hover:to-purple-700 flex items-center justify-center shadow-md transition-all active:scale-95"
                                                     >
-                                                        <MessageCircle className="w-3 h-3 mr-1" /> Chat
+                                                        <MessageCircle className="w-4 h-4 mr-1.5" /> Start Chat
                                                     </button>
                                                 </div>
                                             )}

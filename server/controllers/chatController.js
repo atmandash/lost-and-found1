@@ -363,37 +363,6 @@ exports.sharePhone = async (req, res) => {
         // Use consistent string keys
         chat.phoneShared.set(userId.toString(), true);
 
-        // Award points for sharing phone number
-        const gamificationController = require('./gamificationController');
-        await gamificationController.awardPoints(userId, 10, 'shared phone number');
-
-        // Create notification for other user
-        try {
-            // Robust way to find other participant
-            const otherParticipantId = chat.participants.find(p => {
-                const pId = p._id ? p._id.toString() : p.toString();
-                return pId !== userId;
-            });
-
-            // Handle both object (populated) and string ID cases
-            const otherUserId = otherParticipantId?._id || otherParticipantId;
-
-            const Notification = require('../models/Notification');
-            const item = await Item.findById(chat.itemId);
-
-            if (otherUserId) {
-                await Notification.create({
-                    user: otherUserId,
-                    type: 'message',
-                    message: `${user.name} shared their phone number in chat about "${item?.title || 'item'}"`,
-                    relatedItem: chat.itemId,
-                    link: `/chats/${chat._id}`
-                });
-            }
-        } catch (notifErr) {
-            console.error('Notification error:', notifErr);
-        }
-
         // Update sender's lastReadBy
         if (!chat.lastReadBy) {
             chat.lastReadBy = new Map();
@@ -401,6 +370,44 @@ exports.sharePhone = async (req, res) => {
         chat.lastReadBy.set(userId.toString(), new Date());
 
         await chat.save();
+
+        // 1. Real-time Socket Emission (Instant UI Update)
+        const io = req.app.get('io');
+        if (io) {
+            io.to(req.params.id).emit('receive_message', phoneMessage);
+        }
+
+        // 2. Background Tasks (Fire and forget)
+        const runBackgroundTasks = async () => {
+            try {
+                // Award points
+                const gamificationController = require('./gamificationController');
+                await gamificationController.awardPoints(userId, 10, 'shared phone number');
+
+                // Notifications
+                const otherParticipantId = chat.participants.find(p => {
+                    const pId = p._id ? p._id.toString() : p.toString();
+                    return pId !== userId;
+                });
+                const otherUserId = otherParticipantId?._id || otherParticipantId;
+                const item = await Item.findById(chat.itemId);
+                const Notification = require('../models/Notification');
+
+                if (otherUserId) {
+                    await Notification.create({
+                        user: otherUserId,
+                        type: 'message',
+                        message: `${user.name} shared their phone number in chat about "${item?.title || 'item'}"`,
+                        relatedItem: chat.itemId,
+                        link: `/chats/${chat._id}`
+                    });
+                }
+            } catch (bgErr) {
+                console.error('Background task error in sharePhone:', bgErr);
+            }
+        };
+
+        runBackgroundTasks(); // Don't await this
 
         res.json({ message: 'Phone number shared', chat });
     } catch (err) {
