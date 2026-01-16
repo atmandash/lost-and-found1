@@ -44,7 +44,7 @@ const ItemDetails = () => {
             const token = localStorage.getItem('token');
             console.log('Initiating chat for item:', item._id);
 
-            const res = await axios.post(`${API_URL}/api/chats/initiate',
+            const res = await axios.post(`${API_URL}/api/chats/initiate`,
                 { itemId: item._id },
                 { headers: { 'x-auth-token': token } }
             );
@@ -218,7 +218,7 @@ const ItemDetails = () => {
                                                         onClick={async () => {
                                                             try {
                                                                 const token = localStorage.getItem('token');
-                                                                const res = await axios.post(`${API_URL}/api/chats/initiate',
+                                                                const res = await axios.post(`${API_URL}/api/chats/initiate`,
                                                                     {
                                                                         itemId: item._id,
                                                                         recipientId: claim.claimant._id

@@ -28,7 +28,7 @@ const Leaderboard = () => {
 
     const fetchLeaderboard = async () => {
         try {
-            const res = await axios.get(`${API_URL}/api/gamification/leaderboard?limit=20');
+            const res = await axios.get(`${API_URL}/api/gamification/leaderboard?limit=20`);
             setLeaderboard(res.data);
         } catch (err) {
             console.error('Error fetching leaderboard:', err);

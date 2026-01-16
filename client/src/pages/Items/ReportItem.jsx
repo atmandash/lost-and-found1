@@ -106,7 +106,7 @@ const ReportItem = ({ type }) => {
                 coordinates: [12.8406, 80.1534]
             };
 
-            await axios.post(`${API_URL}/api/items', {
+            await axios.post(`${API_URL}/api/items`, {
                 ...formData,
                 type,
                 location: {

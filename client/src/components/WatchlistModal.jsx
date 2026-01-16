@@ -46,7 +46,7 @@ const WatchlistModal = ({ isOpen, onClose, type, prefillItem }) => {
             // Split keywords by comma or space
             const keywordList = keywords.split(/[\s,]+/).filter(k => k.trim());
 
-            await axios.post(`${API_URL}/api/watchlist', {
+            await axios.post(`${API_URL}/api/watchlist`, {
                 keywords: keywordList,
                 category
             }, {

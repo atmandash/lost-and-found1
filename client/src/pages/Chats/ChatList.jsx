@@ -22,7 +22,7 @@ const ChatList = () => {
         try {
             const token = localStorage.getItem('token');
             console.log('Fetching chats...');
-            const res = await axios.get(`${API_URL}/api/chats', {
+            const res = await axios.get(`${API_URL}/api/chats`, {
                 headers: { 'x-auth-token': token }
             });
             console.log('Chats received:', res.data);

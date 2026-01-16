@@ -21,7 +21,7 @@ const ForgotPassword = () => {
         setMessage('');
         setLoading(true);
         try {
-            await axios.post(`${API_URL}/api/auth/forgot-password', { email });
+            await axios.post(`${API_URL}/api/auth/forgot-password`, { email });
             setMessage('OTP sent to your email.');
             setStep(2);
         } catch (err) {
@@ -37,7 +37,7 @@ const ForgotPassword = () => {
         setMessage('');
         setLoading(true);
         try {
-            await axios.post(`${API_URL}/api/auth/reset-password', { email, otp, newPassword });
+            await axios.post(`${API_URL}/api/auth/reset-password`, { email, otp, newPassword });
             setMessage('Password reset successful! Redirecting...');
             setTimeout(() => navigate('/login'), 2000);
         } catch (err) {

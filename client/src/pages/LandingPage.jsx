@@ -23,7 +23,7 @@ const LandingPage = () => {
     // Fetch global stats
     const fetchStats = async () => {
         try {
-            const res = await axios.get(`${API_URL}/api/stats/global');
+            const res = await axios.get(`${API_URL}/api/stats/global`);
             setStats(res.data);
             setLoading(false);
         } catch (err) {
