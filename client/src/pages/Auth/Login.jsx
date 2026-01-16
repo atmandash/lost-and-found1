@@ -49,7 +49,7 @@ const Login = () => {
                                 name="email"
                                 required
                                 className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all ${isDarkMode ? 'bg-gray-700 border-gray-600 text-gray-100 placeholder-gray-400' : 'border-gray-300 text-gray-900'}`}
-                                placeholder="you@college.edu"
+                                placeholder="example@vitstudent.ac.in"
                                 value={formData.email}
                                 onChange={handleChange}
                             />
@@ -59,7 +59,7 @@ const Login = () => {
                     <div className="space-y-2">
                         <label className={`text-sm font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>Password</label>
                         <div className="relative">
-                            <Lock className={`absolute left-3 top-3.5 w-5 h-5 ${isDarkMode ? 'text-gray-500' : 'text-gray-400'}`} />
+                            <Lock className={`absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 ${isDarkMode ? 'text-gray-500' : 'text-gray-400'}`} />
                             <input
                                 type={showPassword ? "text" : "password"}
                                 name="password"
@@ -72,7 +72,7 @@ const Login = () => {
                             <button
                                 type="button"
                                 onClick={() => setShowPassword(!showPassword)}
-                                className={`absolute right-3 top-3.5 focus:outline-none ${isDarkMode ? 'text-gray-400 hover:text-gray-300' : 'text-gray-400 hover:text-gray-600'}`}
+                                className={`absolute right-3 top-1/2 -translate-y-1/2 focus:outline-none ${isDarkMode ? 'text-gray-400 hover:text-gray-300' : 'text-gray-400 hover:text-gray-600'}`}
                             >
                                 {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                             </button>

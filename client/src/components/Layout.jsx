@@ -15,8 +15,8 @@ const Navbar = () => {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between md:justify-start h-16 items-center">
                     {/* Logo */}
-                    <Link to="/" className="hidden md:flex items-center text-xl font-bold text-indigo-600 mr-10">
-                        <Search className="w-6 h-6 mr-2" />
+                    <Link to="/" className="hidden md:flex items-center text-3xl font-extrabold text-indigo-600 mr-10 tracking-tight">
+                        <Search className="w-8 h-8 mr-2 stroke-[2.5]" />
                         Lost&Found
                     </Link>
 
@@ -71,7 +71,10 @@ const Layout = ({ children }) => {
             <BackgroundEffects />
             {/* Top Bar for Mobile */}
             <div className={`md:hidden p-4 shadow-sm flex justify-between items-center sticky top-0 z-40 ${isDarkMode ? 'bg-gray-800/90 backdrop-blur-md' : 'bg-white/80 backdrop-blur-md'}`}>
-                <Link to="/" className="font-bold text-lg gradient-text flex items-center leading-none">Lost&Found</Link>
+                <Link to="/" className="font-extrabold text-2xl gradient-text flex items-center leading-none tracking-tight">
+                    <Search className="w-6 h-6 mr-2 stroke-[2.5]" />
+                    Lost&Found
+                </Link>
                 <div className="flex items-center gap-4">
                     {isAuthenticated && (
                         <div className="flex-shrink-0 flex items-center">
@@ -92,7 +95,7 @@ const Layout = ({ children }) => {
 
             <Navbar />
 
-            <main className={`flex-grow container mx-auto px-4 py-8 pb-24 md:pb-8 flex flex-col ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+            <main className={`flex-grow container mx-auto px-4 py-8 ${location.pathname === '/' ? 'pb-0' : 'pb-24 md:pb-8'} flex flex-col ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
                 {children}
             </main>
 

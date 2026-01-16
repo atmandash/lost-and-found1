@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { Search, Filter, Bell } from 'lucide-react';
+import { Search, Filter, Bell, RefreshCw } from 'lucide-react';
 import { io } from 'socket.io-client';
 import ItemCard from '../../components/ItemCard';
 import WatchlistModal from '../../components/WatchlistModal';
+import ErrorBoundary from '../../components/ErrorBoundary';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import API_URL from '../../config/api';
@@ -12,6 +13,7 @@ import API_URL from '../../config/api';
 const ItemsPage = ({ type }) => {
     const [items, setItems] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
     const [filter, setFilter] = useState('');
     const [lastUpdated, setLastUpdated] = useState(null);
     const [isWatchlistOpen, setIsWatchlistOpen] = useState(false);
@@ -36,7 +38,6 @@ const ItemsPage = ({ type }) => {
         const diff = y - startY;
         if (window.scrollY === 0 && diff > 0) {
             setPullY(diff > 80 ? 80 : diff);
-            // e.preventDefault(); // Can't prevent default in passive listener, so rely on overflow logic
         } else {
             setPullY(0);
         }
@@ -56,11 +57,20 @@ const ItemsPage = ({ type }) => {
     const fetchItems = async (showLoading = true) => {
         try {
             if (showLoading) setLoading(true);
+            setError(null);
             const res = await axios.get(`${API_URL}/api/items?type=${type}`);
-            setItems(res.data);
+
+            // Check if response data is valid array
+            if (Array.isArray(res.data)) {
+                setItems(res.data);
+            } else {
+                console.error("API returned non-array data:", res.data);
+                setItems([]); // Fallback
+            }
             setLastUpdated(new Date());
         } catch (err) {
             console.error('Error fetching items:', err);
+            setError('Failed to load items. Please try again.');
         } finally {
             if (showLoading) setLoading(false);
         }
@@ -77,15 +87,20 @@ const ItemsPage = ({ type }) => {
         socket = io(API_URL, {
             transports: ['websocket'],
             reconnection: true,
+            reconnectionAttempts: 5
         });
 
         socket.on('connect', () => {
             console.log('ItemsPage connected to socket');
         });
 
+        socket.on('connect_error', (err) => {
+            console.warn('Socket connection error:', err);
+        });
+
         // Handle New Item
         socket.on('item_added', (newItem) => {
-            if (!isMounted) return;
+            if (!isMounted || !newItem) return;
             // Check if new item matches current filters (rudimentary check on type/status)
             if (newItem.type === type && newItem.status === 'active') {
                 setItems(prevItems => {
@@ -102,7 +117,7 @@ const ItemsPage = ({ type }) => {
 
         // Handle Updated Item (Resolved/Edited)
         socket.on('item_updated', (updatedItem) => {
-            if (!isMounted) return;
+            if (!isMounted || !updatedItem) return;
             setItems(prevItems => {
                 const currentItems = Array.isArray(prevItems) ? prevItems : [];
                 return currentItems.map(item =>
@@ -144,7 +159,7 @@ const ItemsPage = ({ type }) => {
             if (isAuthenticated && user) {
                 try {
                     const res = await axios.get(`${API_URL}/api/items?user=${user.id}&type=lost&status=active`);
-                    if (res.data.length > 0) {
+                    if (Array.isArray(res.data) && res.data.length > 0) {
                         setActiveReportItem(res.data[0]); // Capture the first active item
                     } else {
                         setActiveReportItem(null);
@@ -158,17 +173,34 @@ const ItemsPage = ({ type }) => {
     }, [isAuthenticated, user, type]); // Re-check if type/user changes
 
     const filteredItems = (Array.isArray(items) ? items : []).filter(item => {
+        // ULTRA-STRICT SAFE VALIDATION
         if (!item) return false;
 
-        // Status Filter
-        const isResolved = ['resolved', 'claimed', 'reunited', 'closed'].includes(item.status);
-        if (view === 'active' && isResolved) return false;
-        if (view === 'resolved' && !isResolved) return false;
+        // Ensure essential properties exist to prevent crashes in ItemCard
+        // We accept if properties are missing but return a safe fallback in the UI
+        // But for filtering logic, we must be safe:
 
-        // Search Filter
-        const titleMatch = item.title?.toLowerCase().includes(filter.toLowerCase()) || false;
-        const locationMatch = item.location?.main?.toLowerCase().includes(filter.toLowerCase()) || false;
-        return titleMatch || locationMatch;
+        try {
+            // Status Filter - Safely check status
+            const status = item.status || 'active'; // Default to active if missing
+            const isResolved = ['resolved', 'claimed', 'reunited', 'closed'].includes(status);
+
+            if (view === 'active' && isResolved) return false;
+            if (view === 'resolved' && !isResolved) return false;
+
+            // Search Filter - Safely check title and location
+            const filterText = filter.toLowerCase();
+            const title = (item.title || '').toLowerCase();
+            const locationMain = (item.location?.main || '').toLowerCase();
+
+            const titleMatch = title.includes(filterText);
+            const locationMatch = locationMain.includes(filterText);
+
+            return titleMatch || locationMatch;
+        } catch (err) {
+            console.error("Error filtering item:", item, err);
+            return false; // Skip crashing items
+        }
     });
 
     return (
@@ -278,6 +310,18 @@ const ItemsPage = ({ type }) => {
 
             {loading ? (
                 <div className={`text-center py-12 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Loading items...</div>
+            ) : error ? (
+                <div className={`text-center py-12 px-6 ${isDarkMode ? 'text-red-400' : 'text-red-500'}`}>
+                    <div className="flex flex-col items-center gap-3">
+                        <span className="text-lg font-bold">{error}</span>
+                        <button
+                            onClick={() => fetchItems(true)}
+                            className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+                        >
+                            <RefreshCw className="w-4 h-4" /> Try Again
+                        </button>
+                    </div>
+                </div>
             ) : filteredItems.length === 0 ? (
                 <div className={`text-center py-12 px-6 rounded-xl border border-dashed animate-fade-in ${isDarkMode ? 'bg-gray-800 border-gray-600' : 'bg-white border-gray-300'}`}>
                     <div className={`text-lg font-medium ${isDarkMode ? 'text-gray-200' : 'text-gray-900'}`}>No items found</div>
@@ -288,11 +332,13 @@ const ItemsPage = ({ type }) => {
                     </p>
                 </div>
             ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 animate-stagger">
-                    {filteredItems.map(item => (
-                        <ItemCard key={item._id} item={item} />
-                    ))}
-                </div>
+                <ErrorBoundary>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 animate-stagger">
+                        {filteredItems.map(item => (
+                            <ItemCard key={item._id} item={item} />
+                        ))}
+                    </div>
+                </ErrorBoundary>
             )}
 
 

@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ToastProvider } from './context/ToastContext';
 import { ThemeProvider } from './context/ThemeContext';
 import Layout from './components/Layout';
+import ErrorBoundary from './components/ErrorBoundary';
 import './enhanced-animations.css';
 import LandingPage from './pages/LandingPage';
 import Login from './pages/Auth/Login';
@@ -22,23 +23,25 @@ function App() {
       <ToastProvider>
         <Router>
           <Layout>
-            <Routes>
-              <Route path="/" element={<LandingPage />} />
-              <Route path="/start" element={<ReportSelection />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/forgot-password" element={<ForgotPassword />} />
-              <Route path="/lost" element={<ItemsPage type="lost" />} />
+            <ErrorBoundary>
+              <Routes>
+                <Route path="/" element={<LandingPage />} />
+                <Route path="/start" element={<ReportSelection />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
+                <Route path="/forgot-password" element={<ForgotPassword />} />
+                <Route path="/lost" element={<ItemsPage type="lost" />} />
 
-              <Route path="/found" element={<ItemsPage type="found" />} />
-              <Route path="/report/lost" element={<ReportItem type="lost" />} />
-              <Route path="/report/found" element={<ReportItem type="found" />} />
-              <Route path="/items/:id" element={<ItemDetails />} />
-              <Route path="/chats" element={<ChatList />} />
-              <Route path="/chats/:id" element={<ChatRoom />} />
-              <Route path="/profile" element={<Profile />} />
-              <Route path="/leaderboard" element={<Leaderboard />} />
-            </Routes>
+                <Route path="/found" element={<ItemsPage type="found" />} />
+                <Route path="/report/lost" element={<ReportItem type="lost" />} />
+                <Route path="/report/found" element={<ReportItem type="found" />} />
+                <Route path="/items/:id" element={<ItemDetails />} />
+                <Route path="/chats" element={<ChatList />} />
+                <Route path="/chats/:id" element={<ChatRoom />} />
+                <Route path="/profile" element={<Profile />} />
+                <Route path="/leaderboard" element={<Leaderboard />} />
+              </Routes>
+            </ErrorBoundary>
           </Layout>
         </Router>
       </ToastProvider>
