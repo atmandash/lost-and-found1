@@ -6,6 +6,7 @@ import ItemCard from '../../components/ItemCard';
 import WatchlistModal from '../../components/WatchlistModal';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
+import API_URL from '../../config/api';
 
 const ItemsPage = ({ type }) => {
     const [items, setItems] = useState([]);
