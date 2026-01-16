@@ -69,7 +69,7 @@ const NotificationBell = () => {
 
             // Mark as read
             if (!notification.read) {
-                await axios.put(`${API_URL} /api/notifications / ${notification._id}/read`, {}, {
+                await axios.put(`${API_URL}/api/notifications/${notification._id}/read`, {}, {
                     headers: { 'x-auth-token': token }
                 });
                 fetchUnreadCount();
