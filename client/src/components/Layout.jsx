@@ -15,9 +15,11 @@ const Navbar = () => {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between md:justify-start h-16 items-center">
                     {/* Logo */}
-                    <Link to="/" className="hidden md:flex items-center text-4xl font-black text-indigo-600 mr-10 tracking-tight">
-                        <Search className="w-10 h-10 mr-3 stroke-[3]" />
-                        Lost&Found
+                    <Link to="/" className="hidden md:flex items-center text-2xl font-extrabold mr-10 tracking-tight">
+                        <Search className="w-8 h-8 mr-3 stroke-[2.5] text-indigo-600" />
+                        <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600">
+                            Lost&Found
+                        </span>
                     </Link>
 
                     {/* Nav Links */}
