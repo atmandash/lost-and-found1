@@ -11,7 +11,6 @@ const BackgroundEffects = () => {
     // Debug log
     console.log('Current Path:', location.pathname, 'Show Blobs:', showBlobs);
 
-    return (
     // Mouse Parallax Logic
     const [mousePosition, setMousePosition] = React.useState({ x: 0, y: 0 });
 
