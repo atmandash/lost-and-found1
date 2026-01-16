@@ -15,8 +15,8 @@ const Navbar = () => {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between md:justify-start h-16 items-center">
                     {/* Logo */}
-                    <Link to="/" className="hidden md:flex items-center text-3xl font-extrabold text-indigo-600 mr-10 tracking-tight">
-                        <Search className="w-8 h-8 mr-2 stroke-[2.5]" />
+                    <Link to="/" className="hidden md:flex items-center text-4xl font-black text-indigo-600 mr-10 tracking-tight">
+                        <Search className="w-10 h-10 mr-3 stroke-[3]" />
                         Lost&Found
                     </Link>
 
@@ -71,8 +71,8 @@ const Layout = ({ children }) => {
             <BackgroundEffects />
             {/* Top Bar for Mobile */}
             <div className={`md:hidden p-4 shadow-sm flex justify-between items-center sticky top-0 z-40 ${isDarkMode ? 'bg-gray-800/90 backdrop-blur-md' : 'bg-white/80 backdrop-blur-md'}`}>
-                <Link to="/" className="font-extrabold text-2xl gradient-text flex items-center leading-none tracking-tight">
-                    <Search className="w-6 h-6 mr-2 stroke-[2.5]" />
+                <Link to="/" className="font-black text-3xl gradient-text flex items-center leading-none tracking-tight">
+                    <Search className="w-8 h-8 mr-2 stroke-[3]" />
                     Lost&Found
                 </Link>
                 <div className="flex items-center gap-4">
