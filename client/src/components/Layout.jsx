@@ -13,7 +13,7 @@ const Navbar = () => {
     return (
         <nav className={`fixed bottom-0 w-full border-t md:relative md:border-t-0 md:shadow-sm z-50 ${isDarkMode ? 'bg-gray-900 border-gray-700' : 'bg-white border-gray-200'}`}>
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex justify-between md:justify-start h-16 items-center">
+                <div className="flex justify-between md:justify-start h-14 items-center">
                     {/* Logo */}
                     <Link to="/" className="hidden md:flex items-center text-2xl font-extrabold mr-10 tracking-tight">
                         <Search className="w-8 h-8 mr-3 stroke-[2.5] text-indigo-600" />
@@ -73,7 +73,7 @@ const Layout = ({ children }) => {
         <div className={`min-h-screen flex flex-col transition-colors duration-300 relative`}>
             <BackgroundEffects />
             {/* Top Bar for Mobile */}
-            <div className={`md:hidden p-4 shadow-sm flex justify-between items-center sticky top-0 z-40 ${isDarkMode ? 'bg-gray-800/90 backdrop-blur-md' : 'bg-white/80 backdrop-blur-md'}`}>
+            <div className={`md:hidden py-3 px-4 shadow-sm flex justify-between items-center sticky top-0 z-40 ${isDarkMode ? 'bg-gray-800/90 backdrop-blur-md' : 'bg-white/80 backdrop-blur-md'}`}>
                 <Link to="/" className="font-extrabold text-xl flex items-center leading-none tracking-tight">
                     <Search className="w-6 h-6 mr-2 stroke-[2.5] text-indigo-600" />
                     <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600">
