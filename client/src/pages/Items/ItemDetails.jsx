@@ -94,14 +94,6 @@ const ItemDetails = () => {
     const currentUserId = user?._id || user?.id;
     const isMyItem = user && itemUserId && currentUserId && String(itemUserId) === String(currentUserId);
 
-    // Debug logging
-    console.log('🔍 Owner Detection Debug:');
-    console.log('  item.user:', item.user);
-    console.log('  itemUserId:', itemUserId);
-    console.log('  user:', user);
-    console.log('  currentUserId:', currentUserId);
-    console.log('  isMyItem:', isMyItem);
-
     return (
         <div className="max-w-4xl mx-auto space-y-6">
 
