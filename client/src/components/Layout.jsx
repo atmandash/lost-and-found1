@@ -65,6 +65,7 @@ import BackgroundEffects from './BackgroundEffects';
 const Layout = ({ children }) => {
     const { isAuthenticated } = useAuth();
     const { isDarkMode, toggleTheme } = useTheme();
+    const location = useLocation();
 
     return (
         <div className={`min-h-screen flex flex-col transition-colors duration-300 relative`}>
@@ -95,7 +96,7 @@ const Layout = ({ children }) => {
 
             <Navbar />
 
-            <main className={`flex-grow container mx-auto px-4 py-8 ${location.pathname === '/' ? 'pb-0' : 'pb-24 md:pb-8'} flex flex-col ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+            <main className={`flex-grow container mx-auto px-4 py-8 ${location.pathname === '/' ? 'pb-20' : 'pb-32 md:pb-8'} flex flex-col ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
                 {children}
             </main>
 
