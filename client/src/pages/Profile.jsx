@@ -78,10 +78,10 @@ const Profile = () => {
 
             // Fetch ONLY this user's items using backend filter
             // This is safer than fetching all and filtering on client
-            const lostRes = await axios.get(`${API_URL}/api/items?type=lost&user=${userId}`, {
+            const lostRes = await axios.get(`${ API_URL } / api / items ? type = lost & user=${ userId }`, {
                 headers: { 'x-auth-token': token }
             });
-            const foundRes = await axios.get(`${API_URL}/api/items?type=found&user=${userId}`, {
+            const foundRes = await axios.get(`${ API_URL } / api / items ? type = found & user=${ userId }`, {
                 headers: { 'x-auth-token': token }
             });
 
@@ -158,14 +158,14 @@ const Profile = () => {
                     <div className="w-32 h-32 bg-white rounded-full shadow-2xl border-4 border-white overflow-hidden animate-fade-in">
                         <img
                             src={avatarUrl}
-                            alt={`${user.name}'s avatar`}
-                            className="w-full h-full object-cover"
-                        />
-                    </div>
+                            alt={`${ user.name }'s avatar`}
+                            className = "w-full h-full object-cover"
+                />
+                    </div >
 
                     <div className="flex-1">
                         <h1 className="text-3xl font-bold animate-slide-in-right">{user.name}</h1>
-                        <p className="text-indigo-100 mt-1 animate-slide-in-right" style={{ animationDelay: '0.1s' }}>{user.email}</p>
+                        <p className="text-indigo-100 mt-1 animate-slide-in-right break-all" style={{ animationDelay: '0.1s' }}>{user.email}</p>
 
                         {/* Phone Number and Verified Badge in White Spaces */}
                         <div className="mt-6 flex flex-col sm:flex-row gap-3 animate-slide-in-right" style={{ animationDelay: '0.2s' }}>
@@ -189,111 +189,111 @@ const Profile = () => {
                     >
                         Logout
                     </button>
-                </div>
-            </div>
+                </div >
+            </div >
 
-            {/* Stats Grid with Gradients and Animated Counts */}
-            <div className="w-full mb-6">
-                {/* Live Indicator */}
-                <div className="flex items-center justify-center gap-2 mb-4">
+    {/* Stats Grid with Gradients and Animated Counts */ }
+    < div className = "w-full mb-6" >
+        {/* Live Indicator */ }
+        < div className = "flex items-center justify-center gap-2 mb-4" >
                     <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
                     <span className={`text-xs font-medium ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Real-Time Stats</span>
+                </div >
+            </div >
+
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 animate-stagger">
+        <div className="bg-gradient-to-br from-indigo-500 to-indigo-600 p-6 rounded-2xl shadow-lg text-white hover-lift card-glow transition-all">
+            <div className="flex items-center justify-between">
+                <div>
+                    <div className="text-3xl font-bold tabular-nums">{animatedTotalReports}</div>
+                    <div className="text-sm text-indigo-100 mt-1">Total Reports</div>
                 </div>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 animate-stagger">
-                <div className="bg-gradient-to-br from-indigo-500 to-indigo-600 p-6 rounded-2xl shadow-lg text-white hover-lift card-glow transition-all">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <div className="text-3xl font-bold tabular-nums">{animatedTotalReports}</div>
-                            <div className="text-sm text-indigo-100 mt-1">Total Reports</div>
-                        </div>
-                        <MapPin className="w-10 h-10 opacity-50" />
-                    </div>
-                </div>
-
-                <div className="bg-gradient-to-br from-red-500 to-red-600 p-6 rounded-2xl shadow-lg text-white hover-lift card-glow transition-all">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <div className="text-3xl font-bold tabular-nums">{animatedLostItems}</div>
-                            <div className="text-sm text-red-100 mt-1">Lost Items</div>
-                        </div>
-                        <MapPin className="w-10 h-10 opacity-50" />
-                    </div>
-                </div>
-
-                <div className="bg-gradient-to-br from-green-500 to-green-600 p-6 rounded-2xl shadow-lg text-white hover-lift card-glow transition-all">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <div className="text-3xl font-bold tabular-nums">{animatedFoundItems}</div>
-                            <div className="text-sm text-green-100 mt-1">Found Items</div>
-                        </div>
-                        <MapPin className="w-10 h-10 opacity-50" />
-                    </div>
-                </div>
-
-                <div className="bg-gradient-to-br from-yellow-500 to-yellow-600 p-6 rounded-2xl shadow-lg text-white hover-lift card-glow transition-all">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <div className="text-3xl font-bold tabular-nums flex items-center gap-2">
-                                {animatedKarmaPoints}
-                                <Activity className="w-6 h-6 text-yellow-200 animate-pulse" />
-                            </div>
-                            <div className="text-sm text-yellow-100 mt-1">Karma Points (Lvl {stats.level || 1})</div>
-                        </div>
-                        <TrendingUp className="w-10 h-10 opacity-50" />
-                    </div>
-                </div>
-            </div>
-
-            {/* My Reports Section with Tabs */}
-            <div className={`p-6 rounded-2xl shadow-lg border ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`}>
-                <div className="flex flex-col sm:flex-row items-center justify-between mb-6 gap-4">
-                    <h2 className={`text-2xl font-bold ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>My Reports</h2>
-
-                    <div className="flex items-center gap-4">
-                        {/* Tabs */}
-                        <div className={`flex p-1 rounded-xl w-full sm:w-auto overflow-x-auto ${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'}`}>
-                            <button
-                                onClick={() => setActiveTab('active')}
-                                className={`flex-1 sm:flex-none px-4 py-2 rounded-lg text-sm font-medium transition-all whitespace-nowrap ${activeTab === 'active'
-                                    ? 'bg-white text-indigo-600 shadow-md'
-                                    : `${isDarkMode ? 'text-gray-400 hover:text-gray-200' : 'text-gray-500 hover:text-gray-700'}`
-                                    }`}
-                            >
-                                Active Reports
-                            </button>
-                            <button
-                                onClick={() => setActiveTab('history')}
-                                className={`flex-1 sm:flex-none px-4 py-2 rounded-lg text-sm font-medium transition-all whitespace-nowrap ${activeTab === 'history'
-                                    ? 'bg-white text-indigo-600 shadow-md'
-                                    : `${isDarkMode ? 'text-gray-400 hover:text-gray-200' : 'text-gray-500 hover:text-gray-700'}`
-                                    }`}
-                            >
-                                History
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                {loading ? (
-                    <div className={`text-center py-12 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Loading...</div>
-                ) : filteredItems.length === 0 ? (
-                    <div className={`text-center py-12 rounded-xl ${isDarkMode ? 'bg-gradient-to-br from-gray-700 to-gray-800' : 'bg-gradient-to-br from-gray-50 to-gray-100'}`}>
-                        <Calendar className={`w-12 h-12 mx-auto mb-3 ${isDarkMode ? 'text-gray-500' : 'text-gray-300'}`} />
-                        <p className={`font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-                            {activeTab === 'active' ? 'No active reports' : 'No history yet'}
-                        </p>
-                    </div>
-                ) : (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {filteredItems.map(item => (
-                            <ItemCard key={item._id} item={item} />
-                        ))}
-                    </div>
-                )}
+                <MapPin className="w-10 h-10 opacity-50" />
             </div>
         </div>
+
+        <div className="bg-gradient-to-br from-red-500 to-red-600 p-6 rounded-2xl shadow-lg text-white hover-lift card-glow transition-all">
+            <div className="flex items-center justify-between">
+                <div>
+                    <div className="text-3xl font-bold tabular-nums">{animatedLostItems}</div>
+                    <div className="text-sm text-red-100 mt-1">Lost Items</div>
+                </div>
+                <MapPin className="w-10 h-10 opacity-50" />
+            </div>
+        </div>
+
+        <div className="bg-gradient-to-br from-green-500 to-green-600 p-6 rounded-2xl shadow-lg text-white hover-lift card-glow transition-all">
+            <div className="flex items-center justify-between">
+                <div>
+                    <div className="text-3xl font-bold tabular-nums">{animatedFoundItems}</div>
+                    <div className="text-sm text-green-100 mt-1">Found Items</div>
+                </div>
+                <MapPin className="w-10 h-10 opacity-50" />
+            </div>
+        </div>
+
+        <div className="bg-gradient-to-br from-yellow-500 to-yellow-600 p-6 rounded-2xl shadow-lg text-white hover-lift card-glow transition-all">
+            <div className="flex items-center justify-between">
+                <div>
+                    <div className="text-3xl font-bold tabular-nums flex items-center gap-2">
+                        {animatedKarmaPoints}
+                        <Activity className="w-6 h-6 text-yellow-200 animate-pulse" />
+                    </div>
+                    <div className="text-sm text-yellow-100 mt-1">Karma Points (Lvl {stats.level || 1})</div>
+                </div>
+                <TrendingUp className="w-10 h-10 opacity-50" />
+            </div>
+        </div>
+    </div>
+
+{/* My Reports Section with Tabs */ }
+<div className={`p-6 rounded-2xl shadow-lg border ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`}>
+    <div className="flex flex-col sm:flex-row items-center justify-between mb-6 gap-4">
+        <h2 className={`text-2xl font-bold ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>My Reports</h2>
+
+        <div className="flex items-center gap-4">
+            {/* Tabs */}
+            <div className={`flex p-1 rounded-xl w-full sm:w-auto overflow-x-auto ${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'}`}>
+                <button
+                    onClick={() => setActiveTab('active')}
+                    className={`flex-1 sm:flex-none px-4 py-2 rounded-lg text-sm font-medium transition-all whitespace-nowrap ${activeTab === 'active'
+                        ? 'bg-white text-indigo-600 shadow-md'
+                        : `${isDarkMode ? 'text-gray-400 hover:text-gray-200' : 'text-gray-500 hover:text-gray-700'}`
+                        }`}
+                >
+                    Active Reports
+                </button>
+                <button
+                    onClick={() => setActiveTab('history')}
+                    className={`flex-1 sm:flex-none px-4 py-2 rounded-lg text-sm font-medium transition-all whitespace-nowrap ${activeTab === 'history'
+                        ? 'bg-white text-indigo-600 shadow-md'
+                        : `${isDarkMode ? 'text-gray-400 hover:text-gray-200' : 'text-gray-500 hover:text-gray-700'}`
+                        }`}
+                >
+                    History
+                </button>
+            </div>
+        </div>
+    </div>
+
+    {loading ? (
+        <div className={`text-center py-12 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Loading...</div>
+    ) : filteredItems.length === 0 ? (
+        <div className={`text-center py-12 rounded-xl ${isDarkMode ? 'bg-gradient-to-br from-gray-700 to-gray-800' : 'bg-gradient-to-br from-gray-50 to-gray-100'}`}>
+            <Calendar className={`w-12 h-12 mx-auto mb-3 ${isDarkMode ? 'text-gray-500' : 'text-gray-300'}`} />
+            <p className={`font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                {activeTab === 'active' ? 'No active reports' : 'No history yet'}
+            </p>
+        </div>
+    ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredItems.map(item => (
+                <ItemCard key={item._id} item={item} />
+            ))}
+        </div>
+    )}
+</div>
+        </div >
     );
 };
 
