@@ -5,6 +5,9 @@ import { Send, Phone, CheckCircle, AlertCircle, Shield, Lock, Unlock } from 'luc
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import API_URL from '../../config/api';
+import { io } from 'socket.io-client';
+
+const socket = io(API_URL);
 
 const ChatRoom = () => {
     const { id } = useParams();
@@ -23,12 +26,23 @@ const ChatRoom = () => {
     useEffect(() => {
         fetchChat();
         checkCanResolve();
-        markAsRead();
-        const interval = setInterval(() => {
-            fetchChat();
-            checkCanResolve();
-        }, 3000);
-        return () => clearInterval(interval);
+        markAsRead(); // Mark read on enter
+
+        if (id) {
+            socket.emit('join_chat', id);
+        }
+
+        socket.on('receive_message', (newMessage) => {
+            setMessages((prev) => [...prev, newMessage]);
+            // Optional: Mark read if window is focused?
+            // For now, simple implementation
+        });
+
+        // Cleanup
+        return () => {
+            socket.off('receive_message');
+            if (id) socket.emit('leave_chat', id);
+        };
     }, [id]);
 
     useEffect(() => {
@@ -101,7 +115,9 @@ const ChatRoom = () => {
                 { headers: { 'x-auth-token': token } }
             );
             setNewMessage('');
-            fetchChat();
+            setNewMessage('');
+            // fetchChat(); // No longer needed, socket handles it
+            // Optimistic update also possible, but socket is fast enough
         } catch (err) {
             console.error('Error sending message:', err);
             if (err.response?.status === 400) {
@@ -239,48 +255,47 @@ const ChatRoom = () => {
                     🙏 Please be respectful. Profanity and hurtful language are strictly prohibited.
                 </div>
                 {messages.map((msg, idx) => {
-                    const isMe = msg.sender === user.id || msg.sender === user._id || msg.sender._id === user.id;
+                    // Robust check for "Me"
+                    // Handle both populated object and string ID
+                    const msgSenderId = msg.sender._id || msg.sender;
+                    const myId = user.id || user._id;
+                    const isMe = msgSenderId.toString() === myId.toString();
+
                     const isPhoneShare = msg.isPhoneShare;
                     const senderName = isMe ? 'Me' : 'Anonymous';
 
                     return (
                         <div key={idx} className={`flex ${isMe ? 'justify-end' : 'justify-start'} mb-4 items-end`}>
                             {!isMe && (
-                                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 flex-shrink-0 mr-2 flex items-center justify-center text-white text-xs font-bold border-2 border-white shadow-sm">
+                                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-gray-400 to-gray-500 flex-shrink-0 mr-2 flex items-center justify-center text-white text-xs font-bold border-2 border-white shadow-sm">
                                     {senderName[0]}
                                 </div>
                             )}
 
                             <div className="flex flex-col max-w-[70%]">
-                                {!isMe && (
-                                    <span className={`text-xs ml-1 mb-1 flex items-center ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-                                        {senderName}
-                                        <Shield className="w-3 h-3 ml-1 text-green-600" />
-                                    </span>
-                                )}
-
                                 <div
-                                    className={`px-4 py-2 rounded-2xl text-sm ${isPhoneShare
+                                    className={`px-5 py-3 rounded-2xl text-sm shadow-sm ${isPhoneShare
                                         ? 'bg-green-100 border border-green-300 text-green-800'
                                         : isMe
-                                            ? 'bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-br-none shadow-md'
+                                            ? 'bg-indigo-600 text-white rounded-br-none' // My message: Solid Blue/Purple
                                             : isDarkMode
-                                                ? 'bg-gray-700 text-gray-100 rounded-bl-none shadow-sm border border-gray-600'
-                                                : 'bg-gray-200 text-gray-800 rounded-bl-none shadow-sm border border-gray-300'
+                                                ? 'bg-gray-700 text-gray-100 rounded-bl-none border border-gray-600' // Theirs (Dark): Gray
+                                                : 'bg-white text-gray-800 rounded-bl-none border border-gray-200' // Theirs (Light): White
                                         }`}
                                 >
-                                    <p className="break-words">{msg.content}</p>
-                                    <div className={`text-[10px] mt-1 text-right ${isPhoneShare ? 'text-green-700' : isMe ? 'text-purple-100' : isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                                    <p className="break-words leading-relaxed">{msg.content}</p>
+                                    <div className={`text-[10px] mt-1 text-right ${isPhoneShare
+                                            ? 'text-green-700'
+                                            : isMe
+                                                ? 'text-indigo-200'
+                                                : isDarkMode
+                                                    ? 'text-gray-400'
+                                                    : 'text-gray-400'
+                                        }`}>
                                         {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                     </div>
                                 </div>
                             </div>
-
-                            {isMe && (
-                                <div className={`w-8 h-8 rounded-full flex-shrink-0 ml-2 flex items-center justify-center text-xs font-bold border-2 shadow-sm ${isDarkMode ? 'bg-gray-600 text-gray-200 border-gray-500' : 'bg-gray-200 text-gray-600 border-white'}`}>
-                                    Me
-                                </div>
-                            )}
                         </div>
                     );
                 })}

@@ -186,6 +186,10 @@ exports.sendMessage = async (req, res) => {
             // Don't fail the message send if notification fails
         }
 
+        // Real-time Socket Emission
+        const io = req.app.get('io');
+        io.to(req.params.id).emit('receive_message', newMessage);
+
         res.json(chat.messages);
     } catch (err) {
         console.error(err.message);

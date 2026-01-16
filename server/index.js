@@ -104,10 +104,25 @@ app.use(productionErrorHandler);
 io.on('connection', (socket) => {
     console.log('User connected:', socket.id);
 
+    // Join a chat room
+    socket.on('join_chat', (chatId) => {
+        socket.join(chatId);
+        console.log(`User ${socket.id} joined chat: ${chatId}`);
+    });
+
+    // Leave a chat room (optional cleanup)
+    socket.on('leave_chat', (chatId) => {
+        socket.leave(chatId);
+        console.log(`User ${socket.id} left chat: ${chatId}`);
+    });
+
     socket.on('disconnect', () => {
         console.log('User disconnected:', socket.id);
     });
 });
+
+// Make io accessible to our router
+app.set('io', io);
 
 const PORT = process.env.PORT || 5000;
 
