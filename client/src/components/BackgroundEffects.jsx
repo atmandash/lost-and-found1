@@ -19,19 +19,7 @@ const BackgroundEffects = () => {
             <div className="absolute inset-0 bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50"></div>
 
             {/* Blobs - Only visible on specific pages */}
-            {showBlobs && (
-                <>
-                    <div
-                        className="absolute top-0 -left-10 w-[300px] h-[300px] bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"
-                    ></div>
-                    <div
-                        className="absolute top-0 -right-10 w-[300px] h-[300px] bg-green-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"
-                    ></div>
-                    <div
-                        className="absolute -bottom-10 left-20 w-[300px] h-[300px] bg-pink-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"
-                    ></div>
-                </>
-            )}
+            {/* Blobs removed for performance */}
 
             {/* Floating Icons - Visible Opacity */}
             <div className="absolute top-20 left-[10%] animate-float" style={{ animationDelay: '0s' }}>
