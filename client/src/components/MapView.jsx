@@ -39,7 +39,7 @@ const MapView = ({
     interactive = false
 }) => {
     // Default to VIT Chennai coordinates if no coordinates provided
-    const position = coordinates && coordinates.coordinates
+    const position = coordinates && coordinates.coordinates && Array.isArray(coordinates.coordinates) && coordinates.coordinates.length === 2
         ? [coordinates.coordinates[0], coordinates.coordinates[1]]
         : [12.84198, 80.15493];
 
