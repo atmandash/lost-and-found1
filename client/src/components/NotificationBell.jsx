@@ -42,7 +42,7 @@ const NotificationBell = () => {
     const fetchNotifications = async () => {
         try {
             const token = localStorage.getItem('token');
-            const res = await axios.get(`${API_URL} /api/notifications`, {
+            const res = await axios.get(`${API_URL}/api/notifications`, {
                 headers: { 'x-auth-token': token }
             });
             setNotifications(res.data.slice(0, 5)); // Show only 5 most recent
@@ -54,7 +54,7 @@ const NotificationBell = () => {
     const fetchUnreadCount = async () => {
         try {
             const token = localStorage.getItem('token');
-            const res = await axios.get(`${API_URL} /api/notifications / unread - count`, {
+            const res = await axios.get(`${API_URL}/api/notifications/unread-count`, {
                 headers: { 'x-auth-token': token }
             });
             setUnreadCount(res.data.count);
