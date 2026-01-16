@@ -187,8 +187,8 @@ exports.login = async (req, res) => {
             // Increment failed attempts
             user.loginAttempts = (user.loginAttempts || 0) + 1;
 
-            // Lock account after 10 failed attempts for 15 minutes (increased threshold)
-            if (user.loginAttempts >= 10) {
+            // Lock account after 5 failed attempts for 15 minutes
+            if (user.loginAttempts >= 5) {
                 user.lockoutUntil = new Date(Date.now() + 15 * 60 * 1000); // 15 minutes
                 await user.save();
 
@@ -202,7 +202,7 @@ exports.login = async (req, res) => {
 
             await user.save();
 
-            const attemptsLeft = 10 - user.loginAttempts;
+            const attemptsLeft = 5 - user.loginAttempts;
             return res.status(400).json({
                 message: `Invalid Credentials. ${attemptsLeft} attempt${attemptsLeft !== 1 ? 's' : ''} remaining before account lockout.`
             });
