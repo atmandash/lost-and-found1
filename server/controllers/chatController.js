@@ -219,7 +219,7 @@ exports.markAsRead = async (req, res) => {
     }
 };
 
-// Resolve chat - only works if both parties shared phone
+// Resolve chat - only works if both parties shared phone AND user is item owner
 exports.resolveChat = async (req, res) => {
     try {
         const chat = await Chat.findById(req.params.id)
@@ -228,9 +228,12 @@ exports.resolveChat = async (req, res) => {
 
         if (!chat) return res.status(404).json({ message: 'Chat not found' });
 
-        // Check if user is a participant
-        if (!chat.participants.some(p => p._id.toString() === req.user.id)) {
-            return res.status(401).json({ message: 'Not authorized' });
+        // IMPORTANT: Only the item OWNER (person who lost it) can resolve
+        const itemOwnerId = chat.itemId?.user?.toString();
+        const currentUserId = req.user.id;
+
+        if (itemOwnerId !== currentUserId) {
+            return res.status(401).json({ message: 'Only the item owner can mark as resolved' });
         }
 
         // Check if BOTH parties have shared their phone numbers
@@ -269,23 +272,14 @@ exports.resolveChat = async (req, res) => {
             console.log(`Item ${item._id} marked as resolved`);
         }
 
-        // Award points to both participants
+        // IMPORTANT: Award points ONLY to the FINDER (the person who is NOT the item owner)
         const gamificationController = require('./gamificationController');
-        for (const participant of chat.participants) {
-            await gamificationController.awardPoints(participant._id, 50, 'successfully reunited an item');
-        }
+        const finderId = chat.participants.find(p => p._id.toString() !== itemOwnerId)?._id;
 
-        // Send email notifications to both parties - REMOVED per user request
-        // try {
-        //     const { sendItemResolvedEmail } = require('../utils/emailService');
-        //     for (const participant of chat.participants) {
-        //         if (participant.email) {
-        //             await sendItemResolvedEmail(participant.email, participant.name, itemTitle, itemType);
-        //         }
-        //     }
-        // } catch (emailError) {
-        //     console.error('Email notification error:', emailError);
-        // }
+        if (finderId) {
+            await gamificationController.awardPoints(finderId, 50, 'helped reunite a lost item');
+            console.log(`Awarded 50 points to finder ${finderId}`);
+        }
 
         // DO NOT delete chat document anymore, as user wants it for history
         // await Chat.findByIdAndDelete(chat._id); 
@@ -300,10 +294,10 @@ exports.resolveChat = async (req, res) => {
     }
 };
 
-// Check if chat can be resolved (both parties shared phone)
+// Check if chat can be resolved (both parties shared phone AND user is item owner)
 exports.canResolve = async (req, res) => {
     try {
-        const chat = await Chat.findById(req.params.id);
+        const chat = await Chat.findById(req.params.id).populate('itemId', 'user');
 
         if (!chat) return res.status(404).json({ message: 'Chat not found' });
 
@@ -314,12 +308,18 @@ exports.canResolve = async (req, res) => {
         const phone1Shared = chat.phoneShared?.get(participant1) || false;
         const phone2Shared = chat.phoneShared?.get(participant2) || false;
 
+        // IMPORTANT: Only the item OWNER (person who lost it) can resolve
+        const itemOwnerId = chat.itemId?.user?.toString();
+        const currentUserId = req.user.id;
+        const isItemOwner = itemOwnerId === currentUserId;
+
         res.json({
-            canResolve: phone1Shared && phone2Shared,
+            canResolve: phone1Shared && phone2Shared && isItemOwner,
             phoneShared: {
                 [participant1]: phone1Shared,
                 [participant2]: phone2Shared
-            }
+            },
+            isItemOwner
         });
     } catch (err) {
         console.error('Error in canResolve:', err.message);

@@ -49,7 +49,11 @@ export const AuthProvider = ({ children }) => {
             setUser(res.data);
             setIsAuthenticated(true);
         } catch (err) {
-            console.error('Auth Error:', err);
+            console.error('Auth Error Details:', {
+                status: err.response?.status,
+                message: err.response?.data?.message || err.message,
+                endpoint: `${API_URL}/api/auth/me`
+            });
             localStorage.removeItem('token');
             setIsAuthenticated(false);
             setUser(null);
