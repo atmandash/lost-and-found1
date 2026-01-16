@@ -3,7 +3,7 @@ const rateLimit = require('express-rate-limit');
 // Global rate limiter - lenient in dev, strict in production
 const globalLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
-    max: process.env.NODE_ENV === 'production' ? 100 : 1000, // 100 in prod, 1000 in dev
+    max: process.env.NODE_ENV === 'production' ? 500 : 1000, // 500 in prod, 1000 in dev
     message: 'Too many requests from this IP, please try again later.',
     standardHeaders: true,
     legacyHeaders: false,
