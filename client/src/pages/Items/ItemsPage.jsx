@@ -20,7 +20,11 @@ const ItemsPage = ({ type }) => {
 
     const { isAuthenticated, user } = useAuth();
     const { isDarkMode } = useTheme();
+    const { isDarkMode } = useTheme();
     const navigate = useNavigate();
+
+    const [view, setView] = useState('active');
+    const [activeReportItem, setActiveReportItem] = useState(null);
 
     // Pull-to-Refresh Logic
     const [startY, setStartY] = useState(0);
@@ -144,6 +148,8 @@ const ItemsPage = ({ type }) => {
 
     const [view, setView] = useState('active');
     const [activeReportItem, setActiveReportItem] = useState(null);
+
+    // Pull-to-Refresh Logic
 
     const handleReportClick = () => {
         if (!isAuthenticated) {
