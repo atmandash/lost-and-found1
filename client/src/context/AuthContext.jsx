@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
+import API_URL from '../config/api';
 
 const AuthContext = createContext();
 
@@ -22,7 +23,7 @@ export const AuthProvider = ({ children }) => {
         }
 
         try {
-            const res = await axios.get('http://localhost:5000/api/auth/me', {
+            const res = await axios.get(`${API_URL}/api/auth/me`, {
                 headers: {
                     'x-auth-token': token
                 }
@@ -45,7 +46,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     const login = async (email, password) => {
-        const res = await axios.post('http://localhost:5000/api/auth/login', { email, password });
+        const res = await axios.post(`${API_URL}/api/auth/login`, { email, password });
         localStorage.setItem('token', res.data.token);
         setUser(res.data.user);
         setIsAuthenticated(true);
@@ -54,12 +55,12 @@ export const AuthProvider = ({ children }) => {
 
     // Request OTP
     const requestOTP = async (email, phone) => {
-        await axios.post('http://localhost:5000/api/auth/request-otp', { email, phone });
+        await axios.post(`${API_URL}/api/auth/request-otp`, { email, phone });
     };
 
     // Register User (Verify OTP)
     const register = async (formData) => {
-        const res = await axios.post('http://localhost:5000/api/auth/register', formData);
+        const res = await axios.post(`${API_URL}/api/auth/register`, formData);
         localStorage.setItem('token', res.data.token); // Assuming token is returned on successful registration
         setUser(res.data.user);
         setIsAuthenticated(true);
