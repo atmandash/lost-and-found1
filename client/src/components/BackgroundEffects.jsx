@@ -12,6 +12,25 @@ const BackgroundEffects = () => {
     console.log('Current Path:', location.pathname, 'Show Blobs:', showBlobs);
 
     return (
+    // Mouse Parallax Logic
+    const [mousePosition, setMousePosition] = React.useState({ x: 0, y: 0 });
+
+    React.useEffect(() => {
+        const handleMouseMove = (e) => {
+            // Calculate position relative to center of screen (values -1 to 1)
+            const x = (e.clientX - window.innerWidth / 2) / (window.innerWidth / 2);
+            const y = (e.clientY - window.innerHeight / 2) / (window.innerHeight / 2);
+            setMousePosition({ x, y });
+        };
+
+        if (showBlobs) {
+            window.addEventListener('mousemove', handleMouseMove);
+        }
+
+        return () => window.removeEventListener('mousemove', handleMouseMove);
+    }, [showBlobs]);
+
+    return (
         <div key={location.pathname} className="fixed inset-0 -z-10 overflow-hidden pointer-events-none h-full w-full">
             {/* Background Gradient */}
             <div className="absolute inset-0 bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50"></div>
@@ -19,10 +38,18 @@ const BackgroundEffects = () => {
             {/* Blobs - Only visible on specific pages */}
             {showBlobs && (
                 <>
-                    <div className="absolute top-0 -left-10 w-[300px] h-[300px] bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
-                    {/* Changed from yellow to green */}
-                    <div className="absolute top-0 -right-10 w-[300px] h-[300px] bg-green-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
-                    <div className="absolute -bottom-10 left-20 w-[300px] h-[300px] bg-pink-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
+                    <div
+                        className="absolute top-0 -left-10 w-[300px] h-[300px] bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"
+                        style={{ transform: `translate(${mousePosition.x * -30}px, ${mousePosition.y * -30}px)` }}
+                    ></div>
+                    <div
+                        className="absolute top-0 -right-10 w-[300px] h-[300px] bg-green-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"
+                        style={{ transform: `translate(${mousePosition.x * 20}px, ${mousePosition.y * 20}px)` }}
+                    ></div>
+                    <div
+                        className="absolute -bottom-10 left-20 w-[300px] h-[300px] bg-pink-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"
+                        style={{ transform: `translate(${mousePosition.x * -40}px, ${mousePosition.y * -40}px)` }}
+                    ></div>
                 </>
             )}
 
