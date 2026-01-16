@@ -13,18 +13,18 @@ const BackgroundEffects = () => {
 
     return (
         <div key={location.pathname} className="fixed inset-0 -z-10 overflow-hidden pointer-events-none h-full w-full">
-            {/* Background Gradient - Soft & Premium */}
-            <div className="absolute inset-0 bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900"></div>
+            {/* Background Gradient */}
+            <div className="absolute inset-0 bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50"></div>
 
-            {/* Dot Grid Pattern - The "Beautify" Upgrade */}
-            <div className="absolute inset-0 z-0 opacity-[0.4]"
-                style={{
-                    backgroundImage: `radial-gradient(#6366f1 1px, transparent 1px)`,
-                    backgroundSize: '32px 32px',
-                    maskImage: 'linear-gradient(to bottom, black 60%, transparent 100%)',
-                    WebkitMaskImage: 'linear-gradient(to bottom, black 60%, transparent 100%)'
-                }}
-            ></div>
+            {/* Blobs - Only visible on specific pages */}
+            {showBlobs && (
+                <>
+                    <div className="absolute top-0 -left-10 w-[300px] h-[300px] bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
+                    {/* Changed from yellow to green */}
+                    <div className="absolute top-0 -right-10 w-[300px] h-[300px] bg-green-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
+                    <div className="absolute -bottom-10 left-20 w-[300px] h-[300px] bg-pink-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
+                </>
+            )}
 
             {/* Floating Icons - Visible Opacity */}
             <div className="absolute top-20 left-[10%] animate-float" style={{ animationDelay: '0s' }}>
