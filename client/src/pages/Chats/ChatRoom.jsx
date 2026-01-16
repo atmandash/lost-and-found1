@@ -37,7 +37,7 @@ const ChatRoom = () => {
     const fetchChat = async () => {
         try {
             const token = localStorage.getItem('token');
-            const res = await axios.get(`http://localhost:5000/api/chats/${id}`, {
+            const res = await axios.get(`${API_URL}/api/chats/${id}`, {
                 headers: { 'x-auth-token': token }
             });
             setChat(res.data);
@@ -55,7 +55,7 @@ const ChatRoom = () => {
     const checkCanResolve = async () => {
         try {
             const token = localStorage.getItem('token');
-            const res = await axios.get(`http://localhost:5000/api/chats/${id}/can-resolve`, {
+            const res = await axios.get(`${API_URL}/api/chats/${id}/can-resolve`, {
                 headers: { 'x-auth-token': token }
             });
             setCanResolve(res.data.canResolve);
@@ -76,7 +76,7 @@ const ChatRoom = () => {
     const markAsRead = async () => {
         try {
             const token = localStorage.getItem('token');
-            await axios.put(`http://localhost:5000/api/chats/${id}/read`, {}, {
+            await axios.put(`${API_URL}/api/chats/${id}/read`, {}, {
                 headers: { 'x-auth-token': token }
             });
         } catch (err) {
@@ -95,7 +95,7 @@ const ChatRoom = () => {
         setError('');
         try {
             const token = localStorage.getItem('token');
-            await axios.post(`http://localhost:5000/api/chats/${id}/messages`,
+            await axios.post(`${API_URL}/api/chats/${id}/messages`,
                 { content: newMessage },
                 { headers: { 'x-auth-token': token } }
             );
@@ -113,7 +113,7 @@ const ChatRoom = () => {
     const handleSharePhone = async () => {
         try {
             const token = localStorage.getItem('token');
-            await axios.post(`http://localhost:5000/api/chats/${id}/share-phone`, {}, {
+            await axios.post(`${API_URL}/api/chats/${id}/share-phone`, {}, {
                 headers: { 'x-auth-token': token }
             });
             setSuccess('Phone number shared! +10 points');
@@ -140,7 +140,7 @@ const ChatRoom = () => {
 
         try {
             const token = localStorage.getItem('token');
-            const res = await axios.put(`http://localhost:5000/api/chats/${id}/resolve`, {}, {
+            const res = await axios.put(`${API_URL}/api/chats/${id}/resolve`, {}, {
                 headers: { 'x-auth-token': token }
             });
             setSuccess(`${res.data.message} +${res.data.pointsAwarded} points!`);

@@ -54,7 +54,7 @@ const ItemsPage = ({ type }) => {
     const fetchItems = async (showLoading = true) => {
         try {
             if (showLoading) setLoading(true);
-            const res = await axios.get(`http://localhost:5000/api/items?type=${type}`);
+            const res = await axios.get(`${API_URL}/api/items?type=${type}`);
             setItems(res.data);
             setLastUpdated(new Date());
         } catch (err) {
@@ -92,7 +92,7 @@ const ItemsPage = ({ type }) => {
         const checkActiveReport = async () => {
             if (isAuthenticated && user) {
                 try {
-                    const res = await axios.get(`http://localhost:5000/api/items?user=${user.id}&type=lost&status=active`);
+                    const res = await axios.get(`${API_URL}/api/items?user=${user.id}&type=lost&status=active`);
                     if (res.data.length > 0) {
                         setActiveReportItem(res.data[0]); // Capture the first active item
                     } else {

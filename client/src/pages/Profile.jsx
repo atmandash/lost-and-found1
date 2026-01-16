@@ -72,16 +72,16 @@ const Profile = () => {
             console.log('Fetching items for User:', userId);
 
             // Fetch user gamification stats
-            const statsRes = await axios.get('http://localhost:5000/api/gamification/stats', {
+            const statsRes = await axios.get(`${API_URL}/api/gamification/stats', {
                 headers: { 'x-auth-token': token }
             });
 
             // Fetch ONLY this user's items using backend filter
             // This is safer than fetching all and filtering on client
-            const lostRes = await axios.get(`http://localhost:5000/api/items?type=lost&user=${userId}`, {
+            const lostRes = await axios.get(`${API_URL}/api/items?type=lost&user=${userId}`, {
                 headers: { 'x-auth-token': token }
             });
-            const foundRes = await axios.get(`http://localhost:5000/api/items?type=found&user=${userId}`, {
+            const foundRes = await axios.get(`${API_URL}/api/items?type=found&user=${userId}`, {
                 headers: { 'x-auth-token': token }
             });
 

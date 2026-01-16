@@ -18,7 +18,7 @@ const ClaimModal = ({ item, onClose, onSuccess }) => {
         try {
             const token = localStorage.getItem('token');
             await axios.post(
-                `http://localhost:5000/api/items/${item._id}/claim`,
+                `${API_URL}/api/items/${item._id}/claim`,
                 formData,
                 { headers: { 'x-auth-token': token } }
             );

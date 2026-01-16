@@ -4,6 +4,7 @@ import { Search, Heart, Activity, Bell, Shield, MessageCircle, ArrowRight, MapPi
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import axios from 'axios';
+import API_URL from '../config/api';
 import Footer from '../components/Footer';
 
 const LandingPage = () => {
@@ -22,7 +23,7 @@ const LandingPage = () => {
     // Fetch global stats
     const fetchStats = async () => {
         try {
-            const res = await axios.get('http://localhost:5000/api/stats/global');
+            const res = await axios.get(`${API_URL}/api/stats/global');
             setStats(res.data);
             setLoading(false);
         } catch (err) {
@@ -71,11 +72,11 @@ const LandingPage = () => {
             {/* HERO SECTION - Reduced top margin */}
             <div className="flex flex-col items-center justify-center text-center mt-12 px-4 max-w-4xl space-y-8 animate-fade-in-scale">
                 <div className="space-y-4">
-                    <h1 className={`text-5xl md:text-7xl font-extrabold tracking-tight leading-tight ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                    <h1 className={`text - 5xl md: text - 7xl font - extrabold tracking - tight leading - tight ${ isDarkMode? 'text-white': 'text-gray-900' }`}>
                         Find What You've <br />
                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-purple-600">Lost on Campus.</span>
                     </h1>
-                    <p className={`text-xl md:text-2xl max-w-2xl mx-auto ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                    <p className={`text - xl md: text - 2xl max - w - 2xl mx - auto ${ isDarkMode? 'text-gray-400': 'text-gray-600' }`}>
                         Don't panic. Connect with the community to recover your belongings instantly. Safe, fast, and simple.
                     </p>
                 </div>
@@ -92,12 +93,12 @@ const LandingPage = () => {
             {/* FEATURES GRID */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 px-4 max-w-6xl mt-24 w-full animate-stagger">
                 {features.map((feat, idx) => (
-                    <div key={idx} className={`p-6 rounded-2xl border transition-all hover:-translate-y-1 hover:shadow-lg hover-scale ${isDarkMode ? 'bg-gray-800 border-gray-700 hover:bg-gray-750' : 'bg-white/60 border-indigo-50 backdrop-blur-sm hover:bg-white'}`}>
+                    <div key={idx} className={`p - 6 rounded - 2xl border transition - all hover: -translate - y - 1 hover: shadow - lg hover - scale ${ isDarkMode? 'bg-gray-800 border-gray-700 hover:bg-gray-750': 'bg-white/60 border-indigo-50 backdrop-blur-sm hover:bg-white' }`}>
                         <div className="mb-4 bg-gray-50 dark:bg-gray-700 w-12 h-12 rounded-xl flex items-center justify-center">
                             {feat.icon}
                         </div>
-                        <h3 className={`text-lg font-bold mb-2 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>{feat.title}</h3>
-                        <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>{feat.desc}</p>
+                        <h3 className={`text - lg font - bold mb - 2 ${ isDarkMode? 'text-gray-100': 'text-gray-900' }`}>{feat.title}</h3>
+                        <p className={`text - sm ${ isDarkMode? 'text-gray-400': 'text-gray-600' }`}>{feat.desc}</p>
                     </div>
                 ))}
             </div>
@@ -106,34 +107,34 @@ const LandingPage = () => {
             <div className="w-full max-w-5xl mt-24 relative z-10 px-4 animate-slide-in-up mb-12">
                 <div className="flex items-center justify-center gap-2 mb-6">
                     <div className="w-2.5 h-2.5 bg-green-500 rounded-full animate-pulse"></div>
-                    <span className={`text-sm font-bold tracking-wide uppercase ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Live Platform Stats</span>
+                    <span className={`text - sm font - bold tracking - wide uppercase ${ isDarkMode? 'text-gray-400': 'text-gray-500' }`}>Live Platform Stats</span>
                 </div>
 
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 justify-items-center">
-                    <div className={`stagger-item text-center p-4 rounded-xl shadow-sm hover-lift transition-all w-full ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
+                    <div className={`stagger - item text - center p - 4 rounded - xl shadow - sm hover - lift transition - all w - full ${ isDarkMode? 'bg-gray-800': 'bg-white' }`}>
                         <div className="text-2xl md:text-3xl font-bold text-indigo-600 transition-all">
                             {loading ? '...' : <CountUp end={stats.totalReports} />}
                         </div>
-                        <div className={`text-xs md:text-sm mt-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Total Reports</div>
+                        <div className={`text - xs md: text - sm mt - 1 ${ isDarkMode? 'text-gray-400': 'text-gray-500' }`}>Total Reports</div>
                     </div>
-                    <div className={`stagger-item text-center p-4 rounded-xl shadow-sm hover-lift transition-all w-full ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
+                    <div className={`stagger - item text - center p - 4 rounded - xl shadow - sm hover - lift transition - all w - full ${ isDarkMode? 'bg-gray-800': 'bg-white' }`}>
                         <div className="text-2xl md:text-3xl font-bold text-red-600 transition-all">
                             {loading ? '...' : <CountUp end={stats.lostItems} />}
                         </div>
-                        <div className={`text-xs md:text-sm mt-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Lost Items</div>
+                        <div className={`text - xs md: text - sm mt - 1 ${ isDarkMode? 'text-gray-400': 'text-gray-500' }`}>Lost Items</div>
                     </div>
-                    <div className={`stagger-item text-center p-4 rounded-xl shadow-sm hover-lift transition-all w-full ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
+                    <div className={`stagger - item text - center p - 4 rounded - xl shadow - sm hover - lift transition - all w - full ${ isDarkMode? 'bg-gray-800': 'bg-white' }`}>
                         <div className="text-2xl md:text-3xl font-bold text-green-600 transition-all">
                             {loading ? '...' : <CountUp end={stats.foundItems} />}
                         </div>
-                        <div className={`text-xs md:text-sm mt-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Found Items</div>
+                        <div className={`text - xs md: text - sm mt - 1 ${ isDarkMode? 'text-gray-400': 'text-gray-500' }`}>Found Items</div>
                     </div>
-                    <div className={`stagger-item text-center p-4 rounded-xl shadow-sm hover-lift transition-all w-full ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
+                    <div className={`stagger - item text - center p - 4 rounded - xl shadow - sm hover - lift transition - all w - full ${ isDarkMode? 'bg-gray-800': 'bg-white' }`}>
                         <div className="text-2xl md:text-3xl font-bold text-yellow-600 transition-all flex items-center justify-center gap-1">
                             {loading ? '...' : <CountUp end={stats.activeUsers} />}
                             <Activity className="w-4 h-4 text-green-500 pulse" />
                         </div>
-                        <div className={`text-xs md:text-sm mt-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Active Users</div>
+                        <div className={`text - xs md: text - sm mt - 1 ${ isDarkMode? 'text-gray-400': 'text-gray-500' }`}>Active Users</div>
                     </div>
                 </div>
             </div>

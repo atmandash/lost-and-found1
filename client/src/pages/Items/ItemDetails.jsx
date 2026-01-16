@@ -24,7 +24,7 @@ const ItemDetails = () => {
 
     const fetchItem = async () => {
         try {
-            const res = await axios.get(`http://localhost:5000/api/items/${id}`);
+            const res = await axios.get(`${API_URL}/api/items/${id}`);
             setItem(res.data);
         } catch (err) {
             console.error('Error:', err);
@@ -44,7 +44,7 @@ const ItemDetails = () => {
             const token = localStorage.getItem('token');
             console.log('Initiating chat for item:', item._id);
 
-            const res = await axios.post('http://localhost:5000/api/chats/initiate',
+            const res = await axios.post(`${API_URL}/api/chats/initiate',
                 { itemId: item._id },
                 { headers: { 'x-auth-token': token } }
             );
@@ -69,7 +69,7 @@ const ItemDetails = () => {
         try {
             const token = localStorage.getItem('token');
             const res = await axios.post(
-                `http://localhost:5000/api/items/${id}/${voteType}`,
+                `${API_URL}/api/items/${id}/${voteType}`,
                 {},
                 { headers: { 'x-auth-token': token } }
             );
@@ -184,7 +184,7 @@ const ItemDetails = () => {
                                                             onClick={async () => {
                                                                 try {
                                                                     const token = localStorage.getItem('token');
-                                                                    await axios.put(`http://localhost:5000/api/items/${item._id}/claim/${claim._id}/approve`, {}, {
+                                                                    await axios.put(`${API_URL}/api/items/${item._id}/claim/${claim._id}/approve`, {}, {
                                                                         headers: { 'x-auth-token': token }
                                                                     });
                                                                     alert('Claim Approved!');
@@ -201,7 +201,7 @@ const ItemDetails = () => {
                                                             onClick={async () => {
                                                                 try {
                                                                     const token = localStorage.getItem('token');
-                                                                    await axios.put(`http://localhost:5000/api/items/${item._id}/claim/${claim._id}/reject`, {}, {
+                                                                    await axios.put(`${API_URL}/api/items/${item._id}/claim/${claim._id}/reject`, {}, {
                                                                         headers: { 'x-auth-token': token }
                                                                     });
                                                                     fetchItem();
@@ -218,7 +218,7 @@ const ItemDetails = () => {
                                                         onClick={async () => {
                                                             try {
                                                                 const token = localStorage.getItem('token');
-                                                                const res = await axios.post('http://localhost:5000/api/chats/initiate',
+                                                                const res = await axios.post(`${API_URL}/api/chats/initiate',
                                                                     {
                                                                         itemId: item._id,
                                                                         recipientId: claim.claimant._id
@@ -286,7 +286,7 @@ const ItemDetails = () => {
                                     if (confirm('Are you sure you want to mark this item as resolved? It will be moved to the Resolved list.')) {
                                         try {
                                             const token = localStorage.getItem('token');
-                                            await axios.put(`http://localhost:5000/api/items/${item._id}/resolve`, {}, {
+                                            await axios.put(`${API_URL}/api/items/${item._id}/resolve`, {}, {
                                                 headers: { 'x-auth-token': token }
                                             });
                                             alert('Item marked as resolved!');

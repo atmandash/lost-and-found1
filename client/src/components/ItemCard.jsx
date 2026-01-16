@@ -30,7 +30,7 @@ const ItemCard = ({ item }) => {
         setCreatingChat(true);
         try {
             const token = localStorage.getItem('token');
-            const res = await axios.post('http://localhost:5000/api/chats/initiate',
+            const res = await axios.post(`${API_URL}/api/chats/initiate',
                 { itemId: item._id },
                 { headers: { 'x-auth-token': token } }
             );
