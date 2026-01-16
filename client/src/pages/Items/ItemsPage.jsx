@@ -156,9 +156,10 @@ const ItemsPage = ({ type }) => {
     // Check if user has active lost report to show Alert button
     useEffect(() => {
         const checkActiveReport = async () => {
-            if (isAuthenticated && user) {
+            const currentUserId = user?._id || user?.id; // Handle both ID formats
+            if (isAuthenticated && currentUserId) {
                 try {
-                    const res = await axios.get(`${API_URL}/api/items?user=${user.id}&type=lost&status=active`);
+                    const res = await axios.get(`${API_URL}/api/items?user=${currentUserId}&type=lost&status=active`);
                     if (Array.isArray(res.data) && res.data.length > 0) {
                         setActiveReportItem(res.data[0]); // Capture the first active item
                     } else {
@@ -173,8 +174,7 @@ const ItemsPage = ({ type }) => {
     }, [isAuthenticated, user, type]); // Re-check if type/user changes
 
     const filteredItems = (Array.isArray(items) ? items : []).filter(item => {
-        // ULTRA-STRICT SAFE VALIDATION
-        if (!item) return false;
+        if (!item || !item.location) return false; // Safety check for bad data
 
         // Ensure essential properties exist to prevent crashes in ItemCard
         // We accept if properties are missing but return a safe fallback in the UI

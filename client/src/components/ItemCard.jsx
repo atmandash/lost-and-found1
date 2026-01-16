@@ -84,7 +84,7 @@ const ItemCard = ({ item }) => {
                 <div className="space-y-2 mt-3">
                     <div className={`flex items-center text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
                         <MapPin className={`w-4 h-4 mr-1.5 ${isDarkMode ? 'text-gray-500' : 'text-gray-400'}`} />
-                        <span className="truncate">{item.location?.main || 'Location not specified'}</span>
+                        <span className="truncate">{item.location?.main || 'Unknown Location'}</span>
                     </div>
                     <div className={`flex items-center text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
                         <Calendar className={`w-4 h-4 mr-1.5 ${isDarkMode ? 'text-gray-500' : 'text-gray-400'}`} />
