@@ -11,32 +11,7 @@ const BackgroundEffects = () => {
     // Debug log
     console.log('Current Path:', location.pathname, 'Show Blobs:', showBlobs);
 
-    // Mouse Parallax Logic (Throttled for performance)
-    const [mousePosition, setMousePosition] = React.useState({ x: 0, y: 0 });
-
-    React.useEffect(() => {
-        let throttleTimer;
-        const handleMouseMove = (e) => {
-            if (throttleTimer) return; // Skip if throttle is active
-
-            throttleTimer = setTimeout(() => {
-                // Calculate position relative to center of screen (values -1 to 1)
-                const x = (e.clientX - window.innerWidth / 2) / (window.innerWidth / 2);
-                const y = (e.clientY - window.innerHeight / 2) / (window.innerHeight / 2);
-                setMousePosition({ x, y });
-                throttleTimer = null;
-            }, 50); // Update at most every 50ms (20fps, smooth enough for parallax)
-        };
-
-        if (showBlobs) {
-            window.addEventListener('mousemove', handleMouseMove);
-        }
-
-        return () => {
-            window.removeEventListener('mousemove', handleMouseMove);
-            if (throttleTimer) clearTimeout(throttleTimer);
-        };
-    }, [showBlobs]);
+    // Parallax removed to improve performance
 
     return (
         <div key={location.pathname} className="fixed inset-0 -z-10 overflow-hidden pointer-events-none h-full w-full">
@@ -48,15 +23,12 @@ const BackgroundEffects = () => {
                 <>
                     <div
                         className="absolute top-0 -left-10 w-[300px] h-[300px] bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"
-                        style={{ transform: `translate(${mousePosition.x * -30}px, ${mousePosition.y * -30}px)` }}
                     ></div>
                     <div
                         className="absolute top-0 -right-10 w-[300px] h-[300px] bg-green-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"
-                        style={{ transform: `translate(${mousePosition.x * 20}px, ${mousePosition.y * 20}px)` }}
                     ></div>
                     <div
                         className="absolute -bottom-10 left-20 w-[300px] h-[300px] bg-pink-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"
-                        style={{ transform: `translate(${mousePosition.x * -40}px, ${mousePosition.y * -40}px)` }}
                     ></div>
                 </>
             )}
