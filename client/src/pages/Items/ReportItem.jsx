@@ -4,6 +4,7 @@ import axios from 'axios';
 import { MapPin, Tag, Type } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
+import API_URL from '../../config/api';
 import MapPicker from '../../components/MapPicker';
 
 const ReportItem = ({ type }) => {
