@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Search, Filter, Bell } from 'lucide-react';
+import { io } from 'socket.io-client';
 import ItemCard from '../../components/ItemCard';
 import WatchlistModal from '../../components/WatchlistModal';
 import { useAuth } from '../../context/AuthContext';
@@ -73,51 +74,47 @@ const ItemsPage = ({ type }) => {
         fetchItems(true);
 
         // Real-time updates with Socket.IO
-        import('socket.io-client').then(({ io }) => {
+        socket = io(API_URL, {
+            transports: ['websocket'],
+            reconnection: true,
+        });
+
+        socket.on('connect', () => {
+            console.log('ItemsPage connected to socket');
+        });
+
+        // Handle New Item
+        socket.on('item_added', (newItem) => {
             if (!isMounted) return;
-
-            socket = io(API_URL, {
-                transports: ['websocket'],
-                reconnection: true,
-            });
-
-            socket.on('connect', () => {
-                console.log('ItemsPage connected to socket');
-            });
-
-            // Handle New Item
-            socket.on('item_added', (newItem) => {
-                if (!isMounted) return;
-                // Check if new item matches current filters (rudimentary check on type/status)
-                if (newItem.type === type && newItem.status === 'active') {
-                    setItems(prevItems => {
-                        const currentItems = Array.isArray(prevItems) ? prevItems : [];
-                        // Avoid duplicates
-                        if (currentItems.some(i => i._id === newItem._id)) return currentItems;
-                        // Add to top and sort by date descending
-                        const updated = [newItem, ...currentItems].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-                        setLastUpdated(new Date());
-                        return updated;
-                    });
-                }
-            });
-
-            // Handle Updated Item (Resolved/Edited)
-            socket.on('item_updated', (updatedItem) => {
-                if (!isMounted) return;
+            // Check if new item matches current filters (rudimentary check on type/status)
+            if (newItem.type === type && newItem.status === 'active') {
                 setItems(prevItems => {
                     const currentItems = Array.isArray(prevItems) ? prevItems : [];
-                    return currentItems.map(item =>
-                        item._id === updatedItem._id ? { ...item, ...updatedItem } : item
-                    ).filter(item => {
-                        // If view is active, remove resolved items
-                        if (view === 'active' && item.status !== 'active') return false;
-                        return true;
-                    });
+                    // Avoid duplicates
+                    if (currentItems.some(i => i._id === newItem._id)) return currentItems;
+                    // Add to top and sort by date descending
+                    const updated = [newItem, ...currentItems].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+                    setLastUpdated(new Date());
+                    return updated;
                 });
-                setLastUpdated(new Date());
+            }
+        });
+
+        // Handle Updated Item (Resolved/Edited)
+        socket.on('item_updated', (updatedItem) => {
+            if (!isMounted) return;
+            setItems(prevItems => {
+                const currentItems = Array.isArray(prevItems) ? prevItems : [];
+                return currentItems.map(item =>
+                    item._id === updatedItem._id ? { ...item, ...updatedItem } : item
+                ).filter(item => {
+                    // If view is active, remove resolved items
+                    if (view === 'active' && item.status !== 'active') return false;
+                    return true;
+                });
             });
-        }).catch(err => console.error('Socket load error:', err));
+            setLastUpdated(new Date());
+        });
 
         const interval = setInterval(() => {
             if (document.visibilityState === 'visible') fetchItems(false);
@@ -310,4 +307,3 @@ const ItemsPage = ({ type }) => {
 };
 
 export default ItemsPage;
-
