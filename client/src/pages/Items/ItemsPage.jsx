@@ -68,11 +68,15 @@ const ItemsPage = ({ type }) => {
     // Update useEffect to use the new fetchItems and Socket.IO
     useEffect(() => {
         let isMounted = true;
+        let socket = null;
+
         fetchItems(true);
 
         // Real-time updates with Socket.IO
         import('socket.io-client').then(({ io }) => {
-            const socket = io(API_URL, {
+            if (!isMounted) return;
+
+            socket = io(API_URL, {
                 transports: ['websocket'],
                 reconnection: true,
             });
@@ -83,13 +87,15 @@ const ItemsPage = ({ type }) => {
 
             // Handle New Item
             socket.on('item_added', (newItem) => {
+                if (!isMounted) return;
                 // Check if new item matches current filters (rudimentary check on type/status)
                 if (newItem.type === type && newItem.status === 'active') {
                     setItems(prevItems => {
+                        const currentItems = Array.isArray(prevItems) ? prevItems : [];
                         // Avoid duplicates
-                        if (prevItems.some(i => i._id === newItem._id)) return prevItems;
+                        if (currentItems.some(i => i._id === newItem._id)) return currentItems;
                         // Add to top and sort by date descending
-                        const updated = [newItem, ...prevItems].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+                        const updated = [newItem, ...currentItems].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
                         setLastUpdated(new Date());
                         return updated;
                     });
@@ -98,8 +104,10 @@ const ItemsPage = ({ type }) => {
 
             // Handle Updated Item (Resolved/Edited)
             socket.on('item_updated', (updatedItem) => {
+                if (!isMounted) return;
                 setItems(prevItems => {
-                    return prevItems.map(item =>
+                    const currentItems = Array.isArray(prevItems) ? prevItems : [];
+                    return currentItems.map(item =>
                         item._id === updatedItem._id ? { ...item, ...updatedItem } : item
                     ).filter(item => {
                         // If view is active, remove resolved items
@@ -109,17 +117,17 @@ const ItemsPage = ({ type }) => {
                 });
                 setLastUpdated(new Date());
             });
-
-            return () => {
-                socket.disconnect();
-            };
-        });
+        }).catch(err => console.error('Socket load error:', err));
 
         const interval = setInterval(() => {
             if (document.visibilityState === 'visible') fetchItems(false);
         }, 60000);
 
-        return () => clearInterval(interval);
+        return () => {
+            isMounted = false;
+            clearInterval(interval);
+            if (socket) socket.disconnect();
+        };
     }, [type, view]); // Re-run if type or view changes
 
     const [view, setView] = useState('active');
@@ -152,7 +160,7 @@ const ItemsPage = ({ type }) => {
         checkActiveReport();
     }, [isAuthenticated, user, type]); // Re-check if type/user changes
 
-    const filteredItems = items.filter(item => {
+    const filteredItems = (Array.isArray(items) ? items : []).filter(item => {
         if (!item) return false;
 
         // Status Filter
