@@ -148,7 +148,18 @@ exports.register = async (req, res) => {
             { expiresIn: '7d' }, // Reduced from 30d to 7d for security
             (err, token) => {
                 if (err) throw err;
-                res.json({ token, user: { id: user.id, name: user.name, email: user.email, points: user.points } });
+                if (err) throw err;
+                res.json({
+                    token,
+                    user: {
+                        id: user.id,
+                        name: user.name,
+                        email: user.email,
+                        points: user.points,
+                        isAdmin: user.isAdmin,
+                        isHiddenFromLeaderboard: user.isHiddenFromLeaderboard
+                    }
+                });
             }
         );
     } catch (err) {
@@ -221,7 +232,18 @@ exports.login = async (req, res) => {
             { expiresIn: '7d' }, // 7 days for security
             (err, token) => {
                 if (err) throw err;
-                res.json({ token, user: { id: user.id, name: user.name, email: user.email, points: user.points } });
+                if (err) throw err;
+                res.json({
+                    token,
+                    user: {
+                        id: user.id,
+                        name: user.name,
+                        email: user.email,
+                        points: user.points,
+                        isAdmin: user.isAdmin,
+                        isHiddenFromLeaderboard: user.isHiddenFromLeaderboard
+                    }
+                });
             }
         );
     } catch (err) {
