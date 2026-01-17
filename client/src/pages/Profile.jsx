@@ -10,8 +10,8 @@ import { useCountAnimation } from '../hooks/useCountAnimation';
 
 // Avatar generation function
 const generateAvatar = (userId, name) => {
-    // Premium, consistent styles
-    const styles = ['notionists', 'lorelei', 'open-peeps', 'micah', 'miniavs'];
+    // Strictly young, premium styles
+    const styles = ['micah', 'lorelei', 'notionists'];
     const styleIndex = parseInt(userId?.slice(-1) || '0', 16) % styles.length;
     const style = styles[styleIndex];
     return `https://api.dicebear.com/7.x/${style}/svg?seed=${userId || name}`;
@@ -19,11 +19,9 @@ const generateAvatar = (userId, name) => {
 
 // Predefined avatar styles for selection
 const AVATAR_STYLES = [
-    'notionists', // Premium sketch style (Notion-like)
-    'lorelei',    // Clean flat art
-    'open-peeps', // Hand-drawn sketchy
-    'micah',      // Simple clean lines
-    'miniavs'     // Compact & Cute
+    'micah',
+    'lorelei',
+    'notionists'
 ];
 
 // Generate 6 variants for each style = 30 options
