@@ -11,7 +11,7 @@ const Navbar = () => {
     const location = useLocation();
 
     return (
-        <nav className={`fixed bottom-0 w-full md:relative z-50 ${isDarkMode ? 'bg-gray-900/80 backdrop-blur-md' : 'bg-white/80 backdrop-blur-md'}`}>
+        <nav className="fixed bottom-0 w-full md:relative z-50 bg-gray-900/90 backdrop-blur-md border-t border-white/5">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between md:justify-start h-14 items-center">
                     {/* Logo */}
