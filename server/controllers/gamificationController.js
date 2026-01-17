@@ -6,7 +6,7 @@ exports.getLeaderboard = async (req, res) => {
     try {
         const limit = parseInt(req.query.limit) || 10;
 
-        const leaderboard = await User.find()
+        const leaderboard = await User.find({ isHiddenFromLeaderboard: { $ne: true } })
             .select('name points badges level itemsReported itemsReturned')
             .sort({ points: -1 })
             .limit(limit);
