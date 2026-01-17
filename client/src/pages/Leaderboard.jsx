@@ -46,10 +46,10 @@ const Leaderboard = () => {
     };
 
     const getRankBg = (index) => {
-        if (index === 0) return 'bg-gradient-to-r from-yellow-50 to-amber-50 border-yellow-200';
-        if (index === 1) return 'bg-gradient-to-r from-gray-50 to-slate-50 border-gray-200';
-        if (index === 2) return 'bg-gradient-to-r from-amber-50 to-orange-50 border-amber-200';
-        return 'bg-white border-gray-100';
+        if (index === 0) return 'bg-gradient-to-r from-yellow-900/30 to-amber-900/20 border-yellow-500/30';
+        if (index === 1) return 'bg-gradient-to-r from-gray-800/50 to-slate-800/40 border-gray-500/30';
+        if (index === 2) return 'bg-gradient-to-r from-orange-900/30 to-amber-900/20 border-orange-500/30';
+        return 'bg-gray-800/40 border-gray-700/30';
     };
 
     if (loading) {
