@@ -195,7 +195,7 @@ const Profile = () => {
     });
 
     return (
-        <div className="max-w-6xl mx-auto space-y-8">
+        <div className="max-w-7xl mx-auto space-y-8">
             {/* Profile Header with Gradient */}
             <div className="bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 p-8 rounded-3xl shadow-xl text-white animate-fade-in-scale">
                 <div className="flex flex-col md:flex-row items-center text-center md:text-left gap-6">
