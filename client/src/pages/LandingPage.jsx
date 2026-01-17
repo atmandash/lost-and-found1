@@ -120,7 +120,7 @@ const LandingPage = () => {
             </div>
 
             {/* STATS FOOTER (Original Grid Design Restored) */}
-            <div className="w-full max-w-5xl mt-24 relative z-10 px-4 animate-slide-in-up mb-12">
+            <div className="w-full max-w-5xl mt-24 relative z-10 px-4 animate-slide-in-up mb-6">
                 <div className="flex items-center justify-center gap-2 mb-6">
                     <div className="w-2.5 h-2.5 bg-green-500 rounded-full animate-pulse"></div>
                     <span className={`text-sm font-bold tracking-wide uppercase ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Live Platform Stats</span>
