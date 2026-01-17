@@ -15,9 +15,9 @@ const ReportSelection = () => {
 
     return (
         <div className="px-4 flex-grow w-full flex flex-col items-center justify-center animate-fade-in relative overflow-hidden py-4">
-            {/* Login Button */}
+            {/* Login Button - Hidden on mobile to avoid overlap with navbar */}
             {!isAuthenticated && (
-                <div className="absolute top-6 right-6 z-50">
+                <div className="absolute top-6 right-6 z-50 hidden md:block">
                     <button
                         onClick={() => navigate('/login')}
                         className="px-6 py-2 bg-white/80 backdrop-blur-md text-indigo-600 font-bold border border-indigo-100 rounded-full shadow-lg hover:shadow-xl transition-all hover:-translate-y-0.5"
