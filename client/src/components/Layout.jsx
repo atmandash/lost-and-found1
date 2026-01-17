@@ -75,7 +75,7 @@ const Layout = ({ children }) => {
     const location = useLocation();
 
     return (
-        <div className={`min-h-screen flex flex-col transition-colors duration-300 relative overflow-x-hidden`}>
+        <div className="min-h-screen flex flex-col relative">
             <BackgroundEffects />
             {/* Top Bar for Mobile */}
             <div className={`md:hidden h-14 px-4 shadow-sm flex justify-between items-center sticky top-0 z-40 ${isDarkMode ? 'bg-gray-800/90 backdrop-blur-md' : 'bg-white/80 backdrop-blur-md'}`}>
