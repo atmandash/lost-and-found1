@@ -94,77 +94,73 @@ const UserManagement = () => {
                     </div>
                 </div>
 
-                {/* Users Table */}
-                <div className={`overflow-hidden rounded-xl shadow-sm border ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'}`}>
-                    <table className="w-full">
-                        <thead className={isDarkMode ? 'bg-gray-700' : 'bg-gray-50'}>
-                            <tr>
-                                <th className={`px-6 py-3 text-left text-xs font-bold uppercase tracking-wider ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                                    User
-                                </th>
-                                <th className={`px-6 py-3 text-left text-xs font-bold uppercase tracking-wider ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                                    Points
-                                </th>
-                                <th className={`px-6 py-3 text-left text-xs font-bold uppercase tracking-wider ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                                    Items
-                                </th>
-                                <th className={`px-6 py-3 text-left text-xs font-bold uppercase tracking-wider ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                                    Joined
-                                </th>
-                                <th className={`px-6 py-3 text-right text-xs font-bold uppercase tracking-wider ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                                    Actions
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y divide-gray-200">
-                            {filteredUsers.map((u) => (
-                                <tr key={u._id} className={isDarkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-50'}>
-                                    <td className="px-6 py-4 whitespace-nowrap">
-                                        <div className="flex items-center">
-                                            <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-full flex items-center justify-center text-white font-bold">
-                                                {u.name[0]}
-                                            </div>
-                                            <div className="ml-3">
-                                                <div className={`font-medium ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
-                                                    {u.name}
-                                                    {u.isAdmin && <span className="ml-2 px-2 py-0.5 bg-red-100 text-red-800 text-xs font-bold rounded">ADMIN</span>}
-                                                </div>
-                                                <div className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-                                                    {u.email}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap">
-                                        <span className={`font-semibold ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
-                                            {u.points || 0}
-                                        </span>
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap">
-                                        <span className={isDarkMode ? 'text-gray-300' : 'text-gray-600'}>
-                                            {u.itemsReported || 0}
-                                        </span>
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap">
-                                        <span className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-                                            {new Date(u.createdAt).toLocaleDateString()}
-                                        </span>
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-right">
-                                        {u._id !== user?.id && !u.isAdmin && (
-                                            <button
-                                                onClick={() => handleDeleteUser(u._id, u.name)}
-                                                className="text-red-600 hover:text-red-800 font-medium flex items-center justify-end ml-auto"
-                                            >
-                                                <Trash2 className="w-4 h-4 mr-1" />
-                                                Delete
-                                            </button>
+                {/* Users List - Mobile Cards / Desktop Table */}
+                <div className="space-y-4">
+                    {filteredUsers.map((u) => (
+                        <div
+                            key={u._id}
+                            className={`p-4 rounded-xl border ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} hover:shadow-md transition-shadow`}
+                        >
+                            <div className="flex items-start gap-4">
+                                {/* Avatar */}
+                                <div className="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-full flex items-center justify-center text-white font-bold text-lg flex-shrink-0">
+                                    {u.name[0]}
+                                </div>
+
+                                {/* User Info */}
+                                <div className="flex-1 min-w-0">
+                                    <div className="flex items-center gap-2 flex-wrap">
+                                        <h3 className={`font-bold text-lg ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+                                            {u.name}
+                                        </h3>
+                                        {u.isAdmin && (
+                                            <span className="px-2 py-0.5 bg-red-100 text-red-800 text-xs font-bold rounded">
+                                                ADMIN
+                                            </span>
                                         )}
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                                    </div>
+                                    <p className={`text-sm mt-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                                        {u.email}
+                                    </p>
+
+                                    {/* Stats Row */}
+                                    <div className="flex items-center gap-4 mt-3 text-sm">
+                                        <div>
+                                            <span className={`font-semibold ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+                                                {u.points || 0}
+                                            </span>
+                                            <span className={`ml-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                                                points
+                                            </span>
+                                        </div>
+                                        <span className={isDarkMode ? 'text-gray-600' : 'text-gray-300'}>•</span>
+                                        <div>
+                                            <span className={isDarkMode ? 'text-gray-300' : 'text-gray-600'}>
+                                                {u.itemsReported || 0} items
+                                            </span>
+                                        </div>
+                                        <span className={isDarkMode ? 'text-gray-600' : 'text-gray-300'}>•</span>
+                                        <div>
+                                            <span className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                                                Joined {new Date(u.createdAt).toLocaleDateString()}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Delete Button */}
+                                {u._id !== user?.id && !u.isAdmin && (
+                                    <button
+                                        onClick={() => handleDeleteUser(u._id, u.name)}
+                                        className="flex-shrink-0 px-3 py-2 bg-red-50 text-red-600 hover:bg-red-100 rounded-lg font-medium flex items-center gap-2 transition-colors"
+                                    >
+                                        <Trash2 className="w-4 h-4" />
+                                        <span className="hidden sm:inline">Delete</span>
+                                    </button>
+                                )}
+                            </div>
+                        </div>
+                    ))}
 
                     {filteredUsers.length === 0 && (
                         <div className={`text-center py-12 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
