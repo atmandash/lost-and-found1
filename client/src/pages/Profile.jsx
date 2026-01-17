@@ -233,20 +233,22 @@ const Profile = () => {
                         <h1 className="text-3xl font-bold animate-slide-in-right">{user.name}</h1>
                         <p className="text-indigo-100 mt-1 animate-slide-in-right break-all" style={{ animationDelay: '0.1s' }}>{user.email}</p>
 
-                        {/* Phone Number and Verified Badge in White Spaces */}
-                        <div className="mt-6 flex flex-col sm:flex-row gap-3 animate-slide-in-right" style={{ animationDelay: '0.2s' }}>
-                            {/* Phone Number - First White Space */}
-                            <div className="bg-white text-indigo-900 px-6 py-3 rounded-2xl shadow-lg flex items-center gap-3 min-w-[200px] hover-lift">
-                                <Phone className="w-5 h-5 text-indigo-600" />
-                                <span className="font-semibold">{user.phone || 'No phone'}</span>
-                            </div>
+                        {/* Phone Number and Verified Badge - Hidden for Admins */}
+                        {!user.isAdmin && (
+                            <div className="mt-6 flex flex-col sm:flex-row gap-3 animate-slide-in-right" style={{ animationDelay: '0.2s' }}>
+                                {/* Phone Number - First White Space */}
+                                <div className="bg-white text-indigo-900 px-6 py-3 rounded-2xl shadow-lg flex items-center gap-3 min-w-[200px] hover-lift">
+                                    <Phone className="w-5 h-5 text-indigo-600" />
+                                    <span className="font-semibold">{user.phone || 'No phone'}</span>
+                                </div>
 
-                            {/* Verified Student - Second White Space */}
-                            <div className="bg-white text-green-700 px-6 py-3 rounded-2xl shadow-lg flex items-center gap-3 min-w-[200px] hover-lift">
-                                <Shield className="w-5 h-5 text-green-600" />
-                                <span className="font-semibold">Verified VIT Student</span>
+                                {/* Verified Student - Second White Space */}
+                                <div className="bg-white text-green-700 px-6 py-3 rounded-2xl shadow-lg flex items-center gap-3 min-w-[200px] hover-lift">
+                                    <Shield className="w-5 h-5 text-green-600" />
+                                    <span className="font-semibold">Verified VIT Student</span>
+                                </div>
                             </div>
-                        </div>
+                        )}
                     </div>
 
                     <button
@@ -267,88 +269,84 @@ const Profile = () => {
                 </div >
             </div >
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 animate-stagger">
-                <div className="bg-gradient-to-br from-indigo-500 to-indigo-600 p-6 rounded-2xl shadow-lg text-white hover-lift card-glow transition-all">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <div className="text-3xl font-bold tabular-nums">{animatedTotalReports}</div>
-                            <div className="text-sm text-indigo-100 mt-1">Total Reports</div>
-                        </div>
-                        <MapPin className="w-10 h-10 opacity-50" />
-                    </div>
-                </div>
-
-                <div className="bg-gradient-to-br from-red-500 to-red-600 p-6 rounded-2xl shadow-lg text-white hover-lift card-glow transition-all">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <div className="text-3xl font-bold tabular-nums">{animatedLostItems}</div>
-                            <div className="text-sm text-red-100 mt-1">Lost Items</div>
-                        </div>
-                        <MapPin className="w-10 h-10 opacity-50" />
-                    </div>
-                </div>
-
-                <div className="bg-gradient-to-br from-green-500 to-green-600 p-6 rounded-2xl shadow-lg text-white hover-lift card-glow transition-all">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <div className="text-3xl font-bold tabular-nums">{animatedFoundItems}</div>
-                            <div className="text-sm text-green-100 mt-1">Found Items</div>
-                        </div>
-                        <MapPin className="w-10 h-10 opacity-50" />
-                    </div>
-                </div>
-
-                <div className="bg-gradient-to-br from-yellow-500 to-yellow-600 p-6 rounded-2xl shadow-lg text-white hover-lift card-glow transition-all">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <div className="text-3xl font-bold tabular-nums flex items-center gap-2">
-                                {animatedKarmaPoints}
-                                <Activity className="w-6 h-6 text-yellow-200 animate-pulse" />
+            {!user.isAdmin && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 animate-stagger">
+                    <div className="bg-gradient-to-br from-indigo-500 to-indigo-600 p-6 rounded-2xl shadow-lg text-white hover-lift card-glow transition-all">
+                        <div className="flex items-center justify-between">
+                            <div>
+                                <div className="text-3xl font-bold tabular-nums">{animatedTotalReports}</div>
+                                <div className="text-sm text-indigo-100 mt-1">Total Reports</div>
                             </div>
-                            <div className="text-sm text-yellow-100 mt-1">Karma Points (Lvl {stats.level || 1})</div>
+                            <MapPin className="w-10 h-10 opacity-50" />
                         </div>
-                        <TrendingUp className="w-10 h-10 opacity-50" />
+                    </div>
+
+                    <div className="bg-gradient-to-br from-red-500 to-red-600 p-6 rounded-2xl shadow-lg text-white hover-lift card-glow transition-all">
+                        <div className="flex items-center justify-between">
+                            <div>
+                                <div className="text-3xl font-bold tabular-nums">{animatedLostItems}</div>
+                                <div className="text-sm text-red-100 mt-1">Lost Items</div>
+                            </div>
+                            <MapPin className="w-10 h-10 opacity-50" />
+                        </div>
+                    </div>
+
+                    <div className="bg-gradient-to-br from-green-500 to-green-600 p-6 rounded-2xl shadow-lg text-white hover-lift card-glow transition-all">
+                        <div className="flex items-center justify-between">
+                            <div>
+                                <div className="text-3xl font-bold tabular-nums">{animatedFoundItems}</div>
+                                <div className="text-sm text-green-100 mt-1">Found Items</div>
+                            </div>
+                            <MapPin className="w-10 h-10 opacity-50" />
+                        </div>
+                    </div>
+
+                    <div className="bg-gradient-to-br from-yellow-500 to-yellow-600 p-6 rounded-2xl shadow-lg text-white hover-lift card-glow transition-all">
+                        <div className="flex items-center justify-between">
+                            <div>
+                                <div className="text-3xl font-bold tabular-nums flex items-center gap-2">
+                                    {animatedKarmaPoints}
+                                    <Activity className="w-6 h-6 text-yellow-200 animate-pulse" />
+                                </div>
+                                <div className="text-sm text-yellow-100 mt-1">Karma Points (Lvl {stats.level || 1})</div>
+                            </div>
+                            <TrendingUp className="w-10 h-10 opacity-50" />
+                        </div>
                     </div>
                 </div>
-            </div>
+            )}
 
             {/* My Reports Section with Tabs */}
             <div className={`p-4 sm:p-6 rounded-2xl shadow-lg border ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`}>
                 <div className="flex flex-col sm:flex-row items-center justify-between mb-6 gap-4">
                     <h2 className={`text-2xl font-bold ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>My Reports</h2>
 
-                    <div className="flex items-center gap-4 w-full sm:w-auto">
-                        {/* Tabs */}
-                        <div className={`flex p-1 rounded-xl w-full sm:w-auto overflow-x-auto ${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'}`}>
-                            <button
-                                onClick={() => setActiveTab('active')}
-                                className={`flex-1 sm:flex-none px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap ${activeTab === 'active'
-                                    ? 'bg-indigo-600 text-white shadow-md'
-                                    : `${isDarkMode ? 'text-gray-400 hover:text-gray-200 hover:bg-gray-600' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-200'}`
-                                    }`}
-                            >
-                                Active Reports
-                            </button>
-                            <button
-                                onClick={() => setActiveTab('history')}
-                                className={`flex-1 sm:flex-none px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap ${activeTab === 'history'
-                                    ? 'bg-indigo-600 text-white shadow-md'
-                                    : `${isDarkMode ? 'text-gray-400 hover:text-gray-200 hover:bg-gray-600' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-200'}`
-                                    }`}
-                            >
-                                History
-                            </button>
-                            {/* Admin Only: User Management Tab */}
-                            {(user.isAdmin || user.email === 'websitedeve5@gmail.com') && (
+                    {/* Tabs - Hidden for Admins */}
+                    {!user.isAdmin && (
+                        <div className="flex items-center gap-4 w-full sm:w-auto">
+                            {/* Tabs */}
+                            <div className={`flex p-1 rounded-xl w-full sm:w-auto overflow-x-auto ${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'}`}>
                                 <button
-                                    onClick={() => navigate('/admin/users')}
-                                    className={`flex-1 sm:flex-none px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap bg-red-600 text-white hover:bg-red-700 shadow-md`}
+                                    onClick={() => setActiveTab('active')}
+                                    className={`flex-1 sm:flex-none px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap ${activeTab === 'active'
+                                        ? 'bg-indigo-600 text-white shadow-md'
+                                        : `${isDarkMode ? 'text-gray-400 hover:text-gray-200 hover:bg-gray-600' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-200'}`
+                                        }`}
                                 >
-                                    User Management
+                                    Active Reports
                                 </button>
-                            )}
+                                <button
+                                    onClick={() => setActiveTab('history')}
+                                    className={`flex-1 sm:flex-none px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap ${activeTab === 'history'
+                                        ? 'bg-indigo-600 text-white shadow-md'
+                                        : `${isDarkMode ? 'text-gray-400 hover:text-gray-200 hover:bg-gray-600' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-200'}`
+                                        }`}
+                                >
+                                    History
+                                </button>
+                            </div>
                         </div>
-                    </div>
+                    )}
                 </div>
 
                 {loading ? (

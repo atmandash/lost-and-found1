@@ -227,8 +227,8 @@ const ItemDetails = () => {
                             </div>
                         </div>
 
-                        {/* Chat Button - Only show if not user's own item and item is active */}
-                        {!isMyItem && item.status === 'active' ? (
+                        {/* Chat Button - Only show if not user's own item, item is active, and user is not admin */}
+                        {!isMyItem && item.status === 'active' && !user?.isAdmin ? (
                             <button
                                 onClick={handleContact}
                                 disabled={creatingChat}
@@ -237,7 +237,7 @@ const ItemDetails = () => {
                                 <MessageCircle className="w-5 h-5 mr-2" />
                                 {creatingChat ? 'Connecting...' : 'Start Chat'}
                             </button>
-                        ) : !isMyItem && (
+                        ) : !isMyItem && !user?.isAdmin && (
                             <div className={`w-full py-3 rounded-lg border text-center font-medium ${isDarkMode ? 'bg-gray-700 border-gray-600 text-gray-400' : 'bg-gray-100 text-gray-500'}`}>
                                 <span className="flex items-center justify-center">
                                     <CheckCircle className="w-5 h-5 mr-2" />

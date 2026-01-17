@@ -1,12 +1,12 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { MapPin, Search, MessageCircle, User, Bell, LogIn, Trophy, Sun, Moon } from 'lucide-react';
+import { MapPin, Search, MessageCircle, User, Bell, LogIn, Trophy, Sun, Moon, Users } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import NotificationBell from './NotificationBell';
 
 const Navbar = () => {
-    const { isAuthenticated } = useAuth();
+    const { isAuthenticated, user } = useAuth();
     const { isDarkMode, toggleTheme } = useTheme();
     const location = useLocation();
 
@@ -30,6 +30,9 @@ const Navbar = () => {
                                 <NavLink to="/found" icon={<MapPin className="text-green-600" />} label="Found" />
                                 <NavLink to="/chats" icon={<MessageCircle />} label="Chats" />
                                 <NavLink to="/leaderboard" icon={<Trophy />} label="Leaderboard" />
+                                {user?.isAdmin && (
+                                    <NavLink to="/admin/users" icon={<Users className="text-red-600" />} label="User Mgmt" />
+                                )}
                                 <NavLink to="/profile" icon={<User />} label="Profile" />
                                 <div className="hidden md:flex items-center gap-2 ml-4">
                                     <NotificationBell />
