@@ -248,16 +248,16 @@ const Profile = () => {
             </div>
 
             {/* My Reports Section with Tabs */}
-            <div className={`p-6 rounded-2xl shadow-lg border ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`}>
+            <div className={`p-4 sm:p-6 rounded-2xl shadow-lg border ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`}>
                 <div className="flex flex-col sm:flex-row items-center justify-between mb-6 gap-4">
                     <h2 className={`text-2xl font-bold ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>My Reports</h2>
 
-                    <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-4 w-full sm:w-auto">
                         {/* Tabs */}
                         <div className={`flex p-1 rounded-xl w-full sm:w-auto overflow-x-auto ${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'}`}>
                             <button
                                 onClick={() => setActiveTab('active')}
-                                className={`flex-1 sm:flex-none px-4 py-2 rounded-lg text-sm font-medium transition-all whitespace-nowrap ${activeTab === 'active'
+                                className={`flex-1 sm:flex-none px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap ${activeTab === 'active'
                                     ? 'bg-indigo-600 text-white shadow-md'
                                     : `${isDarkMode ? 'text-gray-400 hover:text-gray-200 hover:bg-gray-600' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-200'}`
                                     }`}
@@ -266,7 +266,7 @@ const Profile = () => {
                             </button>
                             <button
                                 onClick={() => setActiveTab('history')}
-                                className={`flex-1 sm:flex-none px-4 py-2 rounded-lg text-sm font-medium transition-all whitespace-nowrap ${activeTab === 'history'
+                                className={`flex-1 sm:flex-none px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap ${activeTab === 'history'
                                     ? 'bg-indigo-600 text-white shadow-md'
                                     : `${isDarkMode ? 'text-gray-400 hover:text-gray-200 hover:bg-gray-600' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-200'}`
                                     }`}
