@@ -198,10 +198,10 @@ const Profile = () => {
         <div className="max-w-6xl mx-auto space-y-8">
             {/* Profile Header with Gradient */}
             <div className="bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 p-8 rounded-3xl shadow-xl text-white animate-fade-in-scale">
-                <div className="flex flex-col md:flex-row items-center md:items-start text-center md:text-left space-y-4 md:space-y-0 md:space-x-8">
+                <div className="flex flex-col md:flex-row items-center text-center md:text-left gap-6">
                     {/* Editable Avatar */}
                     <div
-                        className="relative w-32 h-32 group cursor-pointer"
+                        className="relative w-32 h-32 group cursor-pointer flex-shrink-0"
                         onClick={() => setShowAvatarModal(true)}
                     >
                         <div className="w-full h-full bg-white rounded-full shadow-2xl border-4 border-white overflow-hidden animate-fade-in relative z-10">
@@ -251,12 +251,12 @@ const Profile = () => {
 
                     <button
                         onClick={handleLogout}
-                        className="px-6 py-2 bg-white text-indigo-600 rounded-lg hover:bg-opacity-90 transition-all font-semibold shadow-lg hover-scale"
+                        className="px-6 py-2 bg-white text-indigo-600 rounded-lg hover:bg-opacity-90 transition-all font-semibold shadow-lg hover-scale flex-shrink-0"
                     >
                         Logout
                     </button>
-                </div >
-            </div >
+                </div>
+            </div>
 
             {/* Stats Grid with Gradients and Animated Counts */}
             < div className="w-full mb-6" >

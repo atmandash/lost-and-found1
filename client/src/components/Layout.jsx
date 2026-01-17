@@ -28,7 +28,9 @@ const Navbar = () => {
                             <>
                                 <NavLink to="/lost" icon={<MapPin className="text-red-500" />} label="Lost" />
                                 <NavLink to="/found" icon={<MapPin className="text-green-600" />} label="Found" />
-                                <NavLink to="/chats" icon={<MessageCircle />} label="Chats" />
+                                {!user?.isAdmin && (
+                                    <NavLink to="/chats" icon={<MessageCircle />} label="Chats" />
+                                )}
                                 <NavLink to="/leaderboard" icon={<Trophy />} label="Leaderboard" />
                                 {user?.isAdmin && (
                                     <NavLink to="/admin/users" icon={<Users className="text-red-600" />} label="User Mgmt" />
