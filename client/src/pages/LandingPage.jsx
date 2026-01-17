@@ -109,12 +109,12 @@ const LandingPage = () => {
             {/* FEATURES GRID */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 px-4 max-w-6xl mt-24 w-full animate-stagger relative z-10">
                 {features.map((feat, idx) => (
-                    <div key={idx} className={`p-6 rounded-2xl border transition-all hover:-translate-y-1 hover:shadow-2xl hover:shadow-indigo-500/10 hover-scale flex flex-col items-center text-center ${isDarkMode ? 'bg-gray-800/90 backdrop-blur-sm border-gray-700 hover:bg-gray-750' : 'bg-white/95 border-gray-100 shadow-xl'}`}>
-                        <div className="mb-4 bg-gray-50 dark:bg-gray-700 w-12 h-12 rounded-xl flex items-center justify-center">
+                    <div key={idx} className="p-6 rounded-2xl border border-white/10 transition-all hover:-translate-y-1 hover:shadow-2xl hover:shadow-indigo-500/20 hover-scale flex flex-col items-center text-center bg-gray-900/40 backdrop-blur-md">
+                        <div className="mb-4 bg-gray-800/60 w-12 h-12 rounded-xl flex items-center justify-center">
                             {feat.icon}
                         </div>
-                        <h3 className={`text-lg font-bold mb-2 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>{feat.title}</h3>
-                        <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>{feat.desc}</p>
+                        <h3 className="text-lg font-bold mb-2 text-gray-100">{feat.title}</h3>
+                        <p className="text-sm text-gray-400">{feat.desc}</p>
                     </div>
                 ))}
             </div>
