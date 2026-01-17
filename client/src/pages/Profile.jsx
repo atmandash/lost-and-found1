@@ -231,22 +231,20 @@ const Profile = () => {
                         <h1 className="text-3xl font-bold animate-slide-in-right">{user.name}</h1>
                         <p className="text-indigo-100 mt-1 animate-slide-in-right break-all" style={{ animationDelay: '0.1s' }}>{user.email}</p>
 
-                        {/* Phone Number and Verified Badge - Hidden for Admins */}
-                        {!user.isAdmin && (
-                            <div className="mt-6 flex flex-col sm:flex-row gap-3 animate-slide-in-right" style={{ animationDelay: '0.2s' }}>
-                                {/* Phone Number - First White Space */}
-                                <div className="bg-white text-indigo-900 px-6 py-3 rounded-2xl shadow-lg flex items-center gap-3 min-w-[200px] hover-lift">
-                                    <Phone className="w-5 h-5 text-indigo-600" />
-                                    <span className="font-semibold">{user.phone || 'No phone'}</span>
-                                </div>
-
-                                {/* Verified Student - Second White Space */}
-                                <div className="bg-white text-green-700 px-6 py-3 rounded-2xl shadow-lg flex items-center gap-3 min-w-[200px] hover-lift">
-                                    <Shield className="w-5 h-5 text-green-600" />
-                                    <span className="font-semibold">Verified VIT Student</span>
-                                </div>
+                        {/* Phone Number and Verified Badge */}
+                        <div className="mt-6 flex flex-col sm:flex-row gap-3 animate-slide-in-right" style={{ animationDelay: '0.2s' }}>
+                            {/* Phone Number - First White Space */}
+                            <div className="bg-white text-indigo-900 px-6 py-3 rounded-2xl shadow-lg flex items-center gap-3 min-w-[200px] hover-lift">
+                                <Phone className="w-5 h-5 text-indigo-600" />
+                                <span className="font-semibold">{user.phone || 'No phone'}</span>
                             </div>
-                        )}
+
+                            {/* Verified Student - Second White Space */}
+                            <div className="bg-white text-green-700 px-6 py-3 rounded-2xl shadow-lg flex items-center gap-3 min-w-[200px] hover-lift">
+                                <Shield className="w-5 h-5 text-green-600" />
+                                <span className="font-bold">Verified Student</span>
+                            </div>
+                        </div>
                     </div>
 
                     <button
