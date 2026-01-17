@@ -173,7 +173,9 @@ const UserManagement = () => {
                     )}
                 </div>
             </div>
-            );
+        </div>
+    );
 };
 
-            export default UserManagement;
+export default UserManagement;
+```
