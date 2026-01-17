@@ -95,7 +95,7 @@ const ItemDetails = () => {
     const isMyItem = user && itemUserId && currentUserId && String(itemUserId) === String(currentUserId);
 
     return (
-        <div className="max-w-4xl mx-auto px-4 space-y-6">
+        <div className="max-w-6xl mx-auto px-4 space-y-6">
 
             {/* Map View (Replaces Image Gallery) */}
             <div className="relative">
