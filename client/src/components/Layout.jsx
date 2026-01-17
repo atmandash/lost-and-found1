@@ -78,7 +78,7 @@ const Layout = ({ children }) => {
         <div className="min-h-screen flex flex-col relative">
             <BackgroundEffects />
             {/* Top Bar for Mobile */}
-            <div className="md:hidden h-14 px-4 shadow-sm flex justify-between items-center sticky top-0 z-40 bg-gray-900/90 backdrop-blur-md border-b border-white/5">
+            <div className="md:hidden h-14 px-4 flex justify-between items-center sticky top-0 z-40 bg-gray-900/90 backdrop-blur-md">
                 <Link to="/" className="font-extrabold text-xl flex items-center leading-none tracking-tight">
                     <Search className="w-6 h-6 mr-2 stroke-[2.5] text-indigo-600" />
                     <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600">
