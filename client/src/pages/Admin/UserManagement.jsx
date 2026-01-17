@@ -112,7 +112,7 @@ const UserManagement = () => {
                                 </button>
                             )}
 
-                            <div className="flex items-start gap-4 pr-12">
+                            <div className="flex items-start gap-4 pr-16">
                                 {/* Avatar */}
                                 <div className="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-full flex items-center justify-center text-white font-bold text-lg flex-shrink-0">
                                     {u.name[0]}
