@@ -105,7 +105,7 @@ const Layout = ({ children }) => {
 
             <Navbar />
 
-            <main className={`flex-grow container mx-auto px-4 md:px-8 py-8 ${location.pathname === '/' ? 'pb-20' : 'pb-32 md:pb-8'} flex flex-col w-full max-w-full overflow-x-hidden ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+            <main className={`flex-grow mx-auto px-4 md:px-8 py-8 ${location.pathname === '/' ? 'pb-20' : 'pb-32 md:pb-8'} flex flex-col w-full max-w-full overflow-x-hidden ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
                 {children}
             </main>
 
