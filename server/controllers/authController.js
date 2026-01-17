@@ -155,9 +155,17 @@ exports.register = async (req, res) => {
                         id: user.id,
                         name: user.name,
                         email: user.email,
+                        phone: user.phone,
+                        avatar: user.avatar,
                         points: user.points,
+                        level: user.level,
+                        badges: user.badges,
+                        itemsReported: user.itemsReported,
+                        itemsReturned: user.itemsReturned,
+                        streak: user.streak,
                         isAdmin: user.isAdmin,
-                        isHiddenFromLeaderboard: user.isHiddenFromLeaderboard
+                        isHiddenFromLeaderboard: user.isHiddenFromLeaderboard,
+                        joinedAt: user.joinedAt
                     }
                 });
             }
@@ -239,9 +247,17 @@ exports.login = async (req, res) => {
                         id: user.id,
                         name: user.name,
                         email: user.email,
+                        phone: user.phone,
+                        avatar: user.avatar,
                         points: user.points,
+                        level: user.level,
+                        badges: user.badges,
+                        itemsReported: user.itemsReported,
+                        itemsReturned: user.itemsReturned,
+                        streak: user.streak,
                         isAdmin: user.isAdmin,
-                        isHiddenFromLeaderboard: user.isHiddenFromLeaderboard
+                        isHiddenFromLeaderboard: user.isHiddenFromLeaderboard,
+                        joinedAt: user.joinedAt
                     }
                 });
             }
