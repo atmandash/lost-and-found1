@@ -27,12 +27,18 @@
     border-color: rgba(255, 255, 255, 0.1) !important;
   }
 
-  /* Force all backgrounds to be dark/transparent */
+  /* Force all backgrounds to be dark/transparent glass */
   .bg-white,
   .bg-gray-50,
-  .bg-gray-100 {
+  .bg-gray-100,
+  .bg-gray-200,
+  .bg-gray-700,
+  .bg-gray-800,
+  .bg-gray-900 {
     background-color: rgba(15, 23, 42, 0.6) !important;
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
   }
 
   /* Force all text to be light */
