@@ -399,6 +399,31 @@ exports.getAllUsers = async (req, res) => {
     }
 };
 
+// Update Avatar
+exports.updateAvatar = async (req, res) => {
+    try {
+        const { avatar } = req.body;
+
+        // Validate avatar URL (basic check)
+        if (!avatar || !avatar.startsWith('http')) {
+            return res.status(400).json({ message: 'Invalid avatar URL' });
+        }
+
+        const user = await User.findById(req.user.id);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        user.avatar = avatar;
+        await user.save();
+
+        res.json({ message: 'Avatar updated successfully', avatar: user.avatar });
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+};
+
 // Delete user account (Admin only)
 exports.deleteUser = async (req, res) => {
     try {
