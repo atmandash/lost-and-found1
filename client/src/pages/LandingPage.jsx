@@ -155,7 +155,7 @@ const LandingPage = () => {
                 </div>
             </div>
 
-            <Footer />
+            {/* Footer removed for cleaner home page */}
         </div>
     );
 };
