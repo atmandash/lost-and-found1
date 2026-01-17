@@ -221,16 +221,10 @@ const ItemDetails = () => {
                             </div>
                             <div className="flex-1">
                                 {user?.isAdmin ? (
-                                    // Admin view - show real user details
+                                    // Admin view - show only reporter name
                                     <>
                                         <div className={`font-bold ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
                                             {item.user.name || 'Unknown User'}
-                                        </div>
-                                        <div className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-                                            {item.user.email || 'No email'}
-                                        </div>
-                                        <div className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-                                            📞 {item.user.phone || 'No phone'}
                                         </div>
                                     </>
                                 ) : (
