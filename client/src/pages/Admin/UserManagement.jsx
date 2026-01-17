@@ -99,9 +99,20 @@ const UserManagement = () => {
                     {filteredUsers.map((u) => (
                         <div
                             key={u._id}
-                            className={`p-4 rounded-xl border ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} hover:shadow-md transition-shadow`}
+                            className={`p-4 rounded-xl border relative ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} hover:shadow-md transition-shadow`}
                         >
-                            <div className="flex items-start gap-4">
+                            {/* Delete Button - Top Right */}
+                            {u._id !== user?.id && !u.isAdmin && (
+                                <button
+                                    onClick={() => handleDeleteUser(u._id, u.name)}
+                                    className="absolute top-3 right-3 p-2 bg-red-50 text-red-600 hover:bg-red-100 rounded-lg transition-colors"
+                                    title="Delete user"
+                                >
+                                    <Trash2 className="w-5 h-5" />
+                                </button>
+                            )}
+
+                            <div className="flex items-start gap-4 pr-12">
                                 {/* Avatar */}
                                 <div className="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-full flex items-center justify-center text-white font-bold text-lg flex-shrink-0">
                                     {u.name[0]}
@@ -119,12 +130,12 @@ const UserManagement = () => {
                                             </span>
                                         )}
                                     </div>
-                                    <p className={`text-sm mt-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                                    <p className={`text-sm mt-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'} truncate`}>
                                         {u.email}
                                     </p>
 
                                     {/* Stats Row */}
-                                    <div className="flex items-center gap-4 mt-3 text-sm">
+                                    <div className="flex items-center gap-4 mt-3 text-sm flex-wrap">
                                         <div>
                                             <span className={`font-semibold ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
                                                 {u.points || 0}
@@ -147,17 +158,6 @@ const UserManagement = () => {
                                         </div>
                                     </div>
                                 </div>
-
-                                {/* Delete Button */}
-                                {u._id !== user?.id && !u.isAdmin && (
-                                    <button
-                                        onClick={() => handleDeleteUser(u._id, u.name)}
-                                        className="flex-shrink-0 px-3 py-2 bg-red-50 text-red-600 hover:bg-red-100 rounded-lg font-medium flex items-center gap-2 transition-colors"
-                                    >
-                                        <Trash2 className="w-4 h-4" />
-                                        <span className="hidden sm:inline">Delete</span>
-                                    </button>
-                                )}
                             </div>
                         </div>
                     ))}
