@@ -12,6 +12,7 @@ const NotificationBell = () => {
     const [showDropdown, setShowDropdown] = useState(false);
     const { isAuthenticated } = useAuth();
     const dropdownRef = useRef(null);
+    const isMounted = useRef(true);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -21,10 +22,15 @@ const NotificationBell = () => {
 
             // Poll for new notifications every 30 seconds
             const interval = setInterval(() => {
-                fetchUnreadCount();
+                if (isMounted.current) {
+                    fetchUnreadCount();
+                }
             }, 30000);
 
-            return () => clearInterval(interval);
+            return () => {
+                isMounted.current = false;
+                clearInterval(interval);
+            };
         }
     }, [isAuthenticated]);
 
@@ -45,9 +51,13 @@ const NotificationBell = () => {
             const res = await axios.get(`${API_URL}/api/notifications`, {
                 headers: { 'x-auth-token': token }
             });
-            setNotifications(res.data.slice(0, 5)); // Show only 5 most recent
+            if (isMounted.current) {
+                setNotifications(res.data.slice(0, 5)); // Show only 5 most recent
+            }
         } catch (err) {
-            console.error('Error fetching notifications:', err);
+            if (err.response?.status !== 401) {
+                console.error('Error fetching notifications:', err);
+            }
         }
     };
 
@@ -57,9 +67,13 @@ const NotificationBell = () => {
             const res = await axios.get(`${API_URL}/api/notifications/unread-count`, {
                 headers: { 'x-auth-token': token }
             });
-            setUnreadCount(res.data.count);
+            if (isMounted.current) {
+                setUnreadCount(res.data.count);
+            }
         } catch (err) {
-            console.error('Error fetching unread count:', err);
+            if (err.response?.status !== 401) {
+                console.error('Error fetching unread count:', err);
+            }
         }
     };
 

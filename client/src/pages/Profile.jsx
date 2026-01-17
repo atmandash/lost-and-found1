@@ -31,6 +31,8 @@ const Profile = () => {
         level: 1,
         totalReports: 0
     });
+    const [activeTab, setActiveTab] = useState('active'); // 'active' or 'history'
+    const isMounted = useRef(true); // Track if component is mounted
 
     useEffect(() => {
         if (user) {
@@ -38,19 +40,22 @@ const Profile = () => {
 
             // Poll for updates every 10 seconds (only when tab is visible)
             const interval = setInterval(() => {
-                if (document.visibilityState === 'visible') {
+                if (document.visibilityState === 'visible' && isMounted.current) {
                     fetchMyItems();
                 }
             }, 10000);
 
             // Refresh when window gains focus
             const handleFocus = () => {
-                fetchMyItems();
+                if (isMounted.current) {
+                    fetchMyItems();
+                }
             };
 
             window.addEventListener('focus', handleFocus);
 
             return () => {
+                isMounted.current = false; // Mark as unmounted
                 clearInterval(interval);
                 window.removeEventListener('focus', handleFocus);
             };
@@ -101,21 +106,30 @@ const Profile = () => {
             });
 
             const allMyItems = [...myLostItems, ...myFoundItems];
-            setMyItems(allMyItems);
 
-            // Update stats with data from API + local calculation for redundancy
-            setStats({
-                lost: myLostItems.length,
-                found: myFoundItems.length,
-                points: statsRes.data.points || 0,
-                level: statsRes.data.level || 1,
-                totalReports: allMyItems.length
-            });
+            if (isMounted.current) {
+                setMyItems(allMyItems);
+
+                // Update stats with data from API + local calculation for redundancy
+                setStats({
+                    lost: myLostItems.length,
+                    found: myFoundItems.length,
+                    points: statsRes.data.points || 0,
+                    level: statsRes.data.level || 1,
+                    totalReports: allMyItems.length
+                });
+            }
 
         } catch (err) {
             console.error('Profile: Error fetching user data:', err);
+            // Only show error if not a 401 (user might be logging out)
+            if (err.response?.status !== 401) {
+                console.error('Failed to load your items');
+            }
         } finally {
-            setLoading(false);
+            if (isMounted.current) {
+                setLoading(false);
+            }
         }
     };
 
