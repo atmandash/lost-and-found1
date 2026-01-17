@@ -380,8 +380,8 @@ exports.resolveItem = async (req, res) => {
         const item = await Item.findById(req.params.id);
         if (!item) return res.status(404).json({ message: 'Item not found' });
 
-        // Check ownership
-        if (item.user.toString() !== req.user.id) {
+        // Check ownership (Admin override allowed)
+        if (item.user.toString() !== req.user.id && !req.user.isAdmin) {
             return res.status(401).json({ message: 'Not authorized' });
         }
 
