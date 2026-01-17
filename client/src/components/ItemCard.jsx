@@ -115,8 +115,8 @@ const ItemCard = ({ item }) => {
                         View Details
                     </Link>
 
-                    {/* Chat Button - Only show if not user's own item and item is active */}
-                    {!isMyItem && item.status === 'active' && (
+                    {/* Chat Button - Only show if not user's own item, item is active, and user is not admin */}
+                    {!isMyItem && item.status === 'active' && !user?.isAdmin && (
                         <button
                             onClick={handleStartChat}
                             disabled={creatingChat}
