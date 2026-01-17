@@ -13,102 +13,82 @@
     transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
   }
 
-  /* Light mode - Modern gradient background with grid and glows */
+  /* MODERN DARK UI - Inspired by TOTVS/Auron */
   body {
-    background: linear-gradient(135deg, #f8f9ff 0%, #e8ebff 50%, #f0f4ff 100%);
-    color: var(--color-gray-900);
+    background: #0B1120;
+    color: #E2E8F0;
     position: relative;
     overflow-x: hidden;
+    min-height: 100vh;
   }
 
-  /* Grid pattern overlay */
+  /* Large diagonal shape - top right */
   body::before {
     content: '';
     position: fixed;
-    inset: 0;
-    background-image:
-      linear-gradient(rgba(99, 102, 241, 0.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(99, 102, 241, 0.04) 1px, transparent 1px);
-    background-size: 50px 50px;
+    top: -20%;
+    right: -10%;
+    width: 50%;
+    height: 70%;
+    background: linear-gradient(135deg, rgba(6, 182, 212, 0.12) 0%, rgba(14, 165, 233, 0.08) 100%);
+    transform: rotate(-15deg);
+    border-radius: 20% 80% 20% 80%;
     pointer-events: none;
     z-index: 0;
+    animation: shapePulse 15s ease-in-out infinite;
   }
 
-  /* Dramatic colored glow effects */
-  body::after {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background:
-      radial-gradient(circle at 10% 15%, rgba(139, 92, 246, 0.15) 0%, transparent 35%),
-      radial-gradient(circle at 90% 85%, rgba(236, 72, 153, 0.12) 0%, transparent 35%),
-      radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.08) 0%, transparent 40%);
-    animation: lightGlow 18s ease-in-out infinite;
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  @keyframes lightGlow {
-
-    0%,
-    100% {
-      opacity: 0.7;
-      transform: scale(1) rotate(0deg);
-    }
-
-    50% {
-      opacity: 1;
-      transform: scale(1.05) rotate(2deg);
-    }
-  }
-
-  /* Dark mode - Dramatic modern background with grid */
-  .dark body {
-    background: #0a0e1a;
-    color: #f1f5f9;
-    position: relative;
-    overflow-x: hidden;
-  }
-
-  /* Animated grid pattern overlay */
-  .dark body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image:
-      linear-gradient(rgba(99, 102, 241, 0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(99, 102, 241, 0.03) 1px, transparent 1px);
-    background-size: 50px 50px;
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  /* Large dramatic glow effects */
-  .dark body::after {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background:
-      radial-gradient(circle at 15% 20%, rgba(6, 182, 212, 0.25) 0%, transparent 40%),
-      radial-gradient(circle at 85% 80%, rgba(139, 92, 246, 0.20) 0%, transparent 40%),
-      radial-gradient(circle at 50% 50%, rgba(236, 72, 153, 0.15) 0%, transparent 50%);
-    animation: dramaticGlow 20s ease-in-out infinite;
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  @keyframes dramaticGlow {
+  @keyframes shapePulse {
 
     0%,
     100% {
       opacity: 0.6;
-      transform: scale(1);
+      transform: rotate(-15deg) scale(1);
     }
 
     50% {
       opacity: 0.9;
-      transform: scale(1.1);
+      transform: rotate(-12deg) scale(1.05);
     }
+  }
+
+  /* Large diagonal shape - bottom left */
+  body::after {
+    content: '';
+    position: fixed;
+    bottom: -15%;
+    left: -15%;
+    width: 45%;
+    height: 65%;
+    background: linear-gradient(225deg, rgba(139, 92, 246, 0.10) 0%, rgba(168, 85, 247, 0.06) 100%);
+    transform: rotate(20deg);
+    border-radius: 80% 20% 80% 20%;
+    pointer-events: none;
+    z-index: 0;
+    animation: shapeFloat 18s ease-in-out infinite;
+  }
+
+  @keyframes shapeFloat {
+
+    0%,
+    100% {
+      opacity: 0.5;
+      transform: rotate(20deg) translateY(0);
+    }
+
+    50% {
+      opacity: 0.8;
+      transform: rotate(18deg) translateY(-20px);
+    }
+  }
+
+  /* Add subtle grid for depth */
+  body {
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+    background-size: 60px 60px;
+    background-position: 0 0, 30px 30px;
   }
 }
 
