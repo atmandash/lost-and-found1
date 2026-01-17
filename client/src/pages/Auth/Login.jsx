@@ -28,8 +28,14 @@ const Login = () => {
     };
 
     return (
-        <div className="flex items-center justify-center min-h-[80vh]">
-            <div className={`w-full max-w-md p-8 space-y-6 rounded-xl shadow-lg ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
+        <div className="flex items-center justify-center min-h-[80vh] relative overflow-hidden">
+            {/* Geometric accents */}
+            <div className="absolute inset-0 pointer-events-none overflow-hidden">
+                <div className="absolute -top-32 -right-32 w-64 h-64 bg-gradient-to-br from-indigo-500/20 to-purple-500/20 rounded-full blur-3xl" style={{ animation: 'float 12s ease-in-out infinite' }}></div>
+                <div className="absolute -bottom-24 -left-24 w-48 h-48 bg-gradient-to-br from-cyan-500/15 to-blue-500/15 rounded-full blur-2xl animate-pulse"></div>
+            </div>
+
+            <div className={`w-full max-w-md p-8 space-y-6 rounded-2xl shadow-2xl relative z-10 ${isDarkMode ? 'bg-gray-800/90 backdrop-blur-md border border-gray-700' : 'bg-white'}`}>
                 <h2 className={`text-3xl font-bold text-center ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>Welcome Back</h2>
                 <p className={`text-center ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Sign in to report or claim items</p>
 
@@ -86,7 +92,7 @@ const Login = () => {
 
                     <button
                         type="submit"
-                        className="w-full py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl font-bold tracking-wide shadow-lg shadow-indigo-500/30 hover:shadow-indigo-500/50 hover:-translate-y-0.5 transition-all transform active:scale-95 duration-200"
+                        className="w-full py-3 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white rounded-xl font-bold tracking-wide shadow-xl shadow-indigo-500/40 hover:shadow-indigo-500/60 hover:-translate-y-0.5 transition-all transform active:scale-95 duration-200"
                     >
                         Sign In
                     </button>

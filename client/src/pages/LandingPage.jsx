@@ -68,32 +68,48 @@ const LandingPage = () => {
 
     return (
         <div className="relative flex flex-col items-center min-h-screen overflow-hidden pb-0">
+            {/* LARGE GEOMETRIC BACKGROUND SHAPES */}
+            <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                {/* Huge top-right glow */}
+                <div className="absolute -top-64 -right-64 w-[600px] h-[600px] bg-gradient-to-br from-indigo-600/30 to-purple-600/30 rounded-full blur-[120px] animate-pulse"></div>
 
-            {/* HERO SECTION - Reduced top margin */}
-            <div className="flex flex-col items-center justify-center text-center mt-12 px-4 max-w-4xl space-y-8 animate-fade-in-scale">
+                {/* Large bottom-left accent */}
+                <div className="absolute -bottom-48 -left-48 w-96 h-96 bg-gradient-to-br from-cyan-500/20 to-blue-500/20 rounded-full blur-3xl" style={{ animation: 'glowPulse 7s ease-in-out infinite' }}></div>
+
+                {/* Medium center-right */}
+                <div className="absolute top-1/3 -right-32 w-64 h-64 bg-gradient-to-br from-pink-500/15 to-orange-500/15 rounded-full blur-2xl" style={{ animation: 'float 10s ease-in-out infinite' }}></div>
+
+                {/* Small accent top-left */}
+                <div className="absolute top-20 left-20 w-40 h-40 bg-gradient-to-br from-purple-500/20 to-indigo-500/20 rounded-full blur-xl" style={{ animation: 'float 8s ease-in-out infinite reverse' }}></div>
+            </div>
+
+            {/* HERO SECTION - Enhanced with z-index */}
+            <div className="flex flex-col items-center justify-center text-center mt-12 px-4 max-w-4xl space-y-8 animate-fade-in-scale relative z-10">
                 <div className="space-y-4">
-                    <h1 className={`text-5xl md:text-7xl font-extrabold tracking-tight leading-tight ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                    <h1 className={`text-5xl md:text-7xl font-extrabold tracking-tight leading-tight ${isDarkMode ? 'text-white drop-shadow-2xl' : 'text-gray-900'}`}>
                         Find What You've <br />
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-purple-600">Lost on Campus.</span>
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 via-purple-600 to-pink-600 animate-gradient-x">Lost on Campus.</span>
                     </h1>
-                    <p className={`text-xl md:text-2xl max-w-2xl mx-auto ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                    <p className={`text-xl md:text-2xl max-w-2xl mx-auto ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
                         Don't panic. Connect with the community to recover your belongings instantly. Safe, fast, and simple.
                     </p>
                 </div>
 
                 <button
                     onClick={() => navigate('/start')}
-                    className="group relative px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white text-lg font-bold rounded-full shadow-xl shadow-indigo-500/30 hover:shadow-indigo-500/50 hover:-translate-y-1 transition-all active:scale-95 flex items-center gap-2 animate-bounce-slow"
+                    className="group relative px-8 py-4 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white text-lg font-bold rounded-full shadow-2xl shadow-indigo-500/40 hover:shadow-indigo-500/60 hover:-translate-y-1 transition-all active:scale-95 flex items-center gap-2 animate-bounce-slow"
                 >
                     Get Started
                     <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                    {/* Button glow effect */}
+                    <div className="absolute -inset-1 bg-gradient-to-r from-indigo-600 to-pink-600 rounded-full blur opacity-40 group-hover:opacity-60 transition-opacity -z-10"></div>
                 </button>
             </div>
 
             {/* FEATURES GRID */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 px-4 max-w-6xl mt-24 w-full animate-stagger">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 px-4 max-w-6xl mt-24 w-full animate-stagger relative z-10">
                 {features.map((feat, idx) => (
-                    <div key={idx} className={`p-6 rounded-2xl border transition-all hover:-translate-y-1 hover:shadow-2xl hover:shadow-indigo-500/10 hover-scale flex flex-col items-center text-center ${isDarkMode ? 'bg-gray-800 border-gray-700 hover:bg-gray-750' : 'bg-white/95 border-gray-100 shadow-xl'}`}>
+                    <div key={idx} className={`p-6 rounded-2xl border transition-all hover:-translate-y-1 hover:shadow-2xl hover:shadow-indigo-500/10 hover-scale flex flex-col items-center text-center ${isDarkMode ? 'bg-gray-800/90 backdrop-blur-sm border-gray-700 hover:bg-gray-750' : 'bg-white/95 border-gray-100 shadow-xl'}`}>
                         <div className="mb-4 bg-gray-50 dark:bg-gray-700 w-12 h-12 rounded-xl flex items-center justify-center">
                             {feat.icon}
                         </div>
