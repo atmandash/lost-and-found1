@@ -23,4 +23,8 @@ router.post('/reset-password', passwordResetLimiter, authController.resetPasswor
 // @access  Private
 router.get('/me', authMiddleware, authController.getMe);
 
+// Admin-only routes for user management
+router.get('/users', authMiddleware, authController.getAllUsers);
+router.delete('/users/:id', authMiddleware, authController.deleteUser);
+
 module.exports = router;

@@ -439,12 +439,9 @@ exports.resolveItem = async (req, res) => {
                 io.emit('item_deleted', { id: item._id });
             }
 
-        }
-    } catch (err) {
-        console.error(err.message);
-        res.status(500).send('Server Error');
-    }
-};
-
+            res.json({ message: 'Item permanently deleted' });
+        } catch (err) {
+            console.error(err.message);
+            res.status(500).send('Server Error');
         }
     };
