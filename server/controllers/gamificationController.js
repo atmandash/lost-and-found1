@@ -74,6 +74,8 @@ exports.awardPoints = async (userId, points, reason) => {
         user.level = Math.floor(user.points / 100) + 1;
 
         // Award badges based on milestones
+        // DISABLED per user request (Jan 2026) - Keeping points/level live but no badges
+        /*
         if (user.points >= 100 && !user.badges.includes('First 100')) {
             user.badges.push('First 100');
         }
@@ -83,6 +85,7 @@ exports.awardPoints = async (userId, points, reason) => {
         if (user.points >= 1000 && !user.badges.includes('Community Hero')) {
             user.badges.push('Community Hero');
         }
+        */
 
         await user.save();
         console.log(`Awarded ${points} points to user ${userId} for ${reason}`);
