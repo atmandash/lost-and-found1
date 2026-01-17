@@ -45,6 +45,7 @@ const Profile = () => {
     const [activeTab, setActiveTab] = useState('active'); // 'active' or 'history'
     const isMounted = useRef(true); // Track if component is mounted
     const [showAvatarModal, setShowAvatarModal] = useState(false);
+    const [avatarUrl, setAvatarUrl] = useState(user?.avatar || generateAvatar(user?.id, user?.name));
 
     useEffect(() => {
         if (user) {
