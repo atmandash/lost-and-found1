@@ -56,7 +56,7 @@ const UserManagement = () => {
     if (loading) return <div className="text-center py-20">Loading users...</div>;
 
     return (
-        <div className="max-w-7xl mx-auto space-y-6">
+        <div className="max-w-7xl mx-auto px-4 space-y-6">
             {/* Header */}
             <div className={`p-6 rounded-xl shadow-sm border ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'}`}>
                 <div className="flex items-center justify-between">

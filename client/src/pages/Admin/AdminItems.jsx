@@ -85,7 +85,7 @@ const AdminItems = () => {
     }
 
     return (
-        <div className="max-w-7xl mx-auto space-y-6">
+        <div className="max-w-7xl mx-auto px-4 space-y-6">
             {/* Header */}
             <div className={`p-6 rounded-2xl shadow-lg border ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`}>
                 <h1 className={`text-2xl font-bold ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>All Items</h1>
@@ -117,8 +117,8 @@ const AdminItems = () => {
                         <button
                             onClick={() => setActiveTab('active')}
                             className={`px-4 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2 ${activeTab === 'active'
-                                    ? 'bg-indigo-600 text-white shadow-md'
-                                    : `${isDarkMode ? 'text-gray-400 hover:text-gray-200' : 'text-gray-500 hover:text-gray-700'}`
+                                ? 'bg-indigo-600 text-white shadow-md'
+                                : `${isDarkMode ? 'text-gray-400 hover:text-gray-200' : 'text-gray-500 hover:text-gray-700'}`
                                 }`}
                         >
                             <Clock className="w-4 h-4" />
@@ -127,8 +127,8 @@ const AdminItems = () => {
                         <button
                             onClick={() => setActiveTab('resolved')}
                             className={`px-4 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2 ${activeTab === 'resolved'
-                                    ? 'bg-green-600 text-white shadow-md'
-                                    : `${isDarkMode ? 'text-gray-400 hover:text-gray-200' : 'text-gray-500 hover:text-gray-700'}`
+                                ? 'bg-green-600 text-white shadow-md'
+                                : `${isDarkMode ? 'text-gray-400 hover:text-gray-200' : 'text-gray-500 hover:text-gray-700'}`
                                 }`}
                         >
                             <CheckCircle className="w-4 h-4" />

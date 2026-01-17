@@ -130,7 +130,7 @@ const ReportItem = ({ type }) => {
     };
 
     return (
-        <div className="max-w-5xl mx-auto">
+        <div className="max-w-5xl mx-auto px-4">
             <h1 className={`text-3xl font-bold mb-6 capitalize ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>Report {type} Item</h1>
 
             <form onSubmit={handleSubmit} className={`space-y-6 p-6 rounded-xl shadow-lg border transition-colors ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`}>
