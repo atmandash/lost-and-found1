@@ -1,6 +1,7 @@
 # Dependencies
 node_modules/
-# package-lock.json  # Commented out - Koyeb needs this
+# Package locks
+client/package-lock.json
 yarn.lock
 
 # Environment variables (IMPORTANT - Never commit these!)
