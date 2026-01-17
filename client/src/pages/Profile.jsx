@@ -149,9 +149,6 @@ const Profile = () => {
 
     if (!user) return <div className="text-center py-10">Please login</div>;
 
-    // Use saved avatar URL or generate one
-    const avatarUrl = user.avatar || generateAvatar(user.id, user.name);
-
     const handleAvatarUpdate = async (newAvatarUrl) => {
         try {
             const token = localStorage.getItem('token');
