@@ -21,6 +21,10 @@ const itemSchema = new mongoose.Schema({
             default: [0, 0] // Default value to valid numbers
         }
     },
+    featured: {
+        type: Boolean,
+        default: false
+    },
     images: [{ type: String }],
     status: { type: String, enum: ['active', 'claimed', 'reunited', 'closed', 'resolved'], default: 'active' },
     user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },

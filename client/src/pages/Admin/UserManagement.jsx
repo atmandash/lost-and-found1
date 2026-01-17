@@ -11,6 +11,7 @@ const UserManagement = () => {
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
+    const [selectedUsers, setSelectedUsers] = useState(new Set());
 
     useEffect(() => {
         fetchUsers();
@@ -48,6 +49,50 @@ const UserManagement = () => {
         }
     };
 
+    const toggleUserSelection = (userId) => {
+        setSelectedUsers(prev => {
+            const newSet = new Set(prev);
+            if (newSet.has(userId)) {
+                newSet.delete(userId);
+            } else {
+                newSet.add(userId);
+            }
+            return newSet;
+        });
+    };
+
+    const toggleSelectAll = () => {
+        if (selectedUsers.size === filteredUsers.filter(u => !u.isAdmin && u._id !== user?.id).length) {
+            setSelectedUsers(new Set());
+        } else {
+            const selectableUsers = filteredUsers.filter(u => !u.isAdmin && u._id !== user?.id);
+            setSelectedUsers(new Set(selectableUsers.map(u => u._id)));
+        }
+    };
+
+    const handleBulkDelete = async () => {
+        if (selectedUsers.size === 0) return;
+
+        if (!confirm(`Are you sure you want to delete ${selectedUsers.size} user(s)? This cannot be undone.`)) {
+            return;
+        }
+
+        try {
+            const token = localStorage.getItem('token');
+            await axios.post(`${API_URL}/api/admin/users/bulk-delete`, {
+                userIds: Array.from(selectedUsers)
+            }, {
+                headers: { 'x-auth-token': token }
+            });
+
+            alert(`Successfully deleted ${selectedUsers.size} users`);
+            setSelectedUsers(new Set());
+            fetchUsers();
+        } catch (err) {
+            alert(err.response?.data?.message || 'Error deleting users');
+        }
+    };
+
     const filteredUsers = users.filter(u =>
         u.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         u.email.toLowerCase().includes(searchTerm.toLowerCase())
@@ -77,6 +122,27 @@ const UserManagement = () => {
                             <span className="font-bold">{users.length} Total Users</span>
                         </div>
                     </div>
+
+                    {/* Select All Checkbox */}
+                    {filteredUsers.filter(u => !u.isAdmin && u._id !== user?.id).length > 0 && (
+                        <div className="mt-4 flex items-center gap-3">
+                            <input
+                                type="checkbox"
+                                id="select-all"
+                                checked={selectedUsers.size > 0 && selectedUsers.size === filteredUsers.filter(u => !u.isAdmin && u._id !== user?.id).length}
+                                onChange={toggleSelectAll}
+                                className="w-4 h-4 text-indigo-600 rounded focus:ring-2 focus:ring-indigo-500"
+                            />
+                            <label htmlFor="select-all" className={`text-sm font-medium cursor-pointer ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                                Select All ({filteredUsers.filter(u => !u.isAdmin && u._id !== user?.id).length} users)
+                            </label>
+                            {selectedUsers.size > 0 && (
+                                <span className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                                    • {selectedUsers.size} selected
+                                </span>
+                            )}
+                        </div>
+                    )}
 
                     {/* Search Bar */}
                     <div className="mt-4 relative">
@@ -114,6 +180,16 @@ const UserManagement = () => {
                             )}
 
                             <div className="flex items-start gap-4 pr-16">
+                                {/* Checkbox for bulk selection */}
+                                {u._id !== user?.id && !u.isAdmin && (
+                                    <input
+                                        type="checkbox"
+                                        checked={selectedUsers.has(u._id)}
+                                        onChange={() => toggleUserSelection(u._id)}
+                                        className="mt-4 w-4 h-4 text-indigo-600 rounded focus:ring-2 focus:ring-indigo-500 flex-shrink-0 cursor-pointer"
+                                    />
+                                )}
+
                                 {/* Avatar */}
                                 <div className="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-full flex items-center justify-center text-white font-bold text-lg flex-shrink-0">
                                     {u.name[0]}
@@ -169,6 +245,34 @@ const UserManagement = () => {
                         </div>
                     )}
                 </div>
+
+                {/* Bulk Actions Toolbar - Fixed Bottom */}
+                {selectedUsers.size > 0 && (
+                    <div className="fixed bottom-20 md:bottom-8 left-1/2 transform -translate-x-1/2 z-50 animate-slide-up">
+                        <div className={`flex items-center gap-4 px-6 py-4 rounded-lg shadow-2xl border-2 ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
+                            }`}>
+                            <span className={`font-semibold ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+                                {selectedUsers.size} user{selectedUsers.size > 1 ? 's' : ''} selected
+                            </span>
+                            <button
+                                onClick={handleBulkDelete}
+                                className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 font-medium flex items-center gap-2 transition-colors"
+                            >
+                                <Trash2 className="w-4 h-4" />
+                                Delete Selected
+                            </button>
+                            <button
+                                onClick={() => setSelectedUsers(new Set())}
+                                className={`px-4 py-2 rounded-lg font-medium transition-colors ${isDarkMode
+                                        ? 'bg-gray-700 text-gray-100 hover:bg-gray-600'
+                                        : 'bg-gray-200 text-gray-900 hover:bg-gray-300'
+                                    }`}
+                            >
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );
