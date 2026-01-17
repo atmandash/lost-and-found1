@@ -24,9 +24,9 @@ const AVATAR_STYLES = [
     'notionists'
 ];
 
-// Generate 6 variants for each style = 30 options
+// Generate 12 variants for each style = 36 options
 const PRESET_AVATARS = AVATAR_STYLES.flatMap(style =>
-    [1, 2, 3, 4, 5, 6].map(i => `https://api.dicebear.com/7.x/${style}/svg?seed=${style}_${i}`)
+    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(i => `https://api.dicebear.com/7.x/${style}/svg?seed=${style}_student_${i}`)
 );
 
 const Profile = () => {
