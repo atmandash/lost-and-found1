@@ -304,9 +304,8 @@ exports.approveClaim = async (req, res) => {
 
         if (!item) return res.status(404).json({ message: 'Item not found' });
 
-        // Only item owner can approve
         if (item.user.toString() !== req.user.id) {
-            return res.status(401).json({ message: 'Not authorized' });
+            return res.status(403).json({ message: 'Not authorized' });
         }
 
         const claim = item.claimRequests.id(claimId);
@@ -347,9 +346,8 @@ exports.rejectClaim = async (req, res) => {
 
         if (!item) return res.status(404).json({ message: 'Item not found' });
 
-        // Only item owner can reject
         if (item.user.toString() !== req.user.id) {
-            return res.status(401).json({ message: 'Not authorized' });
+            return res.status(403).json({ message: 'Not authorized' });
         }
 
         const claim = item.claimRequests.id(claimId);
@@ -380,9 +378,8 @@ exports.resolveItem = async (req, res) => {
         const item = await Item.findById(req.params.id);
         if (!item) return res.status(404).json({ message: 'Item not found' });
 
-        // Check ownership (Admin override allowed)
         if (item.user.toString() !== req.user.id && !req.user.isAdmin) {
-            return res.status(401).json({ message: 'Not authorized' });
+            return res.status(403).json({ message: 'Not authorized' });
         }
 
         item.status = 'resolved';
