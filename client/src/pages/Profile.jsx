@@ -9,7 +9,6 @@ import ItemCard from '../components/ItemCard';
 import { useCountAnimation } from '../hooks/useCountAnimation';
 
 // Avatar generation function
-// Avatar generation function
 const generateAvatar = (userId, name) => {
     // Premium, consistent styles
     const styles = ['notionists', 'lorelei', 'open-peeps', 'micah', 'miniavs'];
