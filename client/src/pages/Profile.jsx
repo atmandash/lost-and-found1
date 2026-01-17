@@ -48,6 +48,7 @@ const Profile = () => {
 
     useEffect(() => {
         if (user) {
+            setAvatarUrl(user.avatar || generateAvatar(user.id, user.name));
             fetchMyItems();
 
             // Poll for updates every 10 seconds (only when tab is visible)
