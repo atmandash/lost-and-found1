@@ -105,10 +105,11 @@ const UserManagement = () => {
                             {u._id !== user?.id && !u.isAdmin && (
                                 <button
                                     onClick={() => handleDeleteUser(u._id, u.name)}
-                                    className="absolute top-3 right-3 p-2 bg-red-50 text-red-600 hover:bg-red-100 rounded-lg transition-colors"
+                                    className="absolute top-3 right-3 px-3 py-2 bg-red-50 text-red-600 hover:bg-red-100 rounded-lg transition-colors flex items-center gap-2"
                                     title="Delete user"
                                 >
                                     <Trash2 className="w-5 h-5" />
+                                    <span className="hidden md:inline font-medium">Delete</span>
                                 </button>
                             )}
 
