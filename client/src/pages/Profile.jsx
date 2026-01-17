@@ -258,8 +258,8 @@ const Profile = () => {
                             <button
                                 onClick={() => setActiveTab('active')}
                                 className={`flex-1 sm:flex-none px-4 py-2 rounded-lg text-sm font-medium transition-all whitespace-nowrap ${activeTab === 'active'
-                                    ? 'bg-white text-indigo-600 shadow-md'
-                                    : `${isDarkMode ? 'text-gray-400 hover:text-gray-200' : 'text-gray-500 hover:text-gray-700'}`
+                                    ? 'bg-indigo-600 text-white shadow-md'
+                                    : `${isDarkMode ? 'text-gray-400 hover:text-gray-200 hover:bg-gray-600' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-200'}`
                                     }`}
                             >
                                 Active Reports
@@ -267,8 +267,8 @@ const Profile = () => {
                             <button
                                 onClick={() => setActiveTab('history')}
                                 className={`flex-1 sm:flex-none px-4 py-2 rounded-lg text-sm font-medium transition-all whitespace-nowrap ${activeTab === 'history'
-                                    ? 'bg-white text-indigo-600 shadow-md'
-                                    : `${isDarkMode ? 'text-gray-400 hover:text-gray-200' : 'text-gray-500 hover:text-gray-700'}`
+                                    ? 'bg-indigo-600 text-white shadow-md'
+                                    : `${isDarkMode ? 'text-gray-400 hover:text-gray-200 hover:bg-gray-600' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-200'}`
                                     }`}
                             >
                                 History
