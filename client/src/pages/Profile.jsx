@@ -143,8 +143,6 @@ const Profile = () => {
     const animatedFoundItems = useCountAnimation(stats.found, 1000);
     const animatedKarmaPoints = useCountAnimation(stats.points || 0, 1200);
 
-    const [activeTab, setActiveTab] = useState('active');
-
     // Handle tab query param
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
