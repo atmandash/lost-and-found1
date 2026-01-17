@@ -140,7 +140,7 @@ const ItemsPage = ({ type }) => {
 
     return (
         <div
-            className="space-y-6 min-h-screen transition-transform ease-out duration-200"
+            className="px-4 space-y-6 min-h-screen transition-transform ease-out duration-200"
             onTouchStart={handleTouchStart}
             onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}

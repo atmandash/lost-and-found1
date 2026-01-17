@@ -14,7 +14,7 @@ const ReportSelection = () => {
     };
 
     return (
-        <div className="flex-grow w-full flex flex-col items-center justify-center animate-fade-in relative overflow-hidden py-4">
+        <div className="px-4 flex-grow w-full flex flex-col items-center justify-center animate-fade-in relative overflow-hidden py-4">
             {/* Login Button */}
             {!isAuthenticated && (
                 <div className="absolute top-6 right-6 z-50">
