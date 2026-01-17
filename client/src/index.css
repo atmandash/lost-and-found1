@@ -13,9 +13,53 @@
     transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
   }
 
+  /* Light mode - Modern gradient background with grid and glows */
   body {
-    background-color: var(--color-gray-50);
+    background: linear-gradient(135deg, #f8f9ff 0%, #e8ebff 50%, #f0f4ff 100%);
     color: var(--color-gray-900);
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* Grid pattern overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(99, 102, 241, 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(99, 102, 241, 0.04) 1px, transparent 1px);
+    background-size: 50px 50px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Dramatic colored glow effects */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(circle at 10% 15%, rgba(139, 92, 246, 0.15) 0%, transparent 35%),
+      radial-gradient(circle at 90% 85%, rgba(236, 72, 153, 0.12) 0%, transparent 35%),
+      radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.08) 0%, transparent 40%);
+    animation: lightGlow 18s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  @keyframes lightGlow {
+
+    0%,
+    100% {
+      opacity: 0.7;
+      transform: scale(1) rotate(0deg);
+    }
+
+    50% {
+      opacity: 1;
+      transform: scale(1.05) rotate(2deg);
+    }
   }
 
   /* Dark mode - Dramatic modern background with grid */
