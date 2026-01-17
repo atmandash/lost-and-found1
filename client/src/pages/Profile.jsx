@@ -474,60 +474,58 @@ const Profile = () => {
                         </div>
                     )}
                 </div>
-            )
-        </div>
+            )}
 
-            {/* Avatar Selection Modal */ }
-    {
-        showAvatarModal && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
-                <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-2xl max-h-[80vh] overflow-hidden flex flex-col">
-                    <div className="p-6 border-b border-gray-100 dark:border-gray-700 flex justify-between items-center bg-indigo-600">
-                        <h3 className="text-xl font-bold text-white">Choose Your Avatar</h3>
-                        <button
-                            onClick={() => setShowAvatarModal(false)}
-                            className="text-white/80 hover:text-white transition-colors"
-                        >
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-                        </button>
-                    </div>
-
-                    <div className="p-6 overflow-y-auto flex-1 bg-gray-50 dark:bg-gray-900">
-                        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-4">
-                            {/* Current Avatar Option */}
-                            <div
-                                onClick={() => handleAvatarUpdate(generateAvatar(user.id, user.name))}
-                                className="aspect-square rounded-xl cursor-pointer hover:ring-4 hover:ring-indigo-500 hover:scale-105 transition-all bg-white shadow-sm flex items-center justify-center relative overflow-hidden group"
+            {/* Avatar Selection Modal */}
+            {showAvatarModal && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
+                    <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-2xl max-h-[80vh] overflow-hidden flex flex-col">
+                        <div className="p-6 border-b border-gray-100 dark:border-gray-700 flex justify-between items-center bg-indigo-600">
+                            <h3 className="text-xl font-bold text-white">Choose Your Avatar</h3>
+                            <button
+                                onClick={() => setShowAvatarModal(false)}
+                                className="text-white/80 hover:text-white transition-colors"
                             >
-                                <img src={generateAvatar(user.id, user.name)} alt="Default" className="w-full h-full object-cover" />
-                                <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                                    <span className="text-white text-xs font-bold">Default</span>
-                                </div>
-                            </div>
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
 
-                            {/* Preset Options */}
-                            {PRESET_AVATARS.map((url, index) => (
+                        <div className="p-6 overflow-y-auto flex-1 bg-gray-50 dark:bg-gray-900">
+                            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-4">
+                                {/* Current Avatar Option */}
                                 <div
-                                    key={index}
-                                    onClick={() => handleAvatarUpdate(url)}
-                                    className={`aspect-square rounded-xl cursor-pointer hover:ring-4 hover:ring-indigo-500 hover:scale-105 transition-all bg-white shadow-sm overflow-hidden ${user.avatar === url ? 'ring-4 ring-green-500' : ''}`}
+                                    onClick={() => handleAvatarUpdate(generateAvatar(user.id, user.name))}
+                                    className="aspect-square rounded-xl cursor-pointer hover:ring-4 hover:ring-indigo-500 hover:scale-105 transition-all bg-white shadow-sm flex items-center justify-center relative overflow-hidden group"
                                 >
-                                    <img src={url} alt={`Avatar ${index + 1}`} className="w-full h-full object-cover" loading="lazy" />
+                                    <img src={generateAvatar(user.id, user.name)} alt="Default" className="w-full h-full object-cover" />
+                                    <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <span className="text-white text-xs font-bold">Default</span>
+                                    </div>
                                 </div>
-                            ))}
+
+                                {/* Preset Options */}
+                                {PRESET_AVATARS.map((url, index) => (
+                                    <div
+                                        key={index}
+                                        onClick={() => handleAvatarUpdate(url)}
+                                        className={`aspect-square rounded-xl cursor-pointer hover:ring-4 hover:ring-indigo-500 hover:scale-105 transition-all bg-white shadow-sm overflow-hidden ${user.avatar === url ? 'ring-4 ring-green-500' : ''}`}
+                                    >
+                                        <img src={url} alt={`Avatar ${index + 1}`} className="w-full h-full object-cover" loading="lazy" />
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div className="p-4 bg-gray-50 dark:bg-gray-800 border-t border-gray-100 dark:border-gray-700 text-center text-xs text-gray-500">
+                            Click on any avatar to select it instantly
                         </div>
                     </div>
-
-                    <div className="p-4 bg-gray-50 dark:bg-gray-800 border-t border-gray-100 dark:border-gray-700 text-center text-xs text-gray-500">
-                        Click on any avatar to select it instantly
-                    </div>
                 </div>
-            </div>
-        )
-    }
-    </div >
+            )
+            }
+        </div >
     );
 };
 
