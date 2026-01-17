@@ -396,7 +396,7 @@ const Profile = () => {
                     {/* Quick Actions */}
                     <div className={`p-6 rounded-2xl shadow-lg border ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`}>
                         <h3 className={`text-lg font-bold mb-4 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>Quick Actions</h3>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <button
                                 onClick={() => navigate('/admin/users')}
                                 className="px-4 py-3 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-lg hover:from-red-700 hover:to-red-800 transition-all font-medium shadow-md flex items-center justify-center gap-2"
@@ -405,23 +405,11 @@ const Profile = () => {
                                 User Management
                             </button>
                             <button
-                                onClick={() => navigate('/lost')}
+                                onClick={() => navigate('/admin/items')}
                                 className="px-4 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all font-medium shadow-md flex items-center justify-center gap-2"
                             >
                                 <MapPin className="w-4 h-4" />
                                 View All Items
-                            </button>
-                            <button
-                                className="px-4 py-3 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-lg hover:from-green-700 hover:to-green-800 transition-all font-medium shadow-md flex items-center justify-center gap-2"
-                            >
-                                <TrendingUp className="w-4 h-4" />
-                                Analytics
-                            </button>
-                            <button
-                                className="px-4 py-3 bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-lg hover:from-purple-700 hover:to-purple-800 transition-all font-medium shadow-md flex items-center justify-center gap-2"
-                            >
-                                <Activity className="w-4 h-4" />
-                                System Logs
                             </button>
                         </div>
                     </div>

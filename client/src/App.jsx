@@ -17,6 +17,7 @@ import Profile from './pages/Profile';
 import Leaderboard from './pages/Leaderboard';
 import ReportSelection from './pages/ReportSelection';
 import UserManagement from './pages/Admin/UserManagement';
+import AdminItems from './pages/Admin/AdminItems';
 
 function App() {
   return (
@@ -42,6 +43,7 @@ function App() {
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/leaderboard" element={<Leaderboard />} />
                 <Route path="/admin/users" element={<UserManagement />} />
+                <Route path="/admin/items" element={<AdminItems />} />
               </Routes>
             </ErrorBoundary>
           </Layout>
