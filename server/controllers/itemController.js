@@ -440,8 +440,9 @@ exports.resolveItem = async (req, res) => {
             }
 
             res.json({ message: 'Item permanently deleted' });
-        } catch (err) {
-            console.error(err.message);
-            res.status(500).send('Server Error');
         }
-    };
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+};
