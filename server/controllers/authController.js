@@ -363,3 +363,63 @@ exports.getMe = async (req, res) => {
         res.status(500).send('Server Error');
     }
 };
+
+// Get all users (Admin only)
+exports.getAllUsers = async (req, res) => {
+    try {
+        // Check admin permission
+        if (!req.user.isAdmin) {
+            return res.status(403).json({ message: 'Admin access required' });
+        }
+
+        const users = await User.find()
+            .select('-password')
+            .sort({ createdAt: -1 });
+
+        res.json(users);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+};
+
+// Delete user account (Admin only)
+exports.deleteUser = async (req, res) => {
+    try {
+        // Check admin permission
+        if (!req.user.isAdmin) {
+            return res.status(403).json({ message: 'Admin access required' });
+        }
+
+        const userId = req.params.id;
+
+        // Prevent admin from deleting themselves
+        if (userId === req.user.id) {
+            return res.status(400).json({ message: 'Cannot delete your own admin account' });
+        }
+
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // Cascade delete: Remove all user's data
+        const Item = require('../models/Item');
+        const Chat = require('../models/Chat');
+        const Notification = require('../models/Notification');
+        const Watchlist = require('../models/Watchlist');
+
+        await Item.deleteMany({ user: userId });
+        await Chat.deleteMany({ $or: [{ user1: userId }, { user2: userId }] });
+        await Notification.deleteMany({ userId: userId });
+        await Watchlist.deleteMany({ user: userId });
+
+        // Delete the user
+        await User.findByIdAndDelete(userId);
+
+        res.json({ message: 'User and all related data deleted successfully' });
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+};

@@ -16,6 +16,7 @@ import ItemDetails from './pages/Items/ItemDetails';
 import Profile from './pages/Profile';
 import Leaderboard from './pages/Leaderboard';
 import ReportSelection from './pages/ReportSelection';
+import UserManagement from './pages/Admin/UserManagement';
 
 function App() {
   return (
@@ -40,6 +41,7 @@ function App() {
                 <Route path="/chats/:id" element={<ChatRoom />} />
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/leaderboard" element={<Leaderboard />} />
+                <Route path="/admin/users" element={<UserManagement />} />
               </Routes>
             </ErrorBoundary>
           </Layout>

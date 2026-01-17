@@ -273,6 +273,15 @@ const Profile = () => {
                             >
                                 History
                             </button>
+                            {/* Admin Only: User Management Tab */}
+                            {(user.isAdmin || user.email === 'websitedeve5@gmail.com') && (
+                                <button
+                                    onClick={() => navigate('/admin/users')}
+                                    className={`flex-1 sm:flex-none px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap bg-red-600 text-white hover:bg-red-700 shadow-md`}
+                                >
+                                    User Management
+                                </button>
+                            )}
                         </div>
                     </div>
                 </div>
