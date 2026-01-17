@@ -18,10 +18,10 @@ router.post('/login', authLimiter, validateLogin, handleValidationErrors, authCo
 router.post('/forgot-password', passwordResetLimiter, authController.forgotPassword);
 router.post('/reset-password', passwordResetLimiter, authController.resetPassword);
 
-// @route   GET api/auth/me
 // @desc    Get current user
 // @access  Private
 router.get('/me', authMiddleware, authController.getMe);
+router.put('/avatar', authMiddleware, authController.updateAvatar);
 
 // Admin-only routes for user management
 router.get('/users', authMiddleware, authController.getAllUsers); // Admin only

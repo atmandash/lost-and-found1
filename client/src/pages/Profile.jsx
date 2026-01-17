@@ -8,15 +8,24 @@ import API_URL from '../config/api';
 import ItemCard from '../components/ItemCard';
 import { useCountAnimation } from '../hooks/useCountAnimation';
 
-// Avatar generation function based on user ID
+// Avatar generation function
 const generateAvatar = (userId, name) => {
-    // Use DiceBear API for consistent avatars
     const styles = ['adventurer', 'avataaars', 'bottts', 'micah', 'personas'];
     const styleIndex = parseInt(userId?.slice(-1) || '0', 16) % styles.length;
     const style = styles[styleIndex];
-
     return `https://api.dicebear.com/7.x/${style}/svg?seed=${userId || name}`;
 };
+
+// Predefined avatar styles for selection
+const AVATAR_STYLES = [
+    'adventurer', 'avataaars', 'bottts', 'micah', 'personas',
+    'notionists', 'lorelei', 'open-peeps'
+];
+
+// Generate 4 variants for each style = 32 options
+const PRESET_AVATARS = AVATAR_STYLES.flatMap(style =>
+    [1, 2, 3, 4].map(i => `https://api.dicebear.com/7.x/${style}/svg?seed=${style}${i}`)
+);
 
 const Profile = () => {
     const { user, logout } = useAuth();
@@ -33,6 +42,7 @@ const Profile = () => {
     });
     const [activeTab, setActiveTab] = useState('active'); // 'active' or 'history'
     const isMounted = useRef(true); // Track if component is mounted
+    const [showAvatarModal, setShowAvatarModal] = useState(false);
 
     useEffect(() => {
         if (user) {
@@ -135,7 +145,28 @@ const Profile = () => {
 
     if (!user) return <div className="text-center py-10">Please login</div>;
 
-    const avatarUrl = generateAvatar(user.id, user.name);
+    // Use saved avatar URL or generate one
+    const avatarUrl = user.avatar || generateAvatar(user.id, user.name);
+
+    const handleAvatarUpdate = async (newAvatarUrl) => {
+        try {
+            const token = localStorage.getItem('token');
+            await axios.put(`${API_URL}/api/auth/avatar`,
+                { avatar: newAvatarUrl },
+                { headers: { 'x-auth-token': token } }
+            );
+
+            // Force reload user to get new avatar update
+            // We can optimistic update but reloading user context is safer
+            // Or trigger a user reload via context if exposed, but page reload works too for deep sync
+            window.location.reload();
+        } catch (err) {
+            console.error('Failed to update avatar:', err);
+            alert('Failed to update avatar. Please try again.');
+        } finally {
+            setShowAvatarModal(false);
+        }
+    };
 
     // Animated counts for smooth transitions
     const animatedTotalReports = useCountAnimation(stats.lost + stats.found, 1000);
@@ -167,14 +198,33 @@ const Profile = () => {
             {/* Profile Header with Gradient */}
             <div className="bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 p-8 rounded-3xl shadow-xl text-white animate-fade-in-scale">
                 <div className="flex flex-col md:flex-row items-center md:items-start text-center md:text-left space-y-4 md:space-y-0 md:space-x-8">
-                    {/* Random Avatar */}
-                    <div className="w-32 h-32 bg-white rounded-full shadow-2xl border-4 border-white overflow-hidden animate-fade-in">
-                        <img
-                            src={avatarUrl}
-                            alt={`${user.name}'s avatar`}
-                            className="w-full h-full object-cover"
-                        />
-                    </div >
+                    {/* Editable Avatar */}
+                    <div
+                        className="relative w-32 h-32 group cursor-pointer"
+                        onClick={() => setShowAvatarModal(true)}
+                    >
+                        <div className="w-full h-full bg-white rounded-full shadow-2xl border-4 border-white overflow-hidden animate-fade-in relative z-10">
+                            <img
+                                src={avatarUrl}
+                                alt={`${user.name}'s avatar`}
+                                className="w-full h-full object-cover group-hover:opacity-50 transition-opacity"
+                            />
+                        </div>
+
+                        {/* Edit Overlay */}
+                        <div className="absolute inset-0 flex items-center justify-center z-20 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <div className="bg-black/50 p-2 rounded-full backdrop-blur-sm">
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                                </svg>
+                            </div>
+                        </div>
+
+                        {/* Tooltip */}
+                        <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-30 pointer-events-none">
+                            Change Avatar
+                        </div>
+                    </div>
 
                     <div className="flex-1">
                         <h1 className="text-3xl font-bold animate-slide-in-right">{user.name}</h1>

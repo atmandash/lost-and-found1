@@ -19,6 +19,7 @@ const userSchema = new mongoose.Schema({
     loginStreak: { type: Number, default: 0 },
     loginAttempts: { type: Number, default: 0 },
     lockoutUntil: { type: Date },
+    avatar: { type: String }, // Stores custom avatar URL
     // Admin & Security Fields
     isAdmin: { type: Boolean, default: false }, // Super Admin flag
     isHiddenFromLeaderboard: { type: Boolean, default: false }, // Hide from rankings
