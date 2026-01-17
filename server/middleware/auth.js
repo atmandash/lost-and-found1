@@ -22,7 +22,28 @@ module.exports = function (req, res, next) {
         }
 
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        req.user = decoded.user;
+        // Live DB check for critical security (Revocation & Admin status)
+        const user = await User.findById(decoded.user.id).select('passwordChangedAt isAdmin name email points');
+
+        if (!user) {
+            return res.status(401).json({ message: 'User no longer exists' });
+        }
+
+        // Check if password changed AFTER token was issued
+        if (user.passwordChangedAt) {
+            const changedTimestamp = parseInt(user.passwordChangedAt.getTime() / 1000, 10);
+            if (decoded.iat < changedTimestamp) {
+                return res.status(401).json({ message: 'Password recently changed. Please login again.' });
+            }
+        }
+
+        // Attach full user object for controllers (including isAdmin)
+        req.user = {
+            id: user._id,
+            isAdmin: user.isAdmin,
+            name: user.name,
+            email: user.email
+        };
 
         // Throttle lastActive updates to once per minute to reduce database load
         // This prevents lag from excessive writes while still tracking active users
