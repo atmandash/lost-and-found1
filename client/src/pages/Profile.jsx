@@ -9,8 +9,10 @@ import ItemCard from '../components/ItemCard';
 import { useCountAnimation } from '../hooks/useCountAnimation';
 
 // Avatar generation function
+// Avatar generation function
 const generateAvatar = (userId, name) => {
-    const styles = ['adventurer', 'avataaars', 'bottts', 'micah', 'personas'];
+    // Premium, consistent styles
+    const styles = ['notionists', 'lorelei', 'open-peeps', 'micah', 'miniavs'];
     const styleIndex = parseInt(userId?.slice(-1) || '0', 16) % styles.length;
     const style = styles[styleIndex];
     return `https://api.dicebear.com/7.x/${style}/svg?seed=${userId || name}`;
@@ -18,13 +20,16 @@ const generateAvatar = (userId, name) => {
 
 // Predefined avatar styles for selection
 const AVATAR_STYLES = [
-    'adventurer', 'avataaars', 'bottts', 'micah', 'personas',
-    'notionists', 'lorelei', 'open-peeps'
+    'notionists', // Premium sketch style (Notion-like)
+    'lorelei',    // Clean flat art
+    'open-peeps', // Hand-drawn sketchy
+    'micah',      // Simple clean lines
+    'miniavs'     // Compact & Cute
 ];
 
-// Generate 4 variants for each style = 32 options
+// Generate 6 variants for each style = 30 options
 const PRESET_AVATARS = AVATAR_STYLES.flatMap(style =>
-    [1, 2, 3, 4].map(i => `https://api.dicebear.com/7.x/${style}/svg?seed=${style}${i}`)
+    [1, 2, 3, 4, 5, 6].map(i => `https://api.dicebear.com/7.x/${style}/svg?seed=${style}_${i}`)
 );
 
 const Profile = () => {
