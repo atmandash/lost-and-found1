@@ -19,6 +19,10 @@ const userSchema = new mongoose.Schema({
     loginStreak: { type: Number, default: 0 },
     loginAttempts: { type: Number, default: 0 },
     lockoutUntil: { type: Date },
+    // Admin & Security Fields
+    isAdmin: { type: Boolean, default: false }, // Super Admin flag
+    isHiddenFromLeaderboard: { type: Boolean, default: false }, // Hide from rankings
+    passwordChangedAt: { type: Date }, // For session revocation
     createdAt: { type: Date, default: Date.now }
 });
 
