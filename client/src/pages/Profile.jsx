@@ -314,15 +314,126 @@ const Profile = () => {
                 </div>
             )}
 
-            {/* My Reports Section with Tabs */}
-            <div className={`p-4 sm:p-6 rounded-2xl shadow-lg border ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`}>
-                <div className="flex flex-col sm:flex-row items-center justify-between mb-6 gap-4">
-                    <h2 className={`text-2xl font-bold ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>My Reports</h2>
+            {/* Admin Dashboard OR My Reports Section */}
+            {user.isAdmin ? (
+                // Admin Dashboard
+                <div className="space-y-6">
+                    {/* Admin Dashboard Header */}
+                    <div className={`p-6 rounded-2xl shadow-lg border ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`}>
+                        <h2 className={`text-2xl font-bold ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>Admin Dashboard</h2>
+                        <p className={`text-sm mt-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>System overview and management tools</p>
+                    </div>
 
-                    {/* Tabs - Hidden for Admins */}
-                    {!user.isAdmin && (
+                    {/* System Stats Grid */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {/* Total Users */}
+                        <div className="bg-gradient-to-br from-blue-500 to-blue-600 p-6 rounded-2xl shadow-lg text-white hover-lift transition-all">
+                            <div className="flex items-center justify-between">
+                                <div>
+                                    <div className="text-3xl font-bold">-</div>
+                                    <div className="text-sm text-blue-100 mt-1">Total Users</div>
+                                </div>
+                                <User className="w-10 h-10 opacity-50" />
+                            </div>
+                        </div>
+
+                        {/* Total Items */}
+                        <div className="bg-gradient-to-br from-purple-500 to-purple-600 p-6 rounded-2xl shadow-lg text-white hover-lift transition-all">
+                            <div className="flex items-center justify-between">
+                                <div>
+                                    <div className="text-3xl font-bold">-</div>
+                                    <div className="text-sm text-purple-100 mt-1">Total Items</div>
+                                </div>
+                                <MapPin className="w-10 h-10 opacity-50" />
+                            </div>
+                        </div>
+
+                        {/* Active Items */}
+                        <div className="bg-gradient-to-br from-green-500 to-green-600 p-6 rounded-2xl shadow-lg text-white hover-lift transition-all">
+                            <div className="flex items-center justify-between">
+                                <div>
+                                    <div className="text-3xl font-bold">-</div>
+                                    <div className="text-sm text-green-100 mt-1">Active Items</div>
+                                </div>
+                                <CheckCircle className="w-10 h-10 opacity-50" />
+                            </div>
+                        </div>
+
+                        {/* Resolved Items */}
+                        <div className="bg-gradient-to-br from-indigo-500 to-indigo-600 p-6 rounded-2xl shadow-lg text-white hover-lift transition-all">
+                            <div className="flex items-center justify-between">
+                                <div>
+                                    <div className="text-3xl font-bold">-</div>
+                                    <div className="text-sm text-indigo-100 mt-1">Resolved Items</div>
+                                </div>
+                                <Award className="w-10 h-10 opacity-50" />
+                            </div>
+                        </div>
+
+                        {/* Total Chats */}
+                        <div className="bg-gradient-to-br from-pink-500 to-pink-600 p-6 rounded-2xl shadow-lg text-white hover-lift transition-all">
+                            <div className="flex items-center justify-between">
+                                <div>
+                                    <div className="text-3xl font-bold">-</div>
+                                    <div className="text-sm text-pink-100 mt-1">Total Chats</div>
+                                </div>
+                                <MessageCircle className="w-10 h-10 opacity-50" />
+                            </div>
+                        </div>
+
+                        {/* Success Rate */}
+                        <div className="bg-gradient-to-br from-yellow-500 to-yellow-600 p-6 rounded-2xl shadow-lg text-white hover-lift transition-all">
+                            <div className="flex items-center justify-between">
+                                <div>
+                                    <div className="text-3xl font-bold">-%</div>
+                                    <div className="text-sm text-yellow-100 mt-1">Success Rate</div>
+                                </div>
+                                <TrendingUp className="w-10 h-10 opacity-50" />
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Quick Actions */}
+                    <div className={`p-6 rounded-2xl shadow-lg border ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`}>
+                        <h3 className={`text-lg font-bold mb-4 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>Quick Actions</h3>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                            <button
+                                onClick={() => navigate('/admin/users')}
+                                className="px-4 py-3 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-lg hover:from-red-700 hover:to-red-800 transition-all font-medium shadow-md flex items-center justify-center gap-2"
+                            >
+                                <User className="w-4 h-4" />
+                                User Management
+                            </button>
+                            <button
+                                onClick={() => navigate('/lost')}
+                                className="px-4 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all font-medium shadow-md flex items-center justify-center gap-2"
+                            >
+                                <MapPin className="w-4 h-4" />
+                                View All Items
+                            </button>
+                            <button
+                                className="px-4 py-3 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-lg hover:from-green-700 hover:to-green-800 transition-all font-medium shadow-md flex items-center justify-center gap-2"
+                            >
+                                <TrendingUp className="w-4 h-4" />
+                                Analytics
+                            </button>
+                            <button
+                                className="px-4 py-3 bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-lg hover:from-purple-700 hover:to-purple-800 transition-all font-medium shadow-md flex items-center justify-center gap-2"
+                            >
+                                <Activity className="w-4 h-4" />
+                                System Logs
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            ) : (
+                // Regular User My Reports Section
+                <div className={`p-4 sm:p-6 rounded-2xl shadow-lg border ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`}>
+                    <div className="flex flex-col sm:flex-row items-center justify-between mb-6 gap-4">
+                        <h2 className={`text-2xl font-bold ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>My Reports</h2>
+
+                        {/* Tabs */}
                         <div className="flex items-center gap-4 w-full sm:w-auto">
-                            {/* Tabs */}
                             <div className={`flex p-1 rounded-xl w-full sm:w-auto overflow-x-auto ${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'}`}>
                                 <button
                                     onClick={() => setActiveTab('active')}
@@ -344,76 +455,79 @@ const Profile = () => {
                                 </button>
                             </div>
                         </div>
+                    </div>
+
+                    {loading ? (
+                        <div className={`text-center py-12 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Loading...</div>
+                    ) : filteredItems.length === 0 ? (
+                        <div className={`text-center py-12 rounded-xl ${isDarkMode ? 'bg-gradient-to-br from-gray-700 to-gray-800' : 'bg-gradient-to-br from-gray-50 to-gray-100'}`}>
+                            <Calendar className={`w-12 h-12 mx-auto mb-3 ${isDarkMode ? 'text-gray-500' : 'text-gray-300'}`} />
+                            <p className={`font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                                {activeTab === 'active' ? 'No active reports' : 'No history yet'}
+                            </p>
+                        </div>
+                    ) : (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {filteredItems.map(item => (
+                                <ItemCard key={item._id} item={item} />
+                            ))}
+                        </div>
                     )}
                 </div>
+            )
+        </div>
 
-                {loading ? (
-                    <div className={`text-center py-12 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Loading...</div>
-                ) : filteredItems.length === 0 ? (
-                    <div className={`text-center py-12 rounded-xl ${isDarkMode ? 'bg-gradient-to-br from-gray-700 to-gray-800' : 'bg-gradient-to-br from-gray-50 to-gray-100'}`}>
-                        <Calendar className={`w-12 h-12 mx-auto mb-3 ${isDarkMode ? 'text-gray-500' : 'text-gray-300'}`} />
-                        <p className={`font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-                            {activeTab === 'active' ? 'No active reports' : 'No history yet'}
-                        </p>
+            {/* Avatar Selection Modal */ }
+    {
+        showAvatarModal && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
+                <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-2xl max-h-[80vh] overflow-hidden flex flex-col">
+                    <div className="p-6 border-b border-gray-100 dark:border-gray-700 flex justify-between items-center bg-indigo-600">
+                        <h3 className="text-xl font-bold text-white">Choose Your Avatar</h3>
+                        <button
+                            onClick={() => setShowAvatarModal(false)}
+                            className="text-white/80 hover:text-white transition-colors"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
                     </div>
-                ) : (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {filteredItems.map(item => (
-                            <ItemCard key={item._id} item={item} />
-                        ))}
-                    </div>
-                )}
-            </div>
 
-            {/* Avatar Selection Modal */}
-            {showAvatarModal && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
-                    <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-2xl max-h-[80vh] overflow-hidden flex flex-col">
-                        <div className="p-6 border-b border-gray-100 dark:border-gray-700 flex justify-between items-center bg-indigo-600">
-                            <h3 className="text-xl font-bold text-white">Choose Your Avatar</h3>
-                            <button
-                                onClick={() => setShowAvatarModal(false)}
-                                className="text-white/80 hover:text-white transition-colors"
+                    <div className="p-6 overflow-y-auto flex-1 bg-gray-50 dark:bg-gray-900">
+                        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-4">
+                            {/* Current Avatar Option */}
+                            <div
+                                onClick={() => handleAvatarUpdate(generateAvatar(user.id, user.name))}
+                                className="aspect-square rounded-xl cursor-pointer hover:ring-4 hover:ring-indigo-500 hover:scale-105 transition-all bg-white shadow-sm flex items-center justify-center relative overflow-hidden group"
                             >
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                </svg>
-                            </button>
-                        </div>
-
-                        <div className="p-6 overflow-y-auto flex-1 bg-gray-50 dark:bg-gray-900">
-                            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-4">
-                                {/* Current Avatar Option */}
-                                <div
-                                    onClick={() => handleAvatarUpdate(generateAvatar(user.id, user.name))}
-                                    className="aspect-square rounded-xl cursor-pointer hover:ring-4 hover:ring-indigo-500 hover:scale-105 transition-all bg-white shadow-sm flex items-center justify-center relative overflow-hidden group"
-                                >
-                                    <img src={generateAvatar(user.id, user.name)} alt="Default" className="w-full h-full object-cover" />
-                                    <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                                        <span className="text-white text-xs font-bold">Default</span>
-                                    </div>
+                                <img src={generateAvatar(user.id, user.name)} alt="Default" className="w-full h-full object-cover" />
+                                <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <span className="text-white text-xs font-bold">Default</span>
                                 </div>
-
-                                {/* Preset Options */}
-                                {PRESET_AVATARS.map((url, index) => (
-                                    <div
-                                        key={index}
-                                        onClick={() => handleAvatarUpdate(url)}
-                                        className={`aspect-square rounded-xl cursor-pointer hover:ring-4 hover:ring-indigo-500 hover:scale-105 transition-all bg-white shadow-sm overflow-hidden ${user.avatar === url ? 'ring-4 ring-green-500' : ''}`}
-                                    >
-                                        <img src={url} alt={`Avatar ${index + 1}`} className="w-full h-full object-cover" loading="lazy" />
-                                    </div>
-                                ))}
                             </div>
-                        </div>
 
-                        <div className="p-4 bg-gray-50 dark:bg-gray-800 border-t border-gray-100 dark:border-gray-700 text-center text-xs text-gray-500">
-                            Click on any avatar to select it instantly
+                            {/* Preset Options */}
+                            {PRESET_AVATARS.map((url, index) => (
+                                <div
+                                    key={index}
+                                    onClick={() => handleAvatarUpdate(url)}
+                                    className={`aspect-square rounded-xl cursor-pointer hover:ring-4 hover:ring-indigo-500 hover:scale-105 transition-all bg-white shadow-sm overflow-hidden ${user.avatar === url ? 'ring-4 ring-green-500' : ''}`}
+                                >
+                                    <img src={url} alt={`Avatar ${index + 1}`} className="w-full h-full object-cover" loading="lazy" />
+                                </div>
+                            ))}
                         </div>
+                    </div>
+
+                    <div className="p-4 bg-gray-50 dark:bg-gray-800 border-t border-gray-100 dark:border-gray-700 text-center text-xs text-gray-500">
+                        Click on any avatar to select it instantly
                     </div>
                 </div>
-            )}
-        </div >
+            </div>
+        )
+    }
+    </div >
     );
 };
 
