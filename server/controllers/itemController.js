@@ -411,37 +411,38 @@ exports.resolveItem = async (req, res) => {
         console.error(err.message);
         res.status(500).send('Server Error');
     }
+};
 
-    // Hard delete item (permanent removal) - Admin or Owner only
-    exports.deleteItem = async (req, res) => {
-        try {
-            const item = await Item.findById(req.params.id);
-            if (!item) return res.status(404).json({ message: 'Item not found' });
+// Hard delete item (permanent removal) - Admin or Owner only
+exports.deleteItem = async (req, res) => {
+    try {
+        const item = await Item.findById(req.params.id);
+        if (!item) return res.status(404).json({ message: 'Item not found' });
 
-            // Check ownership (Admin override allowed)
-            if (item.user.toString() !== req.user.id && !req.user.isAdmin) {
-                return res.status(403).json({ message: 'Not authorized' });
-            }
-
-            // Cascade delete: Remove all related data
-            const Chat = require('../models/Chat');
-            const Notification = require('../models/Notification');
-
-            await Chat.deleteMany({ itemId: item._id });
-            await Notification.deleteMany({ itemId: item._id });
-
-            // Permanently delete the item
-            await Item.findByIdAndDelete(req.params.id);
-
-            // Real-time: Emit 'item_deleted' event
-            const io = req.app.get('io');
-            if (io) {
-                io.emit('item_deleted', { id: item._id });
-            }
-
-            res.json({ message: 'Item permanently deleted' });
-        } catch (err) {
-            console.error(err.message);
-            res.status(500).send('Server Error');
+        // Check ownership (Admin override allowed)
+        if (item.user.toString() !== req.user.id && !req.user.isAdmin) {
+            return res.status(403).json({ message: 'Not authorized' });
         }
-    };
+
+        // Cascade delete: Remove all related data
+        const Chat = require('../models/Chat');
+        const Notification = require('../models/Notification');
+
+        await Chat.deleteMany({ itemId: item._id });
+        await Notification.deleteMany({ itemId: item._id });
+
+        // Permanently delete the item
+        await Item.findByIdAndDelete(req.params.id);
+
+        // Real-time: Emit 'item_deleted' event
+        const io = req.app.get('io');
+        if (io) {
+            io.emit('item_deleted', { id: item._id });
+        }
+
+        res.json({ message: 'Item permanently deleted' });
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+};
