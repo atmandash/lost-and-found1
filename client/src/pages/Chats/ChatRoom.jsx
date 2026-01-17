@@ -172,7 +172,7 @@ const ChatRoom = () => {
     if (!chat) return <div className={`text-center py-10 ${isDarkMode ? 'text-gray-300' : ''}`}>Loading chat...</div>;
 
     return (
-        <div className={`max-w-3xl mx-auto h-[80vh] flex flex-col rounded-xl shadow-lg border overflow-hidden ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`}>
+        <div className={`max-w-3xl mx-auto px-4 h-[80vh] flex flex-col rounded-xl shadow-lg border overflow-hidden ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`}>
             {/* Header */}
             <div className={`p-4 border-b flex flex-col gap-3 ${isDarkMode ? 'bg-gray-700 border-gray-600' : 'bg-gradient-to-r from-indigo-50 to-purple-50 border-gray-100'}`}>
                 <div className="flex items-center justify-between">
