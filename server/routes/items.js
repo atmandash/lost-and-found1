@@ -48,4 +48,9 @@ router.put('/:id/claim/:claimId/reject', auth, itemController.rejectClaim);
 // @access  Private
 router.put('/:id/resolve', auth, itemController.resolveItem);
 
+// @route   DELETE api/items/:id
+// @desc    Permanently delete item (Admin or Owner)
+// @access  Private
+router.delete('/:id', auth, itemController.deleteItem);
+
 module.exports = router;

@@ -276,24 +276,16 @@ const ItemDetails = () => {
                                 {(user && (user.isAdmin || user.email === 'websitedeve5@gmail.com')) && !isMyItem && (
                                     <button
                                         onClick={async () => {
-                                            if (confirm('ADMIN ACTION: Are you sure you want to FORCE DELETE this item? This cannot be undone.')) {
+                                            if (confirm('ADMIN ACTION: Are you sure you want to PERMANENTLY DELETE this item? This CANNOT be undone and will remove it from the database.')) {
                                                 try {
                                                     const token = localStorage.getItem('token');
-                                                    // Use resolve endpoint but maybe we need a true DELETE endpoint?
-                                                    // For now, "Resolve" effectively removes it from active list.
-                                                    // Ideally we should have a DELETE endpoint for admins.
-                                                    // Let's use the standard resolve for now to keep flow simple, 
-                                                    // or better: call a DELETE endpoint if available.
-                                                    // Checking routes... we usually just resolve. 
-                                                    // Let's stick to resolve for safety, or implement true delete.
-                                                    // User asked for "Delete". Let's assume resolve is "Take Down".
-                                                    await axios.put(`${API_URL}/api/items/${item._id}/resolve`, {}, {
+                                                    await axios.delete(`${API_URL}/api/items/${item._id}`, {
                                                         headers: { 'x-auth-token': token }
                                                     });
-                                                    alert('Item successfully taken down (Resolved) by Admin.');
+                                                    alert('Item permanently deleted by Admin.');
                                                     navigate('/');
                                                 } catch (err) {
-                                                    alert('Error taking down item');
+                                                    alert('Error deleting item');
                                                 }
                                             }
                                         }}
