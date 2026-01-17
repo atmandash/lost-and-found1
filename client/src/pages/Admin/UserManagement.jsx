@@ -207,9 +207,11 @@ const UserManagement = () => {
                                             </span>
                                         )}
                                     </div>
-                                    <p className={`text-sm mt-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'} truncate`}>
-                                        {u.email}
-                                    </p>
+                                    {!u.isAdmin && (
+                                        <p className={`text-sm mt-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'} truncate`}>
+                                            {u.email}
+                                        </p>
+                                    )}
 
                                     {/* Stats Row */}
                                     <div className="flex items-center gap-4 mt-3 text-sm flex-wrap">
@@ -264,8 +266,8 @@ const UserManagement = () => {
                             <button
                                 onClick={() => setSelectedUsers(new Set())}
                                 className={`px-4 py-2 rounded-lg font-medium transition-colors ${isDarkMode
-                                        ? 'bg-gray-700 text-gray-100 hover:bg-gray-600'
-                                        : 'bg-gray-200 text-gray-900 hover:bg-gray-300'
+                                    ? 'bg-gray-700 text-gray-100 hover:bg-gray-600'
+                                    : 'bg-gray-200 text-gray-900 hover:bg-gray-300'
                                     }`}
                             >
                                 Cancel
