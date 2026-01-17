@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { Award, CheckCircle, MapPin, Calendar, TrendingUp, Phone, Shield, Activity } from 'lucide-react';
+import { Award, CheckCircle, MapPin, Calendar, TrendingUp, Phone, Shield, Activity, User, MessageCircle } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import API_URL from '../config/api';
