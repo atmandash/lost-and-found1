@@ -78,12 +78,12 @@ const LandingPage = () => {
                 <div className="space-y-4">
                     <h1
                         className={`text-5xl md:text-7xl font-extrabold tracking-tight leading-tight ${isDarkMode ? 'text-white' : 'text-gray-900'}`}
-                        style={{ textShadow: isDarkMode ? '0 0 40px rgba(99, 102, 241, 0.4), 0 0 80px rgba(168, 85, 247, 0.2)' : 'none' }}
+                        style={{ textShadow: isDarkMode ? '0 0 40px rgba(6, 182, 212, 0.3), 0 0 80px rgba(20, 184, 166, 0.2)' : 'none' }}
                     >
                         Find What You've <br />
                         <span
-                            className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 via-purple-600 to-pink-600 animate-gradient-x"
-                            style={{ filter: 'drop-shadow(0 0 20px rgba(168, 85, 247, 0.5)) drop-shadow(0 0 40px rgba(236, 72, 153, 0.3))' }}
+                            className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-teal-500 to-emerald-500 animate-gradient-x"
+                            style={{ filter: 'drop-shadow(0 0 20px rgba(6, 182, 212, 0.5)) drop-shadow(0 0 40px rgba(20, 184, 166, 0.3))' }}
                         >Lost on Campus.</span>
                     </h1>
                     <p
@@ -96,12 +96,12 @@ const LandingPage = () => {
 
                 <button
                     onClick={() => navigate('/start')}
-                    className="group relative px-8 py-4 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white text-lg font-bold rounded-full shadow-2xl shadow-indigo-500/40 hover:shadow-indigo-500/60 hover:-translate-y-1 transition-all active:scale-95 flex items-center gap-2 animate-bounce-slow"
+                    className="group relative px-8 py-4 bg-gradient-to-r from-cyan-500 via-teal-500 to-emerald-500 text-white text-lg font-bold rounded-full shadow-2xl shadow-teal-500/40 hover:shadow-teal-500/60 hover:-translate-y-1 transition-all active:scale-95 flex items-center gap-2 animate-bounce-slow"
                 >
                     Get Started
                     <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                     {/* Button glow effect */}
-                    <div className="absolute -inset-1 bg-gradient-to-r from-indigo-600 to-pink-600 rounded-full blur opacity-40 group-hover:opacity-60 transition-opacity -z-10"></div>
+                    <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500 to-emerald-500 rounded-full blur opacity-40 group-hover:opacity-60 transition-opacity -z-10"></div>
                 </button>
             </div>
 

@@ -16,8 +16,8 @@ const Navbar = () => {
                 <div className="flex justify-between md:justify-start h-14 items-center">
                     {/* Logo */}
                     <Link to="/" className="hidden md:flex items-center text-2xl font-extrabold mr-10 tracking-tight">
-                        <Search className="w-8 h-8 mr-3 stroke-[2.5] text-indigo-600" />
-                        <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600">
+                        <Search className="w-8 h-8 mr-3 stroke-[2.5] text-teal-500" />
+                        <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-500 to-teal-500">
                             Lost&Found
                         </span>
                     </Link>
@@ -42,7 +42,7 @@ const Navbar = () => {
                             </>
                         ) : (
                             <>
-                                <NavLink to="/login" icon={<LogIn className="text-indigo-500" />} label="Login" />
+                                <NavLink to="/login" icon={<LogIn className="text-teal-500" />} label="Login" />
                             </>
                         )}
                     </div>
