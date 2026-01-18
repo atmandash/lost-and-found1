@@ -67,7 +67,7 @@ const LandingPage = () => {
     const CountUp = ({ end }) => <span>{end}</span>;
 
     return (
-        <div className="relative flex flex-col items-center min-h-screen overflow-hidden pb-0">
+        <div className="relative flex flex-col items-center flex-1 justify-between overflow-hidden pb-0 w-full min-h-full">
             {/* LARGE GEOMETRIC BACKGROUND SHAPES */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
                 {/* Huge top-right glow */}
