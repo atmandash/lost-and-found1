@@ -10,19 +10,18 @@ import { useCountAnimation } from '../hooks/useCountAnimation';
 
 // Avatar generation function
 const generateAvatar = (userId, name) => {
-    // Modern, colorful avatar styles
-    const styles = ['bottts', 'personas', 'big-smile'];
+    // Original premium avatar styles
+    const styles = ['micah', 'lorelei', 'notionists'];
     const styleIndex = parseInt(userId?.slice(-1) || '0', 16) % styles.length;
     const style = styles[styleIndex];
     return `https://api.dicebear.com/7.x/${style}/svg?seed=${userId || name}`;
 };
 
-// Predefined avatar styles for selection
+// Predefined avatar styles for selection (original pack)
 const AVATAR_STYLES = [
-    'bottts',      // Colorful robot avatars
-    'personas',    // Professional character avatars  
-    'big-smile',   // Happy cartoon faces
-    'pixel-art'    // Retro pixel art style
+    'micah',
+    'lorelei',
+    'notionists'
 ];
 
 // Generate 12 variants for each style = 36 options

@@ -11,7 +11,7 @@ const Navbar = () => {
     const location = useLocation();
 
     return (
-        <nav className="fixed bottom-0 w-full md:relative z-50 bg-gray-900/90 backdrop-blur-md border-t border-white/5">
+        <nav className={`fixed bottom-0 w-full md:relative z-50 bg-gray-900/90 backdrop-blur-md border-t border-white/5 ${!isAuthenticated ? 'hidden md:block' : ''}`}>
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between md:justify-start h-14 items-center">
                     {/* Logo */}
@@ -84,8 +84,8 @@ const Layout = ({ children }) => {
             {/* Top Bar for Mobile */}
             <div className="md:hidden h-14 px-4 flex justify-between items-center sticky top-0 z-40 bg-gray-900/90 backdrop-blur-md">
                 <Link to="/" className="font-extrabold text-xl flex items-center leading-none tracking-tight">
-                    <Search className="w-6 h-6 mr-2 stroke-[2.5] text-indigo-600" />
-                    <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600">
+                    <Search className="w-6 h-6 mr-2 stroke-[2.5] text-teal-500" />
+                    <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-500 to-teal-500">
                         Lost&Found
                     </span>
                 </Link>
@@ -98,7 +98,7 @@ const Layout = ({ children }) => {
                     {!isAuthenticated && (
                         <Link
                             to="/login"
-                            className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-full text-sm font-semibold shadow-md hover:shadow-lg transition-all"
+                            className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-cyan-500 to-teal-500 text-white rounded-full text-sm font-semibold shadow-md hover:shadow-lg transition-all"
                         >
                             <LogIn className="w-4 h-4" />
                             Login
