@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { Mail, Lock, KeyRound, ArrowRight, ArrowLeft } from 'lucide-react';
+import { Mail, Lock, KeyRound, ArrowLeft, Check, X } from 'lucide-react';
 import API_URL from '../../config/api';
 import { useTheme } from '../../context/ThemeContext';
 
@@ -15,6 +15,15 @@ const ForgotPassword = () => {
     const [loading, setLoading] = useState(false);
     const { isDarkMode } = useTheme();
     const navigate = useNavigate();
+
+    // Password validation
+    const passwordChecks = {
+        length: newPassword.length >= 8,
+        uppercase: /[A-Z]/.test(newPassword),
+        lowercase: /[a-z]/.test(newPassword),
+        number: /[0-9]/.test(newPassword),
+    };
+    const isPasswordValid = Object.values(passwordChecks).every(Boolean);
 
     const handleRequestOTP = async (e) => {
         e.preventDefault();
@@ -34,6 +43,12 @@ const ForgotPassword = () => {
 
     const handleResetPassword = async (e) => {
         e.preventDefault();
+
+        if (!isPasswordValid) {
+            setError('Please meet all password requirements.');
+            return;
+        }
+
         setError('');
         setMessage('');
         setLoading(true);
@@ -47,6 +62,13 @@ const ForgotPassword = () => {
             setLoading(false);
         }
     };
+
+    const PasswordCheck = ({ passed, text }) => (
+        <div className={`flex items-center gap-2 text-xs ${passed ? 'text-green-500' : isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+            {passed ? <Check className="w-3 h-3" /> : <X className="w-3 h-3" />}
+            {text}
+        </div>
+    );
 
     return (
         <div className="flex items-center justify-center min-h-[80vh] py-12">
@@ -78,7 +100,7 @@ const ForgotPassword = () => {
                                 <input
                                     type="email"
                                     required
-                                    className={`w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none ${isDarkMode ? 'bg-gray-700 border-gray-600 text-gray-100 placeholder-gray-400' : 'border-gray-300 text-gray-900'}`}
+                                    className={`w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-teal-500 outline-none ${isDarkMode ? 'bg-gray-700 border-gray-600 text-gray-100 placeholder-gray-400' : 'border-gray-300 text-gray-900'}`}
                                     placeholder="you@college.edu"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
@@ -89,14 +111,14 @@ const ForgotPassword = () => {
                         <button
                             type="submit"
                             disabled={loading}
-                            className="w-full py-3 text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors font-medium shadow-md"
+                            className="w-full py-3 text-white bg-teal-600 rounded-lg hover:bg-teal-700 transition-colors font-medium shadow-md"
                         >
                             {loading ? 'Sending...' : 'Send OTP Code'}
                         </button>
                     </form>
                 ) : (
                     <form onSubmit={handleResetPassword} className="space-y-4">
-                        <div className={`p-3 rounded text-center text-sm mb-2 ${isDarkMode ? 'bg-indigo-900/40 text-indigo-300' : 'bg-indigo-50 text-indigo-800'}`}>
+                        <div className={`p-3 rounded text-center text-sm mb-2 ${isDarkMode ? 'bg-teal-900/40 text-teal-300' : 'bg-teal-50 text-teal-800'}`}>
                             Code sent to <span className="font-bold">{email}</span>
                         </div>
 
@@ -107,7 +129,7 @@ const ForgotPassword = () => {
                                 <input
                                     type="text"
                                     required
-                                    className={`w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none tracking-widest ${isDarkMode ? 'bg-gray-700 border-gray-600 text-gray-100 placeholder-gray-400' : 'border-gray-300 text-gray-900'}`}
+                                    className={`w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-teal-500 outline-none tracking-widest ${isDarkMode ? 'bg-gray-700 border-gray-600 text-gray-100 placeholder-gray-400' : 'border-gray-300 text-gray-900'}`}
                                     placeholder="123456"
                                     value={otp}
                                     onChange={(e) => setOtp(e.target.value)}
@@ -122,18 +144,30 @@ const ForgotPassword = () => {
                                 <input
                                     type="password"
                                     required
-                                    className={`w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none ${isDarkMode ? 'bg-gray-700 border-gray-600 text-gray-100 placeholder-gray-400' : 'border-gray-300 text-gray-900'}`}
+                                    minLength={8}
+                                    className={`w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-teal-500 outline-none ${isDarkMode ? 'bg-gray-700 border-gray-600 text-gray-100 placeholder-gray-400' : 'border-gray-300 text-gray-900'}`}
                                     placeholder="••••••••"
                                     value={newPassword}
                                     onChange={(e) => setNewPassword(e.target.value)}
                                 />
                             </div>
+
+                            {/* Password Requirements */}
+                            <div className={`mt-2 p-3 rounded-lg ${isDarkMode ? 'bg-gray-700' : 'bg-gray-50'}`}>
+                                <p className={`text-xs font-medium mb-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>Password must have:</p>
+                                <div className="grid grid-cols-2 gap-1">
+                                    <PasswordCheck passed={passwordChecks.length} text="8+ characters" />
+                                    <PasswordCheck passed={passwordChecks.uppercase} text="Uppercase letter" />
+                                    <PasswordCheck passed={passwordChecks.lowercase} text="Lowercase letter" />
+                                    <PasswordCheck passed={passwordChecks.number} text="Number" />
+                                </div>
+                            </div>
                         </div>
 
                         <button
                             type="submit"
-                            disabled={loading}
-                            className="w-full py-3 text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors font-medium shadow-md"
+                            disabled={loading || !isPasswordValid}
+                            className={`w-full py-3 text-white rounded-lg transition-colors font-medium shadow-md ${isPasswordValid ? 'bg-green-600 hover:bg-green-700' : 'bg-gray-400 cursor-not-allowed'}`}
                         >
                             {loading ? 'Resetting...' : 'Reset Password'}
                         </button>
@@ -151,4 +185,3 @@ const ForgotPassword = () => {
 };
 
 export default ForgotPassword;
-
