@@ -76,11 +76,20 @@ const LandingPage = () => {
             {/* HERO SECTION - Enhanced with z-index */}
             <div className="flex flex-col items-center justify-center text-center mt-12 px-4 max-w-4xl space-y-8 animate-fade-in-scale relative z-10">
                 <div className="space-y-4">
-                    <h1 className={`text-5xl md:text-7xl font-extrabold tracking-tight leading-tight ${isDarkMode ? 'text-white drop-shadow-2xl' : 'text-gray-900'}`}>
+                    <h1
+                        className={`text-5xl md:text-7xl font-extrabold tracking-tight leading-tight ${isDarkMode ? 'text-white' : 'text-gray-900'}`}
+                        style={{ textShadow: isDarkMode ? '0 0 40px rgba(99, 102, 241, 0.4), 0 0 80px rgba(168, 85, 247, 0.2)' : 'none' }}
+                    >
                         Find What You've <br />
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 via-purple-600 to-pink-600 animate-gradient-x">Lost on Campus.</span>
+                        <span
+                            className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 via-purple-600 to-pink-600 animate-gradient-x"
+                            style={{ filter: 'drop-shadow(0 0 20px rgba(168, 85, 247, 0.5)) drop-shadow(0 0 40px rgba(236, 72, 153, 0.3))' }}
+                        >Lost on Campus.</span>
                     </h1>
-                    <p className={`text-xl md:text-2xl max-w-2xl mx-auto ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                    <p
+                        className={`text-xl md:text-2xl max-w-2xl mx-auto ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}
+                        style={{ textShadow: isDarkMode ? '0 0 30px rgba(148, 163, 184, 0.3)' : 'none' }}
+                    >
                         Don't panic. Connect with the community to recover your belongings instantly. Safe, fast, and simple.
                     </p>
                 </div>
