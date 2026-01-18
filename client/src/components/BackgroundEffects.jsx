@@ -1,8 +1,11 @@
-import React from 'react';
+import ConstellationEffect from './ConstellationEffect';
 
 const BackgroundEffects = () => {
     return (
         <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
+            {/* Constellation Mesh Layer (Top) */}
+            <ConstellationEffect />
+
             {/* Huge top-right glow */}
             <div className="absolute -top-64 -right-64 w-[600px] h-[600px] bg-gradient-to-br from-indigo-600/30 to-purple-600/30 rounded-full blur-[120px] animate-pulse"></div>
 
