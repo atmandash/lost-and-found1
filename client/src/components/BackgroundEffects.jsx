@@ -44,7 +44,7 @@ const BackgroundEffects = () => {
 
             {/* Pulsating Teal Blob - Top Right */}
             <div
-                className="absolute -top-16 -right-16 md:-top-24 md:-right-24 w-48 h-48 md:w-[320px] md:h-[320px] rounded-full blur-2xl"
+                className="absolute -top-20 -right-20 md:-top-28 md:-right-28 w-56 h-56 md:w-[380px] md:h-[380px] rounded-full blur-2xl"
                 style={{
                     background: 'radial-gradient(circle, rgba(20, 184, 166, 0.35) 0%, rgba(6, 182, 212, 0.15) 50%, transparent 70%)',
                     animation: 'blobPulse1 5s ease-in-out infinite',
@@ -53,7 +53,7 @@ const BackgroundEffects = () => {
 
             {/* Pulsating Cyan Blob - Bottom Left */}
             <div
-                className="absolute -bottom-12 -left-12 md:-bottom-20 md:-left-20 w-40 h-40 md:w-[280px] md:h-[280px] rounded-full blur-2xl"
+                className="absolute -bottom-16 -left-16 md:-bottom-24 md:-left-24 w-48 h-48 md:w-[340px] md:h-[340px] rounded-full blur-2xl"
                 style={{
                     background: 'radial-gradient(circle, rgba(6, 182, 212, 0.3) 0%, rgba(20, 184, 166, 0.12) 50%, transparent 70%)',
                     animation: 'blobPulse2 7s ease-in-out infinite',
