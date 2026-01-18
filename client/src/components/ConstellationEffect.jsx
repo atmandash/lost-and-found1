@@ -7,7 +7,11 @@ const ConstellationEffect = () => {
 
     useEffect(() => {
         const canvas = canvasRef.current;
+        if (!canvas) return; // Safety check
+
         const ctx = canvas.getContext('2d');
+        if (!ctx) return; // Safety check
+
         let animationFrameId;
         let particles = [];
 
