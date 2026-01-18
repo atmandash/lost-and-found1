@@ -373,7 +373,24 @@ exports.getMe = async (req, res) => {
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
-        res.json(user);
+        // Return consistent user object with 'id' field (matching login response)
+        res.json({
+            id: user.id,
+            _id: user._id, // Keep both for compatibility
+            name: user.name,
+            email: user.email,
+            phone: user.phone,
+            avatar: user.avatar,
+            points: user.points,
+            level: user.level,
+            badges: user.badges,
+            itemsReported: user.itemsReported,
+            itemsReturned: user.itemsReturned,
+            streak: user.streak,
+            isAdmin: user.isAdmin,
+            isHiddenFromLeaderboard: user.isHiddenFromLeaderboard,
+            joinedAt: user.joinedAt
+        });
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server Error');
