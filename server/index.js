@@ -33,9 +33,7 @@ app.use(helmet({
 
 // Middleware
 const corsOptions = {
-    origin: process.env.NODE_ENV === 'production'
-        ? process.env.FRONTEND_URL || 'https://yourdomain.com'
-        : '*',
+    origin: '*', // Allow all origins
     credentials: true
 };
 app.use(cors(corsOptions));
