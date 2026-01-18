@@ -10,8 +10,8 @@ import { useCountAnimation } from '../hooks/useCountAnimation';
 
 // Avatar generation function
 const generateAvatar = (userId, name) => {
-    // Strictly young, premium styles
-    const styles = ['micah', 'lorelei', 'notionists'];
+    // Modern, appealing avatar styles
+    const styles = ['adventurer', 'avataaars', 'fun-emoji'];
     const styleIndex = parseInt(userId?.slice(-1) || '0', 16) % styles.length;
     const style = styles[styleIndex];
     return `https://api.dicebear.com/7.x/${style}/svg?seed=${userId || name}`;
@@ -19,9 +19,10 @@ const generateAvatar = (userId, name) => {
 
 // Predefined avatar styles for selection
 const AVATAR_STYLES = [
-    'micah',
-    'lorelei',
-    'notionists'
+    'adventurer',
+    'avataaars',
+    'fun-emoji',
+    'thumbs'
 ];
 
 // Generate 12 variants for each style = 36 options
@@ -197,7 +198,7 @@ const Profile = () => {
     return (
         <div className="max-w-7xl mx-auto px-4 space-y-8">
             {/* Profile Header with Gradient */}
-            <div className="bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 p-8 rounded-3xl shadow-xl text-white animate-fade-in-scale">
+            <div className="bg-gradient-to-br from-cyan-500 via-teal-500 to-emerald-500 p-8 rounded-3xl shadow-xl text-white animate-fade-in-scale">
                 <div className="flex flex-col md:flex-row items-center text-center md:text-left gap-6">
                     {/* Editable Avatar */}
                     <div
