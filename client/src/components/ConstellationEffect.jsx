@@ -15,9 +15,9 @@ const ConstellationEffect = () => {
         let animationFrameId;
         let particles = [];
 
-        // Configuration
-        const particleCount = window.innerWidth < 768 ? 30 : 80; // Fewer particles on mobile
-        const connectionDistance = window.innerWidth < 768 ? 100 : 150;
+        // Configuration - Bigger and more visible
+        const particleCount = window.innerWidth < 768 ? 40 : 100; // More particles
+        const connectionDistance = window.innerWidth < 768 ? 120 : 200; // Longer connections
 
         // Resize hanlder
         const resizeCanvas = () => {
@@ -32,9 +32,9 @@ const ConstellationEffect = () => {
             constructor() {
                 this.x = Math.random() * canvas.width;
                 this.y = Math.random() * canvas.height;
-                this.vx = (Math.random() - 0.5) * 0.5;
-                this.vy = (Math.random() - 0.5) * 0.5;
-                this.size = Math.random() * 2 + 1;
+                this.vx = (Math.random() - 0.5) * 0.4;
+                this.vy = (Math.random() - 0.5) * 0.4;
+                this.size = Math.random() * 3 + 2; // Bigger dots (2-5px)
                 // Colorful particles: Teal, Indigo, Purple
                 const colors = [
                     'rgba(45, 212, 191, ',  // Teal
@@ -55,8 +55,8 @@ const ConstellationEffect = () => {
 
             draw() {
                 ctx.beginPath();
-                // Dynamic opacity based on theme but kept subtle
-                const opacity = isDarkMode ? 0.6 : 0.4;
+                // Dynamic opacity - more visible
+                const opacity = isDarkMode ? 0.8 : 0.6;
                 ctx.fillStyle = this.colorBase + opacity + ')';
                 ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
                 ctx.fill();
@@ -82,11 +82,11 @@ const ConstellationEffect = () => {
 
                     if (distance < connectionDistance) {
                         ctx.beginPath();
-                        const opacity = (1 - distance / connectionDistance) * 0.2; // Very faint lines
+                        const opacity = (1 - distance / connectionDistance) * 0.5; // More visible lines
                         ctx.strokeStyle = isDarkMode
                             ? `rgba(148, 163, 184, ${opacity})` // Slate-400 for dark mode
                             : `rgba(100, 116, 139, ${opacity})`; // Slate-500 for light mode
-                        ctx.lineWidth = 1;
+                        ctx.lineWidth = 1.5; // Thicker lines
                         ctx.moveTo(p1.x, p1.y);
                         ctx.lineTo(p2.x, p2.y);
                         ctx.stroke();
