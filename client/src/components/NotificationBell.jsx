@@ -135,13 +135,13 @@ const NotificationBell = () => {
             </button>
 
             {showDropdown && (
-                <div className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-xl border border-gray-200 z-50 max-h-96 overflow-hidden">
-                    <div className="p-3 border-b border-gray-100 flex items-center justify-between bg-gradient-to-r from-indigo-50 to-purple-50">
-                        <h3 className="font-bold text-gray-900">Notifications</h3>
+                <div className="absolute right-0 mt-2 w-80 bg-gray-800 rounded-lg shadow-xl border border-gray-700 z-50 max-h-96 overflow-hidden">
+                    <div className="p-3 border-b border-gray-700 flex items-center justify-between bg-gradient-to-r from-teal-900/50 to-cyan-900/50">
+                        <h3 className="font-bold text-gray-100">Notifications</h3>
                         {unreadCount > 0 && (
                             <button
                                 onClick={handleMarkAllRead}
-                                className="text-xs text-indigo-600 hover:text-indigo-800 font-medium"
+                                className="text-xs text-teal-400 hover:text-teal-300 font-medium"
                             >
                                 Mark all read
                             </button>
@@ -150,7 +150,7 @@ const NotificationBell = () => {
 
                     <div className="max-h-80 overflow-y-auto">
                         {notifications.length === 0 ? (
-                            <div className="p-6 text-center text-gray-500 text-sm">
+                            <div className="p-6 text-center text-gray-400 text-sm">
                                 No notifications yet
                             </div>
                         ) : (
@@ -162,25 +162,25 @@ const NotificationBell = () => {
                                 return (
                                     <div
                                         key={notification._id}
-                                        className={`p-3 border-b border-gray-100 transition-colors ${!notification.read ? 'bg-indigo-50' : ''
+                                        className={`p-3 border-b border-gray-700 transition-colors ${!notification.read ? 'bg-teal-900/30' : ''
                                             }`}
                                     >
                                         <div
                                             onClick={() => handleNotificationClick(notification)}
-                                            className="hover:bg-gray-50 cursor-pointer rounded p-2"
+                                            className="hover:bg-gray-700 cursor-pointer rounded p-2"
                                         >
                                             <div className="flex items-start gap-2">
                                                 {!notification.read && (
-                                                    <div className="w-2 h-2 bg-indigo-600 rounded-full mt-2 flex-shrink-0"></div>
+                                                    <div className="w-2 h-2 bg-teal-500 rounded-full mt-2 flex-shrink-0"></div>
                                                 )}
                                                 <div className="flex-1 min-w-0">
                                                     <div className="flex flex-col gap-1">
                                                         <div className="flex items-start justify-between gap-2">
-                                                            <p className="text-sm text-gray-900 leading-snug">
+                                                            <p className="text-sm text-gray-200 leading-snug">
                                                                 {notification.message}
                                                             </p>
                                                         </div>
-                                                        <p className="text-xs text-gray-500">
+                                                        <p className="text-xs text-gray-400">
                                                             {new Date(notification.createdAt).toLocaleDateString()} at{' '}
                                                             {new Date(notification.createdAt).toLocaleTimeString([], {
                                                                 hour: '2-digit',

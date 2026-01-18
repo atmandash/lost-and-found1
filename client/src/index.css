@@ -84,11 +84,11 @@
     right: -20%;
     width: 50vw;
     height: 50vw;
-    background: linear-gradient(135deg, rgba(6, 182, 212, 0.15) 0%, rgba(14, 165, 233, 0.10) 100%);
+    background: linear-gradient(135deg, rgba(6, 182, 212, 0.20) 0%, rgba(14, 165, 233, 0.15) 100%);
     border-radius: 50%;
     pointer-events: none;
     z-index: -1;
-    animation: shapePulse 15s ease-in-out infinite;
+    animation: shapePulseMobile 8s ease-in-out infinite;
   }
 
   @media (min-width: 768px) {
@@ -97,22 +97,36 @@
       right: -10%;
       width: 60%;
       height: 80%;
-      transform: rotate(-15deg);
       border-radius: 20% 80% 20% 80%;
+      animation: shapePulseDesktop 8s ease-in-out infinite;
     }
   }
 
-  @keyframes shapePulse {
+  @keyframes shapePulseMobile {
 
     0%,
     100% {
-      opacity: 0.6;
+      opacity: 0.4;
       transform: scale(1);
     }
 
     50% {
-      opacity: 0.9;
-      transform: scale(1.05);
+      opacity: 1;
+      transform: scale(1.1);
+    }
+  }
+
+  @keyframes shapePulseDesktop {
+
+    0%,
+    100% {
+      opacity: 0.4;
+      transform: rotate(-15deg) scale(1);
+    }
+
+    50% {
+      opacity: 1;
+      transform: rotate(-12deg) scale(1.08);
     }
   }
 
@@ -124,11 +138,11 @@
     left: -20%;
     width: 50vw;
     height: 50vw;
-    background: linear-gradient(225deg, rgba(6, 182, 212, 0.12) 0%, rgba(20, 184, 166, 0.10) 100%);
+    background: linear-gradient(225deg, rgba(6, 182, 212, 0.18) 0%, rgba(20, 184, 166, 0.15) 100%);
     border-radius: 50%;
     pointer-events: none;
     z-index: -1;
-    animation: shapePulseBottom 18s ease-in-out infinite;
+    animation: shapePulseMobileBottom 10s ease-in-out infinite;
   }
 
   @media (min-width: 768px) {
@@ -137,22 +151,36 @@
       left: -15%;
       width: 50%;
       height: 65%;
-      transform: rotate(20deg);
       border-radius: 80% 20% 80% 20%;
+      animation: shapePulseDesktopBottom 10s ease-in-out infinite;
     }
   }
 
-  @keyframes shapePulseBottom {
+  @keyframes shapePulseMobileBottom {
 
     0%,
     100% {
-      opacity: 0.6;
+      opacity: 0.4;
+      transform: scale(1);
+    }
+
+    50% {
+      opacity: 1;
+      transform: scale(1.1);
+    }
+  }
+
+  @keyframes shapePulseDesktopBottom {
+
+    0%,
+    100% {
+      opacity: 0.4;
       transform: rotate(20deg) scale(1);
     }
 
     50% {
-      opacity: 0.9;
-      transform: rotate(25deg) scale(1.1);
+      opacity: 1;
+      transform: rotate(25deg) scale(1.12);
     }
   }
 

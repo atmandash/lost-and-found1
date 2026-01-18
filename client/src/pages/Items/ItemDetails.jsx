@@ -293,8 +293,8 @@ const ItemDetails = () => {
                                     </button>
                                 )}
 
-                                {/* Admin Force Delete Button */}
-                                {(user && (user.isAdmin || user.email === 'websitedeve5@gmail.com')) && !isMyItem && (
+                                {/* Admin Force Delete Button - show for all items (active, resolved, etc) */}
+                                {(user && (user.isAdmin || user.email === 'websitedeve5@gmail.com')) && (
                                     <button
                                         onClick={async () => {
                                             if (confirm('ADMIN ACTION: Are you sure you want to PERMANENTLY DELETE this item? This CANNOT be undone and will remove it from the database.')) {
@@ -306,7 +306,8 @@ const ItemDetails = () => {
                                                     alert('Item permanently deleted by Admin.');
                                                     navigate('/');
                                                 } catch (err) {
-                                                    alert('Error deleting item');
+                                                    console.error('Delete error:', err.response?.data || err.message);
+                                                    alert(err.response?.data?.message || 'Error deleting item');
                                                 }
                                             }
                                         }}
@@ -327,6 +328,31 @@ const ItemDetails = () => {
                             >
                                 <Award className="w-5 h-5 mr-2" />
                                 Claim This Item
+                            </button>
+                        )}
+
+                        {/* Admin Delete Button for Resolved Items */}
+                        {item.status !== 'active' && (user && (user.isAdmin || user.email === 'websitedeve5@gmail.com')) && (
+                            <button
+                                onClick={async () => {
+                                    if (confirm('ADMIN ACTION: Are you sure you want to PERMANENTLY DELETE this resolved item? This CANNOT be undone.')) {
+                                        try {
+                                            const token = localStorage.getItem('token');
+                                            await axios.delete(`${API_URL}/api/items/${item._id}`, {
+                                                headers: { 'x-auth-token': token }
+                                            });
+                                            alert('Item permanently deleted by Admin.');
+                                            navigate('/');
+                                        } catch (err) {
+                                            console.error('Delete error:', err.response?.data || err.message);
+                                            alert(err.response?.data?.message || 'Error deleting item');
+                                        }
+                                    }
+                                }}
+                                className="w-full flex items-center justify-center py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-all font-bold shadow-lg"
+                            >
+                                <Shield className="w-5 h-5 mr-2" />
+                                Force Delete (Admin)
                             </button>
                         )}
 
