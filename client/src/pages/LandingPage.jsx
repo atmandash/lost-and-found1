@@ -6,6 +6,7 @@ import { useTheme } from '../context/ThemeContext';
 import axios from 'axios';
 import API_URL from '../config/api';
 import Footer from '../components/Footer';
+import SpotlightCard from '../components/SpotlightCard';
 
 const LandingPage = () => {
     const navigate = useNavigate();
