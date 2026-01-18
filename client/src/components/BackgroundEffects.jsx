@@ -1,19 +1,27 @@
 import React from 'react';
-import { MapPin, Search, Package, Eye, MessageCircle, Shield, Award, Bell } from 'lucide-react';
+import { MapPin, Search, Package, Eye, MessageCircle, Shield, Award, Bell, Key, Compass, Tag, Bookmark, Heart, Star, Zap, Target } from 'lucide-react';
 
 const BackgroundEffects = () => {
-    // Floating icons representing the Lost & Found theme
+    // Floating icons representing the Lost & Found theme - more icons, bigger sizes
     const floatingIcons = [
-        { Icon: MapPin, x: '10%', y: '15%', size: 24, delay: 0, color: 'text-red-400/30' },
-        { Icon: Search, x: '85%', y: '20%', size: 28, delay: 1, color: 'text-blue-400/30' },
-        { Icon: Package, x: '20%', y: '70%', size: 22, delay: 2, color: 'text-green-400/30' },
-        { Icon: Eye, x: '75%', y: '65%', size: 26, delay: 0.5, color: 'text-purple-400/30' },
-        { Icon: MessageCircle, x: '50%', y: '85%', size: 20, delay: 1.5, color: 'text-cyan-400/30' },
-        { Icon: Shield, x: '90%', y: '45%', size: 24, delay: 2.5, color: 'text-yellow-400/30' },
-        { Icon: Award, x: '5%', y: '45%', size: 22, delay: 0.8, color: 'text-orange-400/30' },
-        { Icon: Bell, x: '60%', y: '10%', size: 24, delay: 1.8, color: 'text-pink-400/30' },
-        { Icon: MapPin, x: '40%', y: '35%', size: 20, delay: 3, color: 'text-teal-400/25' },
-        { Icon: Search, x: '30%', y: '55%', size: 18, delay: 2.2, color: 'text-indigo-400/25' },
+        { Icon: MapPin, x: '8%', y: '12%', size: 32, delay: 0, color: 'text-red-400/25' },
+        { Icon: Search, x: '88%', y: '18%', size: 36, delay: 1, color: 'text-blue-400/25' },
+        { Icon: Package, x: '15%', y: '65%', size: 30, delay: 2, color: 'text-green-400/25' },
+        { Icon: Eye, x: '78%', y: '60%', size: 34, delay: 0.5, color: 'text-purple-400/25' },
+        { Icon: MessageCircle, x: '45%', y: '82%', size: 28, delay: 1.5, color: 'text-cyan-400/25' },
+        { Icon: Shield, x: '92%', y: '42%', size: 32, delay: 2.5, color: 'text-yellow-400/25' },
+        { Icon: Award, x: '5%', y: '40%', size: 30, delay: 0.8, color: 'text-orange-400/25' },
+        { Icon: Bell, x: '55%', y: '8%', size: 32, delay: 1.8, color: 'text-pink-400/25' },
+        { Icon: Key, x: '35%', y: '28%', size: 28, delay: 3, color: 'text-amber-400/25' },
+        { Icon: Compass, x: '25%', y: '50%', size: 30, delay: 2.2, color: 'text-indigo-400/25' },
+        { Icon: Tag, x: '70%', y: '75%', size: 26, delay: 1.2, color: 'text-teal-400/25' },
+        { Icon: Bookmark, x: '82%', y: '85%', size: 28, delay: 0.3, color: 'text-rose-400/25' },
+        { Icon: Heart, x: '12%', y: '88%', size: 26, delay: 2.8, color: 'text-red-300/25' },
+        { Icon: Star, x: '65%', y: '35%', size: 30, delay: 1.6, color: 'text-yellow-300/25' },
+        { Icon: Zap, x: '40%', y: '55%', size: 28, delay: 0.7, color: 'text-cyan-300/25' },
+        { Icon: Target, x: '95%', y: '12%', size: 32, delay: 2.4, color: 'text-emerald-400/25' },
+        { Icon: MapPin, x: '52%', y: '45%', size: 24, delay: 3.2, color: 'text-violet-400/20' },
+        { Icon: Search, x: '3%', y: '75%', size: 26, delay: 1.1, color: 'text-sky-400/20' },
     ];
 
     return (
@@ -26,7 +34,7 @@ const BackgroundEffects = () => {
                     style={{
                         left: item.x,
                         top: item.y,
-                        animation: `float ${6 + idx}s ease-in-out infinite`,
+                        animation: `float ${6 + (idx % 4)}s ease-in-out infinite`,
                         animationDelay: `${item.delay}s`,
                     }}
                 >
