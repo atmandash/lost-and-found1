@@ -42,6 +42,14 @@ const Profile = () => {
         level: 1,
         totalReports: 0
     });
+    const [adminStats, setAdminStats] = useState({
+        totalUsers: 0,
+        totalItems: 0,
+        activeItems: 0,
+        resolvedItems: 0,
+        totalChats: 0,
+        successRate: 0
+    });
     const [activeTab, setActiveTab] = useState('active'); // 'active' or 'history'
     const isMounted = useRef(true); // Track if component is mounted
     const [showAvatarModal, setShowAvatarModal] = useState(false);
@@ -52,10 +60,16 @@ const Profile = () => {
             setAvatarUrl(user.avatar || generateAvatar(user.id, user.name));
             fetchMyItems();
 
+            // Fetch admin stats if user is admin
+            if (user.isAdmin) {
+                fetchAdminStats();
+            }
+
             // Poll for updates every 10 seconds (only when tab is visible)
             const interval = setInterval(() => {
                 if (document.visibilityState === 'visible' && isMounted.current) {
                     fetchMyItems();
+                    if (user.isAdmin) fetchAdminStats();
                 }
             }, 10000);
 
@@ -144,6 +158,24 @@ const Profile = () => {
             if (isMounted.current) {
                 setLoading(false);
             }
+        }
+    };
+
+    // Fetch admin stats
+    const fetchAdminStats = async () => {
+        try {
+            const token = localStorage.getItem('token');
+            if (!token) return;
+
+            const res = await axios.get(`${API_URL}/api/stats/admin`, {
+                headers: { 'x-auth-token': token }
+            });
+
+            if (isMounted.current) {
+                setAdminStats(res.data);
+            }
+        } catch (err) {
+            console.error('Error fetching admin stats:', err);
         }
     };
 
@@ -330,7 +362,7 @@ const Profile = () => {
                         <div className="bg-gradient-to-br from-blue-500 to-blue-600 p-6 rounded-2xl shadow-lg text-white hover-lift transition-all">
                             <div className="flex items-center justify-between">
                                 <div>
-                                    <div className="text-3xl font-bold">-</div>
+                                    <div className="text-3xl font-bold">{adminStats.totalUsers}</div>
                                     <div className="text-sm text-blue-100 mt-1">Total Users</div>
                                 </div>
                                 <User className="w-10 h-10 opacity-50" />
@@ -341,7 +373,7 @@ const Profile = () => {
                         <div className="bg-gradient-to-br from-purple-500 to-purple-600 p-6 rounded-2xl shadow-lg text-white hover-lift transition-all">
                             <div className="flex items-center justify-between">
                                 <div>
-                                    <div className="text-3xl font-bold">-</div>
+                                    <div className="text-3xl font-bold">{adminStats.totalItems}</div>
                                     <div className="text-sm text-purple-100 mt-1">Total Items</div>
                                 </div>
                                 <MapPin className="w-10 h-10 opacity-50" />
@@ -352,7 +384,7 @@ const Profile = () => {
                         <div className="bg-gradient-to-br from-green-500 to-green-600 p-6 rounded-2xl shadow-lg text-white hover-lift transition-all">
                             <div className="flex items-center justify-between">
                                 <div>
-                                    <div className="text-3xl font-bold">-</div>
+                                    <div className="text-3xl font-bold">{adminStats.activeItems}</div>
                                     <div className="text-sm text-green-100 mt-1">Active Items</div>
                                 </div>
                                 <CheckCircle className="w-10 h-10 opacity-50" />
@@ -363,7 +395,7 @@ const Profile = () => {
                         <div className="bg-gradient-to-br from-indigo-500 to-indigo-600 p-6 rounded-2xl shadow-lg text-white hover-lift transition-all">
                             <div className="flex items-center justify-between">
                                 <div>
-                                    <div className="text-3xl font-bold">-</div>
+                                    <div className="text-3xl font-bold">{adminStats.resolvedItems}</div>
                                     <div className="text-sm text-indigo-100 mt-1">Resolved Items</div>
                                 </div>
                                 <Award className="w-10 h-10 opacity-50" />
@@ -374,7 +406,7 @@ const Profile = () => {
                         <div className="bg-gradient-to-br from-pink-500 to-pink-600 p-6 rounded-2xl shadow-lg text-white hover-lift transition-all">
                             <div className="flex items-center justify-between">
                                 <div>
-                                    <div className="text-3xl font-bold">-</div>
+                                    <div className="text-3xl font-bold">{adminStats.totalChats}</div>
                                     <div className="text-sm text-pink-100 mt-1">Total Chats</div>
                                 </div>
                                 <MessageCircle className="w-10 h-10 opacity-50" />
@@ -385,7 +417,7 @@ const Profile = () => {
                         <div className="bg-gradient-to-br from-yellow-500 to-yellow-600 p-6 rounded-2xl shadow-lg text-white hover-lift transition-all">
                             <div className="flex items-center justify-between">
                                 <div>
-                                    <div className="text-3xl font-bold">-%</div>
+                                    <div className="text-3xl font-bold">{adminStats.successRate}%</div>
                                     <div className="text-sm text-yellow-100 mt-1">Success Rate</div>
                                 </div>
                                 <TrendingUp className="w-10 h-10 opacity-50" />
