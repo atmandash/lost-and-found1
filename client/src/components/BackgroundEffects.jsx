@@ -60,6 +60,33 @@ const BackgroundEffects = () => {
                 }}
             />
 
+            {/* Pulsating Purple Blob - Center Left */}
+            <div
+                className="absolute top-1/3 -left-12 md:-left-20 w-40 h-40 md:w-[280px] md:h-[280px] rounded-full blur-2xl"
+                style={{
+                    background: 'radial-gradient(circle, rgba(139, 92, 246, 0.25) 0%, rgba(124, 58, 237, 0.1) 50%, transparent 70%)',
+                    animation: 'blobPulse3 9s ease-in-out infinite',
+                }}
+            />
+
+            {/* Pulsating Emerald Blob - Top Center */}
+            <div
+                className="absolute -top-10 left-1/3 md:left-1/4 w-36 h-36 md:w-[260px] md:h-[260px] rounded-full blur-2xl"
+                style={{
+                    background: 'radial-gradient(circle, rgba(16, 185, 129, 0.22) 0%, rgba(5, 150, 105, 0.08) 50%, transparent 70%)',
+                    animation: 'blobPulse4 6s ease-in-out infinite',
+                }}
+            />
+
+            {/* Pulsating Amber Blob - Bottom Right */}
+            <div
+                className="absolute bottom-1/4 -right-10 md:-right-16 w-32 h-32 md:w-[220px] md:h-[220px] rounded-full blur-2xl"
+                style={{
+                    background: 'radial-gradient(circle, rgba(245, 158, 11, 0.2) 0%, rgba(217, 119, 6, 0.08) 50%, transparent 70%)',
+                    animation: 'blobPulse5 8s ease-in-out infinite',
+                }}
+            />
+
             {/* CSS for animations */}
             <style>{`
                 @keyframes float {
@@ -87,6 +114,39 @@ const BackgroundEffects = () => {
                     }
                     50% { 
                         opacity: 0.55;
+                        transform: scale(1.1);
+                    }
+                }
+                
+                @keyframes blobPulse3 {
+                    0%, 100% { 
+                        opacity: 0.15;
+                        transform: scale(1);
+                    }
+                    50% { 
+                        opacity: 0.5;
+                        transform: scale(1.12);
+                    }
+                }
+                
+                @keyframes blobPulse4 {
+                    0%, 100% { 
+                        opacity: 0.18;
+                        transform: scale(1);
+                    }
+                    50% { 
+                        opacity: 0.52;
+                        transform: scale(1.08);
+                    }
+                }
+                
+                @keyframes blobPulse5 {
+                    0%, 100% { 
+                        opacity: 0.15;
+                        transform: scale(1);
+                    }
+                    50% { 
+                        opacity: 0.45;
                         transform: scale(1.1);
                     }
                 }
