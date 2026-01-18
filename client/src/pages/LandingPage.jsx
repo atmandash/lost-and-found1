@@ -154,7 +154,10 @@ const LandingPage = () => {
                 </div>
             </div>
 
-            <Footer />
+            {/* Hide footer on mobile when not logged in */}
+            <div className={`${!isAuthenticated ? 'hidden md:block' : ''}`}>
+                <Footer />
+            </div>
         </div>
     );
 };
