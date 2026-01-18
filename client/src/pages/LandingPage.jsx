@@ -67,9 +67,7 @@ const LandingPage = () => {
     // Static Display (Animation Removed)
     const CountUp = ({ end }) => <span>{end}</span>;
 
-    import SpotlightCard from '../components/SpotlightCard';
 
-    // ... (rest of code)
 
     return (
         <div className="relative flex flex-col items-center flex-1 justify-between overflow-hidden pb-0 w-full min-h-full">
