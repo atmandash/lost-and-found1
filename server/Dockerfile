@@ -1,22 +1,18 @@
 FROM node:18-alpine
 
-# Set working directory
 WORKDIR /app
 
-# Copy package files first (better caching)
-COPY package*.json ./
-
-# Install dependencies (using modern npm syntax)
-RUN npm ci --omit=dev
-
-# Copy the rest of the application code
+# Copy all files
 COPY . .
 
-# Expose the port the app runs on
+# Install dependencies (using npm install - more forgiving than npm ci)
+RUN npm install --production
+
+# Expose port
 EXPOSE 8000
 
-# Set environment variable for port
+# Set port
 ENV PORT=8000
 
-# Start the application
+# Start
 CMD ["npm", "start"]
