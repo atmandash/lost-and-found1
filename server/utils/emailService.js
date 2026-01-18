@@ -180,7 +180,7 @@ const templates = {
                         </p>
                     </div>
                     <p style="font-size: 14px; color: #6b7280;">
-                        If you believe this was done in error or have any questions, please contact the campus administration.
+                        If you believe this was done in error or have any questions, please contact the website administration.
                     </p>
                     <p style="font-size: 14px; color: #6b7280; margin-top: 20px;">
                         Thank you for your understanding and continued participation in our Lost & Found community!
