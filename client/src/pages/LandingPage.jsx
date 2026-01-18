@@ -66,9 +66,12 @@ const LandingPage = () => {
     // Static Display (Animation Removed)
     const CountUp = ({ end }) => <span>{end}</span>;
 
+    import SpotlightCard from '../components/SpotlightCard';
+
+    // ... (rest of code)
+
     return (
         <div className="relative flex flex-col items-center flex-1 justify-between overflow-hidden pb-0 w-full min-h-full">
-            {/* LARGE GEOMETRIC BACKGROUND SHAPES */}
             {/* Background handled globaly by BackgroundEffects */}
 
             {/* HERO SECTION - Enhanced with z-index */}
@@ -94,16 +97,16 @@ const LandingPage = () => {
                 </button>
             </div>
 
-            {/* FEATURES GRID */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 px-4 max-w-6xl mt-24 w-full animate-stagger relative z-10">
-                {features.map((feat, idx) => (
-                    <div key={idx} className="p-6 rounded-2xl border border-white/10 transition-all hover:-translate-y-1 hover:shadow-2xl hover:shadow-indigo-500/20 hover-scale flex flex-col items-center text-center bg-gray-900/40 backdrop-blur-md">
-                        <div className="mb-4 bg-gray-800/60 w-12 h-12 rounded-xl flex items-center justify-center">
-                            {feat.icon}
+            {/* FEATURES GRID - With Spotlight Effect */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 px-4 max-w-7xl w-full mt-24 relative z-10 animate-stagger">
+                {features.map((feature, idx) => (
+                    <SpotlightCard key={idx} className="p-6 flex flex-col items-center text-center h-full">
+                        <div className="mb-4 bg-gray-800/60 w-14 h-14 rounded-2xl flex items-center justify-center shadow-inner border border-white/5">
+                            {feature.icon}
                         </div>
-                        <h3 className="text-lg font-bold mb-2 text-gray-100">{feat.title}</h3>
-                        <p className="text-sm text-gray-400">{feat.desc}</p>
-                    </div>
+                        <h3 className="text-xl font-bold mb-2 text-white">{feature.title}</h3>
+                        <p className="text-gray-400 text-sm leading-relaxed">{feature.desc}</p>
+                    </SpotlightCard>
                 ))}
             </div>
 
