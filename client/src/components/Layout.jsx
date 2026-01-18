@@ -24,7 +24,7 @@ const Navbar = () => {
 
                     {/* Nav Links */}
                     <div className="flex w-full justify-around md:w-auto md:space-x-8 items-center">
-                        {isAuthenticated && (
+                        {isAuthenticated ? (
                             <>
                                 <NavLink to="/lost" icon={<MapPin className="text-red-500" />} label="Lost" />
                                 <NavLink to="/found" icon={<MapPin className="text-green-600" />} label="Found" />
@@ -39,6 +39,10 @@ const Navbar = () => {
                                 <div className="hidden md:flex items-center gap-2 ml-4">
                                     <NotificationBell />
                                 </div>
+                            </>
+                        ) : (
+                            <>
+                                <NavLink to="/login" icon={<LogIn className="text-indigo-500" />} label="Login" />
                             </>
                         )}
                     </div>
