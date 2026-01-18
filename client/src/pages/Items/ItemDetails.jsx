@@ -216,9 +216,17 @@ const ItemDetails = () => {
                     <div className={`p-6 rounded-xl shadow-sm border space-y-4 ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`}>
                         {/* User Info - Show real info for admins, anonymous for others */}
                         <div className="flex items-center space-x-3 mb-4">
-                            <div className="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-full flex items-center justify-center text-white font-bold text-xl shadow-md">
-                                {item.user.name ? item.user.name[0] : 'A'}
-                            </div>
+                            {item.user.avatar ? (
+                                <img
+                                    src={item.user.avatar}
+                                    alt="User avatar"
+                                    className="w-12 h-12 rounded-full object-cover shadow-md"
+                                />
+                            ) : (
+                                <div className="w-12 h-12 bg-gradient-to-br from-teal-500 to-cyan-500 rounded-full flex items-center justify-center text-white font-bold text-xl shadow-md">
+                                    {item.user.name ? item.user.name[0] : 'A'}
+                                </div>
+                            )}
                             <div className="flex-1">
                                 {user?.isAdmin ? (
                                     // Admin view - show only reporter name
@@ -273,11 +281,12 @@ const ItemDetails = () => {
                                                     alert('Item marked as resolved!');
                                                     navigate('/' + item.type); // Go back to list
                                                 } catch (err) {
-                                                    alert('Error resolving item');
+                                                    console.error('Resolve error:', err.response?.data || err.message);
+                                                    alert(err.response?.data?.message || 'Error resolving item. Please try again.');
                                                 }
                                             }
                                         }}
-                                        className="w-full flex items-center justify-center py-3 bg-red-100 text-red-600 rounded-lg hover:bg-red-200 transition-all font-medium border border-red-200"
+                                        className={`w-full flex items-center justify-center py-3 rounded-lg transition-all font-medium border ${isDarkMode ? 'bg-red-900/30 text-red-400 border-red-900 hover:bg-red-900/50' : 'bg-red-100 text-red-600 border-red-200 hover:bg-red-200'}`}
                                     >
                                         <CheckCircle className="w-5 h-5 mr-2" />
                                         Mark as Resolved

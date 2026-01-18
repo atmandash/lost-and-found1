@@ -49,8 +49,8 @@ const ChatList = () => {
             </div>
 
             {chats.length === 0 ? (
-                <div className={`text-center py-12 rounded-xl shadow-sm border ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-gradient-to-br from-indigo-50 to-purple-50 border-gray-100'}`}>
-                    <MessageCircle className={`w-12 h-12 mx-auto mb-3 ${isDarkMode ? 'text-gray-600' : 'text-indigo-300'}`} />
+                <div className={`text-center py-12 rounded-xl shadow-sm border ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'}`}>
+                    <MessageCircle className={`w-12 h-12 mx-auto mb-3 ${isDarkMode ? 'text-gray-600' : 'text-gray-400'}`} />
                     <p className={`font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>No active chats</p>
                     <p className={`text-sm mt-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Start helping others by browsing lost & found items!</p>
                 </div>
