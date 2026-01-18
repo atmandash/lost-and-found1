@@ -76,7 +76,7 @@
     -webkit-backdrop-filter: none !important;
   }
 
-  /* Large diagonal shape - top right */
+  /* Large diagonal shape - top right (desktop only) */
   body::before {
     content: '';
     position: fixed;
@@ -90,6 +90,13 @@
     pointer-events: none;
     z-index: -1;
     animation: shapePulse 15s ease-in-out infinite;
+    display: none;
+  }
+
+  @media (min-width: 768px) {
+    body::before {
+      display: block;
+    }
   }
 
   @keyframes shapePulse {
@@ -106,7 +113,7 @@
     }
   }
 
-  /* Large diagonal shape - bottom left */
+  /* Large diagonal shape - bottom left (desktop only) */
   body::after {
     content: '';
     position: fixed;
@@ -114,13 +121,20 @@
     left: -15%;
     width: 50%;
     height: 65%;
-    background: linear-gradient(225deg, rgba(6, 182, 212, 0.12) 0%, rgba(139, 92, 246, 0.10) 100%);
-    /* Teal to Purple */
+    background: linear-gradient(225deg, rgba(6, 182, 212, 0.12) 0%, rgba(20, 184, 166, 0.10) 100%);
+    /* Teal gradient */
     transform: rotate(20deg);
     border-radius: 80% 20% 80% 20%;
     pointer-events: none;
     z-index: -1;
     animation: shapePulseBottom 18s ease-in-out infinite;
+    display: none;
+  }
+
+  @media (min-width: 768px) {
+    body::after {
+      display: block;
+    }
   }
 
   @keyframes shapePulseBottom {
