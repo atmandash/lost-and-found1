@@ -42,9 +42,9 @@ const BackgroundEffects = () => {
                 </div>
             ))}
 
-            {/* Subtle gradient glows (keeping ambient feel) */}
-            <div className="absolute -top-64 -right-64 w-[500px] h-[500px] bg-gradient-to-br from-blue-600/20 to-cyan-600/15 rounded-full blur-[120px]"></div>
-            <div className="absolute -bottom-48 -left-48 w-80 h-80 bg-gradient-to-br from-teal-500/15 to-blue-500/10 rounded-full blur-3xl"></div>
+            {/* Subtle gradient glows - responsive for mobile */}
+            <div className="absolute -top-32 -right-32 md:-top-64 md:-right-64 w-64 h-64 md:w-[500px] md:h-[500px] bg-gradient-to-br from-teal-600/20 to-cyan-600/15 rounded-full blur-[80px] md:blur-[120px]"></div>
+            <div className="absolute -bottom-24 -left-24 md:-bottom-48 md:-left-48 w-48 h-48 md:w-80 md:h-80 bg-gradient-to-br from-teal-500/15 to-cyan-500/10 rounded-full blur-2xl md:blur-3xl"></div>
 
             {/* CSS for floating animation */}
             <style>{`

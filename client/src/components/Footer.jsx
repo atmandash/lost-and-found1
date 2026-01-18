@@ -28,7 +28,7 @@ const Footer = () => {
                             href="https://mail.google.com/mail/?view=cm&fs=1&to=websitedeve5@gmail.com"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="font-semibold tracking-wide hover:text-indigo-200 transition-colors whitespace-nowrap leading-5 mt-1"
+                            className="font-semibold tracking-wide hover:text-teal-300 transition-colors whitespace-nowrap"
                         >
                             websitedeve5@gmail.com
                         </a>
