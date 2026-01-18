@@ -15,9 +15,9 @@ const ConstellationEffect = () => {
         let animationFrameId;
         let particles = [];
 
-        // Configuration - Fewer particles, like a community network
-        const particleCount = window.innerWidth < 768 ? 15 : 35;
-        const connectionDistance = window.innerWidth < 768 ? 150 : 250; // Longer connections for network feel
+        // Configuration - Community network
+        const particleCount = window.innerWidth < 768 ? 30 : 70;
+        const connectionDistance = window.innerWidth < 768 ? 150 : 250;
 
         const resizeCanvas = () => {
             canvas.width = window.innerWidth;
@@ -33,7 +33,7 @@ const ConstellationEffect = () => {
                 this.y = Math.random() * canvas.height;
                 this.vx = (Math.random() - 0.5) * 0.3; // Slower, calmer movement
                 this.vy = (Math.random() - 0.5) * 0.3;
-                this.size = Math.random() * 2 + 2; // 2-4px for "people" nodes
+                this.size = Math.random() * 1.5 + 1; // Smaller dots 1-2.5px
 
                 // Two types: "Seekers" (looking for items) and "Finders" (found items)
                 const isFinder = Math.random() > 0.5;
