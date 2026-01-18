@@ -69,19 +69,7 @@ const LandingPage = () => {
     return (
         <div className="relative flex flex-col items-center flex-1 justify-between overflow-hidden pb-0 w-full min-h-full">
             {/* LARGE GEOMETRIC BACKGROUND SHAPES */}
-            <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                {/* Huge top-right glow */}
-                <div className="absolute -top-64 -right-64 w-[600px] h-[600px] bg-gradient-to-br from-indigo-600/30 to-purple-600/30 rounded-full blur-[120px] animate-pulse"></div>
-
-                {/* Large bottom-left accent */}
-                <div className="absolute -bottom-48 -left-48 w-96 h-96 bg-gradient-to-br from-cyan-500/20 to-blue-500/20 rounded-full blur-3xl" style={{ animation: 'glowPulse 7s ease-in-out infinite' }}></div>
-
-                {/* Medium center-right */}
-                <div className="absolute top-1/3 -right-32 w-64 h-64 bg-gradient-to-br from-pink-500/15 to-orange-500/15 rounded-full blur-2xl" style={{ animation: 'float 10s ease-in-out infinite' }}></div>
-
-                {/* Small accent top-left */}
-                <div className="absolute top-20 left-20 w-40 h-40 bg-gradient-to-br from-purple-500/20 to-indigo-500/20 rounded-full blur-xl" style={{ animation: 'float 8s ease-in-out infinite reverse' }}></div>
-            </div>
+            {/* Background handled globaly by BackgroundEffects */}
 
             {/* HERO SECTION - Enhanced with z-index */}
             <div className="flex flex-col items-center justify-center text-center mt-12 px-4 max-w-4xl space-y-8 animate-fade-in-scale relative z-10">
