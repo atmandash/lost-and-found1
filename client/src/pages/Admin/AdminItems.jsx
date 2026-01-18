@@ -170,7 +170,7 @@ const AdminItems = () => {
                             className={`w-full pl-10 pr-4 py-2 rounded-xl border ${isDarkMode
                                 ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400'
                                 : 'bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-500'
-                                } focus:outline-none focus:ring-2 focus:ring-indigo-500`}
+                                } focus:outline-none focus:ring-2 focus:ring-teal-500`}
                         />
                     </div>
 
@@ -179,7 +179,7 @@ const AdminItems = () => {
                         <button
                             onClick={() => setActiveTab('active')}
                             className={`px-4 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2 ${activeTab === 'active'
-                                ? 'bg-indigo-600 text-white shadow-md'
+                                ? 'bg-teal-600 text-white shadow-md'
                                 : `${isDarkMode ? 'text-gray-400 hover:text-gray-200' : 'text-gray-500 hover:text-gray-700'}`
                                 }`}
                         >
@@ -221,19 +221,19 @@ const AdminItems = () => {
                                 Showing {filteredItems.length} {activeTab} item{filteredItems.length !== 1 ? 's' : ''}
                             </p>
                         </div>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             {filteredItems.map(item => (
                                 <div key={item._id} className="relative">
                                     <ItemCard item={item} />
-                                    {/* Admin Action Buttons Overlay */}
-                                    <div className="absolute top-2 right-2 flex gap-2">
+                                    {/* Admin Action Buttons - Below Card */}
+                                    <div className="mt-2 flex gap-2 justify-center">
                                         {/* Featured Toggle */}
                                         <button
                                             onClick={() => handleToggleFeatured(item._id, item.featured)}
                                             className={`p-2 rounded-lg transition-colors ${item.featured
-                                                    ? 'bg-yellow-500 text-white hover:bg-yellow-600'
-                                                    : 'bg-white text-gray-600 hover:bg-yellow-50'
-                                                } shadow-md`}
+                                                ? 'bg-yellow-500 text-white hover:bg-yellow-600'
+                                                : isDarkMode ? 'bg-gray-700 text-gray-300 hover:bg-gray-600' : 'bg-gray-100 text-gray-600 hover:bg-yellow-50'
+                                                } shadow-sm`}
                                             title={item.featured ? 'Remove Featured' : 'Mark as Featured'}
                                         >
                                             <Star className="w-4 h-4" fill={item.featured ? 'currentColor' : 'none'} />
@@ -241,7 +241,7 @@ const AdminItems = () => {
                                         {/* Edit Button */}
                                         <button
                                             onClick={() => handleEditItem(item)}
-                                            className="p-2 bg-white text-blue-600 hover:bg-blue-50 rounded-lg transition-colors shadow-md"
+                                            className={`p-2 rounded-lg transition-colors shadow-sm ${isDarkMode ? 'bg-gray-700 text-blue-400 hover:bg-gray-600' : 'bg-gray-100 text-blue-600 hover:bg-blue-50'}`}
                                             title="Edit Item"
                                         >
                                             <Edit className="w-4 h-4" />
@@ -249,7 +249,7 @@ const AdminItems = () => {
                                         {/* Delete Button */}
                                         <button
                                             onClick={() => handleDeleteItem(item._id, item.title)}
-                                            className="p-2 bg-white text-red-600 hover:bg-red-50 rounded-lg transition-colors shadow-md"
+                                            className={`p-2 rounded-lg transition-colors shadow-sm ${isDarkMode ? 'bg-gray-700 text-red-400 hover:bg-gray-600' : 'bg-gray-100 text-red-600 hover:bg-red-50'}`}
                                             title="Delete Item"
                                         >
                                             <Trash2 className="w-4 h-4" />

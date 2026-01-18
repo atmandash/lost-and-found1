@@ -11,15 +11,20 @@ const resetAllUserStats = async () => {
         await mongoose.connect(process.env.MONGO_URI);
         console.log('Connected to MongoDB');
 
-        // Reset all users' stats to 0
+        // Reset all users' stats to default values
         const result = await User.updateMany(
             {}, // Match all users
             {
                 $set: {
                     points: 0,
+                    level: 1,
+                    badges: [],
                     itemsReported: 0,
+                    itemsReturned: 0,
                     lostItemsReported: 0,
-                    foundItemsReported: 0
+                    foundItemsReported: 0,
+                    streak: 0,
+                    helpfulVotes: 0
                 }
             }
         );
@@ -27,9 +32,11 @@ const resetAllUserStats = async () => {
         console.log(`✅ Successfully reset stats for ${result.modifiedCount} users`);
         console.log('All users now have:');
         console.log('  - points: 0');
+        console.log('  - level: 1');
+        console.log('  - badges: []');
         console.log('  - itemsReported: 0');
-        console.log('  - lostItemsReported: 0');
-        console.log('  - foundItemsReported: 0');
+        console.log('  - itemsReturned: 0');
+        console.log('  - streak: 0');
 
         await mongoose.connection.close();
         process.exit(0);
