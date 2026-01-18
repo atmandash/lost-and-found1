@@ -84,7 +84,7 @@
     right: -20%;
     width: 50vw;
     height: 50vw;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.04) 100%);
     border-radius: 50%;
     pointer-events: none;
     z-index: -1;
@@ -138,7 +138,7 @@
     left: -20%;
     width: 50vw;
     height: 50vw;
-    background: linear-gradient(225deg, rgba(255, 255, 255, 0.025) 0%, rgba(255, 255, 255, 0.01) 100%);
+    background: linear-gradient(225deg, rgba(255, 255, 255, 0.07) 0%, rgba(255, 255, 255, 0.03) 100%);
     border-radius: 50%;
     pointer-events: none;
     z-index: -1;
@@ -187,8 +187,8 @@
   /* Add subtle grid for depth */
   body {
     background-image:
-      linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+      linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
     background-size: 60px 60px;
     background-position: 0 0, 30px 30px;
   }
