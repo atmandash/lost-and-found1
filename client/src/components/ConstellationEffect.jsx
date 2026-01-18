@@ -7,19 +7,18 @@ const ConstellationEffect = () => {
 
     useEffect(() => {
         const canvas = canvasRef.current;
-        if (!canvas) return; // Safety check
+        if (!canvas) return;
 
         const ctx = canvas.getContext('2d');
-        if (!ctx) return; // Safety check
+        if (!ctx) return;
 
         let animationFrameId;
         let particles = [];
 
-        // Configuration - Bigger and more visible
-        const particleCount = window.innerWidth < 768 ? 40 : 100; // More particles
-        const connectionDistance = window.innerWidth < 768 ? 120 : 200; // Longer connections
+        // Configuration - Fewer particles, like a community network
+        const particleCount = window.innerWidth < 768 ? 15 : 35;
+        const connectionDistance = window.innerWidth < 768 ? 150 : 250; // Longer connections for network feel
 
-        // Resize hanlder
         const resizeCanvas = () => {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
@@ -32,30 +31,40 @@ const ConstellationEffect = () => {
             constructor() {
                 this.x = Math.random() * canvas.width;
                 this.y = Math.random() * canvas.height;
-                this.vx = (Math.random() - 0.5) * 0.4;
-                this.vy = (Math.random() - 0.5) * 0.4;
-                this.size = Math.random() * 2.5 + 1.5; // Medium dots (1.5-4px)
-                // Colorful particles: Teal, Indigo, Purple
-                const colors = [
-                    'rgba(45, 212, 191, ',  // Teal
-                    'rgba(99, 102, 241, ',  // Indigo
-                    'rgba(168, 85, 247, '   // Purple
-                ];
-                this.colorBase = colors[Math.floor(Math.random() * colors.length)];
+                this.vx = (Math.random() - 0.5) * 0.3; // Slower, calmer movement
+                this.vy = (Math.random() - 0.5) * 0.3;
+                this.size = Math.random() * 2 + 2; // 2-4px for "people" nodes
+
+                // Two types: "Seekers" (looking for items) and "Finders" (found items)
+                const isFinder = Math.random() > 0.5;
+                this.colorBase = isFinder
+                    ? 'rgba(34, 197, 94, '   // Green for finders
+                    : 'rgba(99, 102, 241, '; // Indigo for seekers
+                this.type = isFinder ? 'finder' : 'seeker';
             }
 
             update() {
                 this.x += this.vx;
                 this.y += this.vy;
 
-                // Bounce off edges
+                // Bounce off edges gently
                 if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
                 if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
             }
 
             draw() {
+                // Draw a subtle glow first
+                const gradient = ctx.createRadialGradient(
+                    this.x, this.y, 0,
+                    this.x, this.y, this.size * 3
+                );
+                gradient.addColorStop(0, this.colorBase + '0.4)');
+                gradient.addColorStop(1, this.colorBase + '0)');
+                ctx.fillStyle = gradient;
+                ctx.fillRect(this.x - this.size * 3, this.y - this.size * 3, this.size * 6, this.size * 6);
+
+                // Draw the main node
                 ctx.beginPath();
-                // Dynamic opacity - more visible
                 const opacity = isDarkMode ? 0.8 : 0.6;
                 ctx.fillStyle = this.colorBase + opacity + ')';
                 ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
@@ -63,17 +72,16 @@ const ConstellationEffect = () => {
             }
         }
 
-        const init = () => {
-            particles = [];
-            for (let i = 0; i < particleCount; i++) {
-                particles.push(new Particle());
-            }
-        };
+        // Initialize particles
+        for (let i = 0; i < particleCount; i++) {
+            particles.push(new Particle());
+        }
 
         const animate = () => {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // Draw connections first (behind dots)
+            // Draw connections first (behind nodes)
+            // Connections represent people helping each other
             particles.forEach((p1, i) => {
                 particles.slice(i + 1).forEach(p2 => {
                     const dx = p1.x - p2.x;
@@ -82,11 +90,21 @@ const ConstellationEffect = () => {
 
                     if (distance < connectionDistance) {
                         ctx.beginPath();
-                        const opacity = (1 - distance / connectionDistance) * 0.5; // More visible lines
-                        ctx.strokeStyle = isDarkMode
-                            ? `rgba(148, 163, 184, ${opacity})` // Slate-400 for dark mode
-                            : `rgba(100, 116, 139, ${opacity})`; // Slate-500 for light mode
-                        ctx.lineWidth = 1.5; // Thicker lines
+                        const opacity = (1 - distance / connectionDistance) * 0.4;
+
+                        // Special glow when finder connects to seeker
+                        if (p1.type !== p2.type) {
+                            // Connection between finder and seeker - highlight it!
+                            ctx.strokeStyle = `rgba(167, 139, 250, ${opacity * 1.5})`; // Purple glow
+                            ctx.lineWidth = 2;
+                        } else {
+                            // Same type connection - subtle
+                            ctx.strokeStyle = isDarkMode
+                                ? `rgba(148, 163, 184, ${opacity * 0.6})`
+                                : `rgba(100, 116, 139, ${opacity * 0.6})`;
+                            ctx.lineWidth = 1;
+                        }
+
                         ctx.moveTo(p1.x, p1.y);
                         ctx.lineTo(p2.x, p2.y);
                         ctx.stroke();
@@ -94,7 +112,7 @@ const ConstellationEffect = () => {
                 });
             });
 
-            // Update and draw particles
+            // Update and draw particles (people nodes)
             particles.forEach(particle => {
                 particle.update();
                 particle.draw();
@@ -103,7 +121,6 @@ const ConstellationEffect = () => {
             animationFrameId = requestAnimationFrame(animate);
         };
 
-        init();
         animate();
 
         return () => {
@@ -115,7 +132,8 @@ const ConstellationEffect = () => {
     return (
         <canvas
             ref={canvasRef}
-            className="absolute inset-0 z-0 pointer-events-none opacity-60"
+            className="fixed inset-0 pointer-events-none z-[1]"
+            style={{ opacity: 0.7 }}
         />
     );
 };
