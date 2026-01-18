@@ -40,13 +40,13 @@ const SpotlightCard = ({ children, className = "", spotlightColor = "rgba(255, 2
             onBlur={handleBlur}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
-            className={`relative overflow-hidden rounded-xl border transition-all duration-300 ${className} ${isDarkMode ? 'bg-gray-800 border-white/10' : 'bg-white border-gray-200'}`}
+            className={`relative overflow-hidden rounded-xl border transition-all duration-300 ${className} ${isDarkMode ? 'bg-gray-900/40 border-white/10 backdrop-blur-md' : 'bg-white border-gray-200'}`}
         >
             <div
                 className="pointer-events-none absolute -inset-px opacity-0 transition-opacity duration-300"
                 style={{
                     opacity,
-                    background: `radial-gradient(600px circle at ${position.x}px ${position.y}px, ${spotlightColor}, transparent 40%)`,
+                    background: `radial-gradient(600px circle at ${position.x}px ${position.y}px, rgba(139, 92, 246, 0.15), rgba(6, 182, 212, 0.15), transparent 40%)`,
                 }}
             />
             <div className="relative z-10 h-full">
