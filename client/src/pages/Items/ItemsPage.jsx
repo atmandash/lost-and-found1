@@ -91,9 +91,10 @@ const ItemsPage = ({ type }) => {
     // Check if user has active lost report to show Alert button
     useEffect(() => {
         const checkActiveReport = async () => {
-            if (isAuthenticated && user) {
+            const userId = user?.id || user?._id;
+            if (isAuthenticated && userId) {
                 try {
-                    const res = await axios.get(`${API_URL}/api/items?user=${user.id}&type=lost&status=active`);
+                    const res = await axios.get(`${API_URL}/api/items?user=${userId}&type=lost&status=active`);
                     if (res.data.length > 0) {
                         setActiveReportItem(res.data[0]); // Capture the first active item
                     } else {
