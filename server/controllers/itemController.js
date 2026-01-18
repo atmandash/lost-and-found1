@@ -13,7 +13,7 @@ exports.getItems = async (req, res) => {
         else query.status = { $ne: 'closed' }; // Default: active items
         if (user) query.user = user; // Filter by user
 
-        const items = await Item.find(query).sort({ createdAt: -1 }).populate('user', 'name');
+        const items = await Item.find(query).sort({ createdAt: -1 }).populate('user', 'name avatar');
         res.json(items);
     } catch (err) {
         console.error(err.message);
@@ -24,7 +24,7 @@ exports.getItems = async (req, res) => {
 // Get item by ID
 exports.getItemById = async (req, res) => {
     try {
-        const item = await Item.findById(req.params.id).populate('user', 'name');
+        const item = await Item.findById(req.params.id).populate('user', 'name avatar');
         if (!item) return res.status(404).json({ message: 'Item not found' });
         res.json(item);
     } catch (err) {
@@ -63,7 +63,7 @@ exports.createItem = async (req, res) => {
             status: 'active',
             'location.main': location.main,
             user: { $ne: req.user.id } // Don't match own items
-        }).populate('user', 'name').limit(10);
+        }).populate('user', 'name avatar').limit(10);
 
         // Create notifications for matches
         if (potentialMatches.length > 0) {
