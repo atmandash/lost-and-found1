@@ -88,7 +88,7 @@
     border-radius: 50%;
     pointer-events: none;
     z-index: -1;
-    animation: shapePulseMobile 3s ease-in-out infinite;
+    animation: shapePulseMobile 8s ease-in-out infinite;
   }
 
   @media (min-width: 768px) {
@@ -98,7 +98,7 @@
       width: 60%;
       height: 80%;
       border-radius: 20% 80% 20% 80%;
-      animation: shapePulseDesktop 3s ease-in-out infinite;
+      animation: shapePulseDesktop 8s ease-in-out infinite;
     }
   }
 
@@ -142,7 +142,7 @@
     border-radius: 50%;
     pointer-events: none;
     z-index: -1;
-    animation: shapePulseMobileBottom 4s ease-in-out infinite;
+    animation: shapePulseMobileBottom 10s ease-in-out infinite;
   }
 
   @media (min-width: 768px) {
@@ -152,7 +152,7 @@
       width: 50%;
       height: 65%;
       border-radius: 80% 20% 80% 20%;
-      animation: shapePulseDesktopBottom 4s ease-in-out infinite;
+      animation: shapePulseDesktopBottom 10s ease-in-out infinite;
     }
   }
 

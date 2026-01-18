@@ -42,17 +42,53 @@ const BackgroundEffects = () => {
                 </div>
             ))}
 
-            {/* Subtle gradient glows - responsive for mobile */}
-            <div className="absolute -top-32 -right-32 md:-top-64 md:-right-64 w-64 h-64 md:w-[500px] md:h-[500px] bg-gradient-to-br from-teal-600/20 to-cyan-600/15 rounded-full blur-[80px] md:blur-[120px]"></div>
-            <div className="absolute -bottom-24 -left-24 md:-bottom-48 md:-left-48 w-48 h-48 md:w-80 md:h-80 bg-gradient-to-br from-teal-500/15 to-cyan-500/10 rounded-full blur-2xl md:blur-3xl"></div>
+            {/* Pulsating Teal Blob - Top Right */}
+            <div
+                className="absolute -top-20 -right-20 md:-top-32 md:-right-32 w-64 h-64 md:w-[450px] md:h-[450px] rounded-full"
+                style={{
+                    background: 'radial-gradient(circle, rgba(20, 184, 166, 0.6) 0%, rgba(6, 182, 212, 0.3) 40%, transparent 70%)',
+                    animation: 'blobPulse1 5s ease-in-out infinite',
+                }}
+            />
 
-            {/* CSS for floating animation */}
+            {/* Pulsating Cyan Blob - Bottom Left */}
+            <div
+                className="absolute -bottom-16 -left-16 md:-bottom-28 md:-left-28 w-56 h-56 md:w-[380px] md:h-[380px] rounded-full"
+                style={{
+                    background: 'radial-gradient(circle, rgba(6, 182, 212, 0.5) 0%, rgba(20, 184, 166, 0.25) 40%, transparent 70%)',
+                    animation: 'blobPulse2 7s ease-in-out infinite',
+                }}
+            />
+
+            {/* CSS for animations */}
             <style>{`
                 @keyframes float {
                     0%, 100% { transform: translateY(0px) rotate(0deg); }
                     25% { transform: translateY(-15px) rotate(3deg); }
                     50% { transform: translateY(-8px) rotate(-2deg); }
                     75% { transform: translateY(-20px) rotate(2deg); }
+                }
+                
+                @keyframes blobPulse1 {
+                    0%, 100% { 
+                        opacity: 0.3;
+                        transform: scale(1);
+                    }
+                    50% { 
+                        opacity: 0.9;
+                        transform: scale(1.12);
+                    }
+                }
+                
+                @keyframes blobPulse2 {
+                    0%, 100% { 
+                        opacity: 0.25;
+                        transform: scale(1);
+                    }
+                    50% { 
+                        opacity: 0.85;
+                        transform: scale(1.15);
+                    }
                 }
             `}</style>
         </div>
