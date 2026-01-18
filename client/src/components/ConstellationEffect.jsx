@@ -34,7 +34,7 @@ const ConstellationEffect = () => {
                 this.y = Math.random() * canvas.height;
                 this.vx = (Math.random() - 0.5) * 0.4;
                 this.vy = (Math.random() - 0.5) * 0.4;
-                this.size = Math.random() * 3 + 2; // Bigger dots (2-5px)
+                this.size = Math.random() * 2.5 + 1.5; // Medium dots (1.5-4px)
                 // Colorful particles: Teal, Indigo, Purple
                 const colors = [
                     'rgba(45, 212, 191, ',  // Teal
