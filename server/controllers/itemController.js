@@ -431,6 +431,23 @@ exports.deleteItem = async (req, res) => {
             return res.status(403).json({ message: 'Not authorized' });
         }
 
+        // If admin is deleting someone else's item, deduct the points they earned
+        const isAdminDeletingOthersItem = req.user.isAdmin && item.user.toString() !== userId.toString();
+        if (isAdminDeletingOthersItem) {
+            const User = require('../models/User');
+            const reporter = await User.findById(item.user);
+            if (reporter) {
+                // Deduct the points that were awarded for this report
+                const pointsToDeduct = item.type === 'found' ? 15 : 10;
+                reporter.points = Math.max(0, reporter.points - pointsToDeduct);
+                reporter.itemsReported = Math.max(0, reporter.itemsReported - 1);
+                // Recalculate level based on new points
+                reporter.level = Math.floor(reporter.points / 100) + 1;
+                await reporter.save();
+                console.log(`Deducted ${pointsToDeduct} points from user ${reporter._id} for deleted item`);
+            }
+        }
+
         // Cascade delete: Remove all related data
         const Chat = require('../models/Chat');
         const Notification = require('../models/Notification');
@@ -447,7 +464,7 @@ exports.deleteItem = async (req, res) => {
             io.emit('item_deleted', { id: item._id });
         }
 
-        res.json({ message: 'Item permanently deleted' });
+        res.json({ message: 'Item permanently deleted' + (isAdminDeletingOthersItem ? ' and points deducted from reporter' : '') });
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server Error');
