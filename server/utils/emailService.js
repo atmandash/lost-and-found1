@@ -154,6 +154,44 @@ const templates = {
                 </div>
             </div>
         `
+    }),
+
+    adminRemoval: (userName, itemTitle, itemType) => ({
+        subject: `📋 Notice: Your ${itemType} report "${itemTitle}" has been removed`,
+        html: `
+            <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+                <div style="background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); padding: 30px; border-radius: 16px 16px 0 0; text-align: center;">
+                    <h1 style="color: white; margin: 0; font-size: 28px;">📋 Report Removed</h1>
+                </div>
+                <div style="background: #f9fafb; padding: 30px; border-radius: 0 0 16px 16px;">
+                    <p style="font-size: 16px; color: #374151;">Hi <strong>${userName}</strong>,</p>
+                    <p style="font-size: 16px; color: #374151;">
+                        We're writing to inform you that your ${itemType} item report "<strong>${itemTitle}</strong>" has been removed by an administrator.
+                    </p>
+                    <div style="background: white; padding: 20px; border-radius: 12px; margin: 20px 0; border-left: 4px solid #f59e0b;">
+                        <p style="margin: 0; color: #374151; font-weight: 600;">📌 Reason for Removal:</p>
+                        <p style="margin: 10px 0 0 0; color: #6b7280;">
+                            The report was reviewed and removed as it may have been a duplicate entry, already resolved offline, or contained incomplete/inaccurate information.
+                        </p>
+                    </div>
+                    <div style="background: #fef3c7; padding: 15px; border-radius: 8px; margin: 20px 0;">
+                        <p style="margin: 0; color: #92400e; font-size: 14px;">
+                            <strong>Note:</strong> Any points earned from this report have been adjusted accordingly.
+                        </p>
+                    </div>
+                    <p style="font-size: 14px; color: #6b7280;">
+                        If you believe this was done in error or have any questions, please contact the campus administration.
+                    </p>
+                    <p style="font-size: 14px; color: #6b7280; margin-top: 20px;">
+                        Thank you for your understanding and continued participation in our Lost & Found community!
+                    </p>
+                    <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 20px 0;">
+                    <p style="font-size: 12px; color: #9ca3af; text-align: center;">
+                        Lost & Found - VIT Chennai Campus
+                    </p>
+                </div>
+            </div>
+        `
     })
 };
 
@@ -178,6 +216,10 @@ module.exports = {
     },
     sendWatchlistAlertEmail: async (userEmail, userName, itemTitle, keyword) => {
         const template = templates.watchlistAlert(userName, itemTitle, keyword);
+        return sendEmail(userEmail, template.subject, template.html);
+    },
+    sendAdminRemovalEmail: async (userEmail, userName, itemTitle, itemType) => {
+        const template = templates.adminRemoval(userName, itemTitle, itemType);
         return sendEmail(userEmail, template.subject, template.html);
     }
 };

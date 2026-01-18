@@ -433,10 +433,19 @@ exports.deleteItem = async (req, res) => {
 
         // If admin is deleting someone else's item, deduct the points they earned
         const isAdminDeletingOthersItem = req.user.isAdmin && item.user.toString() !== userId.toString();
+        let reporterEmail = null;
+        let reporterName = null;
+        const itemTitle = item.title;
+        const itemType = item.type;
+
         if (isAdminDeletingOthersItem) {
             const User = require('../models/User');
             const reporter = await User.findById(item.user);
             if (reporter) {
+                // Save reporter info for email
+                reporterEmail = reporter.email;
+                reporterName = reporter.name;
+
                 // Deduct the points that were awarded for this report
                 const pointsToDeduct = item.type === 'found' ? 15 : 10;
                 reporter.points = Math.max(0, reporter.points - pointsToDeduct);
@@ -445,6 +454,12 @@ exports.deleteItem = async (req, res) => {
                 reporter.level = Math.floor(reporter.points / 100) + 1;
                 await reporter.save();
                 console.log(`Deducted ${pointsToDeduct} points from user ${reporter._id} for deleted item`);
+
+                // Send email notification to reporter (in background)
+                const { sendAdminRemovalEmail } = require('../utils/emailService');
+                sendAdminRemovalEmail(reporterEmail, reporterName, itemTitle, itemType)
+                    .then(() => console.log(`Removal email sent to ${reporterEmail}`))
+                    .catch(e => console.error('Admin removal email failed:', e));
             }
         }
 
