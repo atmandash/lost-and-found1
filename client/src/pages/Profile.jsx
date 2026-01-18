@@ -319,7 +319,7 @@ const Profile = () => {
                 // Admin Dashboard
                 <div className="space-y-6">
                     {/* Admin Dashboard Header */}
-                    <div className={`p-6 rounded-2xl shadow-lg border ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`}>
+                    <div className={`p-6 rounded-2xl shadow-lg border opaque-card ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`}>
                         <h2 className={`text-2xl font-bold ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>Admin Dashboard</h2>
                         <p className={`text-sm mt-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>System overview and management tools</p>
                     </div>
@@ -394,7 +394,7 @@ const Profile = () => {
                     </div>
 
                     {/* Quick Actions */}
-                    <div className={`p-6 rounded-2xl shadow-lg border ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`}>
+                    <div className={`p-6 rounded-2xl shadow-lg border opaque-card ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`}>
                         <h3 className={`text-lg font-bold mb-4 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>Quick Actions</h3>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <button
@@ -416,7 +416,7 @@ const Profile = () => {
                 </div>
             ) : (
                 // Regular User My Reports Section
-                <div className={`p-4 sm:p-6 rounded-2xl shadow-lg border ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`}>
+                <div className={`p-4 sm:p-6 rounded-2xl shadow-lg border opaque-card ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`}>
                     <div className="flex flex-col sm:flex-row items-center justify-between mb-6 gap-4">
                         <h2 className={`text-2xl font-bold ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>My Reports</h2>
 
