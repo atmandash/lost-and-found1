@@ -181,6 +181,27 @@ const ChatRoom = () => {
         }
     };
 
+    // Error State (e.g., 403 Forbidden)
+    if (error && !chat) {
+        return (
+            <div className={`max-w-3xl mx-auto px-4 py-8 text-center rounded-xl shadow-lg border ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`}>
+                <div className="flex justify-center mb-4">
+                    <div className="p-3 bg-red-100 rounded-full">
+                        <AlertCircle className="w-8 h-8 text-red-600" />
+                    </div>
+                </div>
+                <h2 className={`text-xl font-bold mb-2 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>Unable to Load Chat</h2>
+                <p className={`mb-6 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>{error}</p>
+                <button
+                    onClick={() => navigate('/chats')}
+                    className="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+                >
+                    Back to All Chats
+                </button>
+            </div>
+        );
+    }
+
     if (!chat) return <div className={`text-center py-10 ${isDarkMode ? 'text-gray-300' : ''}`}>Loading chat...</div>;
 
     return (
