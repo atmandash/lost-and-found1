@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { Award, CheckCircle, MapPin, Calendar, TrendingUp, Phone, Shield, Activity, User, MessageCircle } from 'lucide-react';
+import { Award, CheckCircle, MapPin, Calendar, TrendingUp, Phone, Shield, Activity, User, MessageCircle, Trophy } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import API_URL from '../config/api';
@@ -54,6 +54,7 @@ const Profile = () => {
     const isMounted = useRef(true); // Track if component is mounted
     const [showAvatarModal, setShowAvatarModal] = useState(false);
     const [avatarUrl, setAvatarUrl] = useState(user?.avatar || generateAvatar(user?.id, user?.name));
+    const [leaderboardVisible, setLeaderboardVisible] = useState(true); // Admin toggle state
 
     useEffect(() => {
         if (user) {
@@ -69,7 +70,10 @@ const Profile = () => {
             const interval = setInterval(() => {
                 if (document.visibilityState === 'visible' && isMounted.current) {
                     fetchMyItems();
-                    if (user.isAdmin) fetchAdminStats();
+                    if (user.isAdmin) {
+                        fetchAdminStats();
+                        fetchSettings();
+                    }
                 }
             }, 10000);
 
@@ -176,6 +180,34 @@ const Profile = () => {
             }
         } catch (err) {
             console.error('Error fetching admin stats:', err);
+        }
+    };
+
+    const fetchSettings = async () => {
+        try {
+            const res = await axios.get(`${API_URL}/api/settings/leaderboardVisible`);
+            if (res.data && res.data.value !== undefined && isMounted.current) {
+                setLeaderboardVisible(res.data.value);
+            }
+        } catch (err) {
+            console.error('Error fetching settings:', err);
+        }
+    };
+
+    const toggleLeaderboard = async () => {
+        try {
+            const token = localStorage.getItem('token');
+            const newValue = !leaderboardVisible;
+            setLeaderboardVisible(newValue); // Optimistic update
+
+            await axios.put(`${API_URL}/api/settings/leaderboardVisible`,
+                { value: newValue },
+                { headers: { 'x-auth-token': token } }
+            );
+        } catch (err) {
+            console.error('Error updating settings:', err);
+            setLeaderboardVisible(!leaderboardVisible); // Revert on error
+            alert('Failed to update setting');
         }
     };
 
@@ -442,6 +474,32 @@ const Profile = () => {
                             >
                                 <MapPin className="w-4 h-4" />
                                 View All Items
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* Site Settings */}
+                    <div className={`p-6 rounded-2xl shadow-lg border opaque-card ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`}>
+                        <h3 className={`text-lg font-bold mb-4 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>Site Configuration</h3>
+                        <div className="flex items-center justify-between p-4 rounded-xl bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800">
+                            <div className="flex items-center gap-3">
+                                <div className={`p-2 rounded-lg ${leaderboardVisible ? 'bg-yellow-100 text-yellow-600' : 'bg-gray-200 text-gray-500'}`}>
+                                    <Trophy className="w-6 h-6" />
+                                </div>
+                                <div>
+                                    <div className={`font-semibold ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>Leaderboard Visibility</div>
+                                    <div className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                                        {leaderboardVisible ? 'Visible to all users' : 'Hidden from regular users'}
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Toggle Switch */}
+                            <button
+                                onClick={toggleLeaderboard}
+                                className={`w-14 h-8 flex items-center rounded-full p-1 transition-colors duration-300 ${leaderboardVisible ? 'bg-green-500' : 'bg-gray-400'}`}
+                            >
+                                <div className={`bg-white w-6 h-6 rounded-full shadow-md transform transition-transform duration-300 ${leaderboardVisible ? 'translate-x-6' : 'translate-x-0'}`} />
                             </button>
                         </div>
                     </div>

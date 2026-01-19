@@ -91,6 +91,7 @@ app.use('/api/gamification', require('./routes/gamification'));
 app.use('/api/stats', require('./routes/stats'));
 app.use('/api/watchlist', require('./routes/watchlist'));
 app.use('/api/admin', require('./routes/admin'));
+app.use('/api/settings', require('./routes/settings'));
 
 app.get('/', (req, res) => {
     res.send('Lost and Found API is running');

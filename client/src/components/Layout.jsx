@@ -4,11 +4,29 @@ import { MapPin, Search, MessageCircle, User, Bell, LogIn, Trophy, Sun, Moon, Us
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import NotificationBell from './NotificationBell';
+import axios from 'axios'; // Added
+import API_URL from '../config/api'; // Added
+import { useState, useEffect } from 'react'; // Added hooks
 
 const Navbar = () => {
     const { isAuthenticated, user } = useAuth();
     const { isDarkMode, toggleTheme } = useTheme();
     const location = useLocation();
+    const [leaderboardVisible, setLeaderboardVisible] = useState(true); // Default to true
+
+    useEffect(() => {
+        const fetchSettings = async () => {
+            try {
+                const res = await axios.get(`${API_URL}/api/settings/leaderboardVisible`);
+                if (res.data && res.data.value !== undefined) {
+                    setLeaderboardVisible(res.data.value);
+                }
+            } catch (err) {
+                console.error('Failed to fetch settings:', err);
+            }
+        };
+        fetchSettings();
+    }, [location.pathname]);
 
     return (
         <nav className={`fixed bottom-0 w-full md:relative z-50 bg-gray-900/90 backdrop-blur-md border-t border-white/5 ${!isAuthenticated ? 'hidden md:block' : ''}`}>
@@ -31,7 +49,9 @@ const Navbar = () => {
                                 {!user?.isAdmin && (
                                     <NavLink to="/chats" icon={<MessageCircle />} label="Chats" />
                                 )}
-                                <NavLink to="/leaderboard" icon={<Trophy />} label="Leaderboard" />
+                                {(user?.isAdmin || leaderboardVisible) && (
+                                    <NavLink to="/leaderboard" icon={<Trophy />} label="Leaderboard" />
+                                )}
                                 {user?.isAdmin && (
                                     <NavLink to="/admin/users" icon={<Users className="text-red-600" />} label="User Mgmt" />
                                 )}
