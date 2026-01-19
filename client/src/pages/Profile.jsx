@@ -187,7 +187,13 @@ const Profile = () => {
         try {
             const res = await axios.get(`${API_URL}/api/settings/leaderboardVisible?t=${Date.now()}`);
             if (res.data && res.data.value !== undefined && isMounted.current) {
-                setLeaderboardVisible(res.data.value);
+                // DEBUG: Temporary alert to diagnose persistence issue
+                alert(`DEBUG: Server says Leaderboard is ${res.data.value} (Type: ${typeof res.data.value})`);
+
+                // Ensure boolean
+                const val = res.data.value;
+                const boolVal = val === true || val === 'true';
+                setLeaderboardVisible(boolVal);
             }
         } catch (err) {
             console.error('Error fetching settings:', err);
