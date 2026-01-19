@@ -64,6 +64,7 @@ const Profile = () => {
             // Fetch admin stats if user is admin
             if (user.isAdmin) {
                 fetchAdminStats();
+                fetchSettings();
             }
 
             // Poll for updates every 10 seconds (only when tab is visible)
