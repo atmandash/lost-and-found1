@@ -52,6 +52,8 @@ const ChatRoom = () => {
     const fetchChat = async () => {
         try {
             const token = localStorage.getItem('token');
+            if (!token) return;
+
             const res = await axios.get(`${API_URL}/api/chats/${id}`, {
                 headers: { 'x-auth-token': token }
             });
@@ -70,6 +72,8 @@ const ChatRoom = () => {
     const checkCanResolve = async () => {
         try {
             const token = localStorage.getItem('token');
+            if (!token) return;
+
             const res = await axios.get(`${API_URL}/api/chats/${id}/can-resolve`, {
                 headers: { 'x-auth-token': token }
             });
@@ -91,6 +95,8 @@ const ChatRoom = () => {
     const markAsRead = async () => {
         try {
             const token = localStorage.getItem('token');
+            if (!token) return;
+
             await axios.put(`${API_URL}/api/chats/${id}/read`, {}, {
                 headers: { 'x-auth-token': token }
             });

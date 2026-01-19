@@ -22,6 +22,8 @@ const ChatList = () => {
     const fetchChats = async () => {
         try {
             const token = localStorage.getItem('token');
+            if (!token) return; // Stop if no token to prevent 401 Logout loop
+
             console.log('Fetching chats...');
             const res = await axios.get(`${API_URL}/api/chats`, {
                 headers: { 'x-auth-token': token }
