@@ -264,6 +264,16 @@ const ChatRoom = () => {
                         </span>
                     </div>
                 )}
+
+                {/* Safety Tip for Lost Item Owners */}
+                {chat.itemId?.type === 'lost' && (
+                    <div className={`mt-3 flex items-start gap-2 px-3 py-2 rounded-lg text-xs ${isDarkMode ? 'bg-blue-900/30 border border-blue-700 text-blue-200' : 'bg-blue-50 border border-blue-200 text-blue-800'}`}>
+                        <Shield className="w-4 h-4 flex-shrink-0 mt-0.5" />
+                        <div>
+                            <strong>Safety Tip:</strong> Before handing over a lost item, ask the claimant to <u>unlock the device</u> or describe unique markers (scratch, wallpaper) that only the owner would know. Don't rely solely on their claim.
+                        </div>
+                    </div>
+                )}
             </div>
 
             {/* Error/Success Messages */}

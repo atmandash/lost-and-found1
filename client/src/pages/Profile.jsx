@@ -278,9 +278,36 @@ const Profile = () => {
                             <img
                                 src={avatarUrl}
                                 alt={`${user.name}'s avatar`}
+                                onError={(e) => {
+                                    e.target.onerror = null; // Prevent infinite loop
+                                    // Fallback to a dicebear avatar based on name if the current URL fails
+                                    e.target.src = `https://api.dicebear.com/7.x/micah/svg?seed=${user.name}`;
+                                }}
                                 className="w-full h-full object-cover group-hover:opacity-50 transition-opacity"
                             />
                         </div>
+
+                        {/* Edit Overlay - Always visible on mobile via valid touch targets, but enhanced here */}
+                        <div className="absolute inset-0 flex items-center justify-center z-20 opacity-0 group-hover:opacity-100 transition-opacity bg-black/40 rounded-full">
+                            <div className="bg-white/20 p-2 rounded-full backdrop-blur-md border border-white/50">
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                                </svg>
+                            </div>
+                        </div>
+
+                        {/* Explicit Mobile Button (Visible when not hovering too) */}
+                        <button
+                            className="absolute -bottom-2 -right-2 bg-indigo-600 text-white p-2 rounded-full shadow-lg z-30 md:hidden"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                setShowAvatarModal(true);
+                            }}
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                            </svg>
+                        </button>
 
                         {/* Edit Overlay */}
                         <div className="absolute inset-0 flex items-center justify-center z-20 opacity-0 group-hover:opacity-100 transition-opacity">
