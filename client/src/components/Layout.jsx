@@ -17,7 +17,7 @@ const Navbar = () => {
     useEffect(() => {
         const fetchSettings = async () => {
             try {
-                const res = await axios.get(`${API_URL}/api/settings/leaderboardVisible`);
+                const res = await axios.get(`${API_URL}/api/settings/leaderboardVisible?t=${Date.now()}`);
                 if (res.data && res.data.value !== undefined) {
                     setLeaderboardVisible(res.data.value);
                 }

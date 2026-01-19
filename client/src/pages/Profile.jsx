@@ -185,7 +185,7 @@ const Profile = () => {
 
     const fetchSettings = async () => {
         try {
-            const res = await axios.get(`${API_URL}/api/settings/leaderboardVisible`);
+            const res = await axios.get(`${API_URL}/api/settings/leaderboardVisible?t=${Date.now()}`);
             if (res.data && res.data.value !== undefined && isMounted.current) {
                 setLeaderboardVisible(res.data.value);
             }
@@ -491,7 +491,7 @@ const Profile = () => {
                                 <div>
                                     <div className={`font-semibold ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>Leaderboard Visibility</div>
                                     <div className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-                                        {leaderboardVisible ? 'Visible to all users' : 'Hidden from regular users'}
+                                        {leaderboardVisible ? 'Visible to all users' : 'Hidden from regular users (Always visible to Admins)'}
                                     </div>
                                 </div>
                             </div>
