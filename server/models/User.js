@@ -31,7 +31,7 @@ const userSchema = new mongoose.Schema({
 userSchema.plugin(queryLimiterPlugin);
 
 // Indexes for performance
-userSchema.index({ email: 1 }, { unique: true });
+// Email index is handled by unique: true in schema definition
 userSchema.index({ points: -1 }); // For leaderboard
 
 module.exports = mongoose.model('User', userSchema);

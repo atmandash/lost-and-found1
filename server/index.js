@@ -10,6 +10,10 @@ const { sanitizeMiddleware } = require('./middleware/sanitize'); // Added
 const { enforceHTTPS, productionErrorHandler } = require('./middleware/security'); // Added
 
 const app = express();
+
+// Trust proxy for Koyeb/Cloud deployment (Fixes express-rate-limit X-Forwarded-For error)
+app.set('trust proxy', 1);
+
 const server = http.createServer(app);
 const io = new Server(server, {
     cors: {
