@@ -35,7 +35,7 @@ exports.initiateChat = async (req, res) => {
 
         if (otherUserId === userId) {
             console.log('ERROR: Cannot chat with yourself');
-            return res.status(400).json({ message: 'Cannot chat with yourself' });
+            return res.status(403).json({ message: 'Cannot chat with yourself' });
         }
 
         // Check if chat exists
@@ -114,7 +114,7 @@ exports.getChatById = async (req, res) => {
 
         // Check participation
         if (!chat.participants.some(p => p._id.toString() === req.user.id)) {
-            return res.status(401).json({ message: 'Not authorized' });
+            return res.status(403).json({ message: 'Not authorized' });
         }
 
         // Check if chat has expired
@@ -233,7 +233,7 @@ exports.resolveChat = async (req, res) => {
         const currentUserId = req.user.id;
 
         if (itemOwnerId !== currentUserId) {
-            return res.status(401).json({ message: 'Only the item owner can mark as resolved' });
+            return res.status(403).json({ message: 'Only the item owner can mark as resolved' });
         }
 
         // Check if BOTH parties have shared their phone numbers
@@ -337,7 +337,7 @@ exports.sharePhone = async (req, res) => {
 
         // Check if user is a participant
         if (!chat.participants.some(p => p.toString() === userId)) {
-            return res.status(401).json({ message: 'Not authorized' });
+            return res.status(403).json({ message: 'Not authorized' });
         }
 
         // Get user's phone
