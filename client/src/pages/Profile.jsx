@@ -199,6 +199,21 @@ const Profile = () => {
         }
     };
 
+    // Animated counts for smooth transitions - MOVED UP due to Hook Rules
+    const animatedTotalReports = useCountAnimation(stats.lost + stats.found, 1000);
+    const animatedLostItems = useCountAnimation(stats.lost, 1000);
+    const animatedFoundItems = useCountAnimation(stats.found, 1000);
+    const animatedKarmaPoints = useCountAnimation(stats.points || 0, 1200);
+
+    // Handle tab query param - MOVED UP due to Hook Rules
+    useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        const tabParam = params.get('tab');
+        if (tabParam && ['active', 'history'].includes(tabParam)) {
+            setActiveTab(tabParam);
+        }
+    }, []);
+
     const toggleLeaderboard = async () => {
         try {
             const token = localStorage.getItem('token');
@@ -229,8 +244,6 @@ const Profile = () => {
             );
 
             // Force reload user to get new avatar update
-            // We can optimistic update but reloading user context is safer
-            // Or trigger a user reload via context if exposed, but page reload works too for deep sync
             window.location.reload();
         } catch (err) {
             console.error('Failed to update avatar:', err);
@@ -239,21 +252,6 @@ const Profile = () => {
             setShowAvatarModal(false);
         }
     };
-
-    // Animated counts for smooth transitions
-    const animatedTotalReports = useCountAnimation(stats.lost + stats.found, 1000);
-    const animatedLostItems = useCountAnimation(stats.lost, 1000);
-    const animatedFoundItems = useCountAnimation(stats.found, 1000);
-    const animatedKarmaPoints = useCountAnimation(stats.points || 0, 1200);
-
-    // Handle tab query param
-    useEffect(() => {
-        const params = new URLSearchParams(window.location.search);
-        const tabParam = params.get('tab');
-        if (tabParam && ['active', 'history'].includes(tabParam)) {
-            setActiveTab(tabParam);
-        }
-    }, []);
 
     // Filter items based on tab
     const filteredItems = myItems.filter(item => {
