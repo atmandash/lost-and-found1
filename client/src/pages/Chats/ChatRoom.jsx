@@ -65,6 +65,12 @@ const ChatRoom = () => {
             console.error('Error fetching chat:', err);
             if (err.response?.status === 410) {
                 setError('This chat has expired');
+            } else if (err.response?.status === 403) {
+                setError('You do not have permission to view this chat.');
+            } else if (err.response?.status === 404) {
+                setError('Chat not found.');
+            } else {
+                setError('Failed to load chat. Please try again.');
             }
         }
     };
