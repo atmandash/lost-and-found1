@@ -6,6 +6,8 @@ exports.getSetting = async (req, res) => {
         const { key } = req.params;
         const setting = await Setting.findOne({ key });
 
+        console.log(`[Get Setting] Key: '${key}', Found: ${!!setting}, Value: ${setting?.value}`);
+
         // Return default values if not found
         if (!setting) {
             // Define defaults here
