@@ -8,8 +8,7 @@ const SettingSchema = new mongoose.Schema({
         trim: true
     },
     value: {
-        type: mongoose.Schema.Types.Mixed, // Can store boolean, string, number, objects
-        required: true
+        type: mongoose.Schema.Types.Mixed // Can store boolean, string, number, objects
     },
     updatedAt: {
         type: Date,

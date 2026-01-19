@@ -207,7 +207,9 @@ const Profile = () => {
         } catch (err) {
             console.error('Error updating settings:', err);
             setLeaderboardVisible(!leaderboardVisible); // Revert on error
-            alert('Failed to update setting');
+            const msg = err.response?.data?.message || err.message || 'Unknown error';
+            const status = err.response?.status ? ` (${err.response.status})` : '';
+            alert(`Failed to update setting: ${msg}${status}`);
         }
     };
 

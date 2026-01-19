@@ -27,9 +27,11 @@ exports.updateSetting = async (req, res) => {
     try {
         const { key } = req.params;
         const { value } = req.body;
+        // DEBUGGING LOGS
+        console.log('Update Setting Request:', { key, value, user: req.user, body: req.body });
 
         // Check verification is done in middleware, but double check admin status here just in case
-        if (!req.user.isAdmin) {
+        if (!req.user || !req.user.isAdmin) {
             return res.status(403).json({ message: 'Not authorized' });
         }
 
@@ -48,7 +50,7 @@ exports.updateSetting = async (req, res) => {
 
         res.json(setting);
     } catch (err) {
-        console.error(err.message);
-        res.status(500).send('Server Error');
+        console.error('Setting Update Error:', err);
+        res.status(500).json({ message: 'Server Error', error: err.message, stack: process.env.NODE_ENV === 'development' ? err.stack : undefined });
     }
 };
