@@ -11,18 +11,23 @@ export const useTheme = () => {
 };
 
 export const ThemeProvider = ({ children }) => {
-    // Dark mode is effectively removed as per user request
-    const isDarkMode = false;
+    // Default to dark mode as per modern UI design
+    const [isDarkMode, setIsDarkMode] = useState(() => {
+        const saved = localStorage.getItem('darkMode');
+        return saved !== null ? JSON.parse(saved) : true;
+    });
 
     useEffect(() => {
-        // Ensure dark class is removed
-        document.documentElement.classList.remove('dark');
-        localStorage.removeItem('darkMode'); // Clear preference
-    }, []);
+        if (isDarkMode) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+        localStorage.setItem('darkMode', JSON.stringify(isDarkMode));
+    }, [isDarkMode]);
 
     const toggleTheme = () => {
-        // No-op
-        console.log("Dark mode is disabled.");
+        setIsDarkMode(prev => !prev);
     };
 
     return (

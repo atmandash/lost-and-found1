@@ -46,7 +46,6 @@ module.exports = async function (req, res, next) {
                 name: user.name,
                 email: user.email
             };
-            console.log('Auth Middleware: Set req.user:', req.user);
 
             // Throttle lastActive updates to once per minute to reduce database load
             const now = Date.now();

@@ -112,28 +112,8 @@ exports.getChatById = async (req, res) => {
 
         if (!chat) return res.status(404).json({ message: 'Chat not found' });
 
-        // DEBUG LOGGING
-        console.log('--- DEBUG: GET CHAT BY ID ---');
-        console.log('Chat ID:', req.params.id);
-        console.log('Req User:', req.user);
-        console.log('Req User ID (Type):', typeof req.user.id, req.user.id);
-        console.log('Chat Participants:', chat.participants.map(p => ({
-            id: p._id,
-            type: typeof p._id,
-            stringId: p._id.toString()
-        })));
-
-        const isParticipant = chat.participants.some(p => {
-            const pId = p._id.toString();
-            const uId = req.user.id.toString();
-            const match = pId === uId;
-            console.log(`Comparing ${pId} === ${uId} ? ${match}`);
-            return match;
-        });
-
         // Check participation
-        if (!isParticipant) {
-            console.log('Access Denied: User is not a participant');
+        if (!chat.participants.some(p => p._id.toString() === req.user.id.toString())) {
             return res.status(403).json({ message: 'Not authorized' });
         }
 
