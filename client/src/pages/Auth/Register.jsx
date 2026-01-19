@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
+import API_URL from '../../config/api';
 import { Lock, Mail, User, Phone, Eye, EyeOff } from 'lucide-react';
 
 const Register = () => {
@@ -48,13 +50,6 @@ const Register = () => {
 
         setLoading(true);
         try {
-            // Import API_URL dynamically or hardcode relative path if proxied
-            // Assuming useAuth uses Axios with base URL, but here we might need manual call
-            // Better to use axios directly here
-            const axios = require('axios').default;
-            // We need API_URL from config
-            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-
             await axios.post(`${API_URL}/api/auth/request-otp`, {
                 email: formData.email,
                 phone: formData.phone
@@ -63,7 +58,14 @@ const Register = () => {
             setSuccess(`OTP sent to ${formData.email}`);
             setStep(2);
         } catch (err) {
-            setError(err.response?.data?.message || 'Failed to send OTP. Please try again.');
+            console.error('OTP Request Failed:', err);
+            // DEBUG: Log the full error response to console
+            if (err.response) {
+                console.log('Error Response Data:', err.response.data);
+                console.log('Error Status:', err.response.status);
+            }
+            const msg = err.response?.data?.message || 'Failed to send OTP. Please try again.';
+            setError(msg);
         } finally {
             setLoading(false);
         }
