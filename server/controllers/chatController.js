@@ -10,7 +10,7 @@ exports.initiateChat = async (req, res) => {
         console.log('User ID:', req.user?.id);
 
         const { itemId, recipientId } = req.body;
-        const userId = req.user.id;
+        const userId = req.user.id.toString();
 
         const item = await Item.findById(itemId);
         console.log('Found item:', item?._id);
@@ -71,7 +71,7 @@ exports.initiateChat = async (req, res) => {
 // Get User's Chats with unread count
 exports.getMyChats = async (req, res) => {
     try {
-        const userId = req.user.id;
+        const userId = req.user.id.toString();
 
         // Get active chats only (exclude resolved)
         const chats = await Chat.find({
@@ -113,7 +113,7 @@ exports.getChatById = async (req, res) => {
         if (!chat) return res.status(404).json({ message: 'Chat not found' });
 
         // Check participation
-        if (!chat.participants.some(p => p._id.toString() === req.user.id)) {
+        if (!chat.participants.some(p => p._id.toString() === req.user.id.toString())) {
             return res.status(403).json({ message: 'Not authorized' });
         }
 
@@ -133,7 +133,7 @@ exports.getChatById = async (req, res) => {
 exports.sendMessage = async (req, res) => {
     try {
         const { content } = req.body;
-        const userId = req.user.id;
+        const userId = req.user.id.toString();
         const chat = await Chat.findById(req.params.id);
 
         if (!chat) return res.status(404).json({ message: 'Chat not found' });
@@ -200,7 +200,7 @@ exports.sendMessage = async (req, res) => {
 // Mark chat as read
 exports.markAsRead = async (req, res) => {
     try {
-        const userId = req.user.id;
+        const userId = req.user.id.toString();
         const chat = await Chat.findById(req.params.id);
 
         if (!chat) return res.status(404).json({ message: 'Chat not found' });
@@ -230,7 +230,7 @@ exports.resolveChat = async (req, res) => {
 
         // IMPORTANT: Only the item OWNER (person who lost it) can resolve
         const itemOwnerId = chat.itemId?.user?.toString();
-        const currentUserId = req.user.id;
+        const currentUserId = req.user.id.toString();
 
         if (itemOwnerId !== currentUserId) {
             return res.status(403).json({ message: 'Only the item owner can mark as resolved' });
@@ -310,7 +310,7 @@ exports.canResolve = async (req, res) => {
 
         // IMPORTANT: Only the item OWNER (person who lost it) can resolve
         const itemOwnerId = chat.itemId?.user?.toString();
-        const currentUserId = req.user.id;
+        const currentUserId = req.user.id.toString();
         const isItemOwner = itemOwnerId === currentUserId;
 
         res.json({
@@ -330,7 +330,7 @@ exports.canResolve = async (req, res) => {
 // Share phone number
 exports.sharePhone = async (req, res) => {
     try {
-        const userId = req.user.id;
+        const userId = req.user.id.toString();
         const chat = await Chat.findById(req.params.id);
 
         if (!chat) return res.status(404).json({ message: 'Chat not found' });
