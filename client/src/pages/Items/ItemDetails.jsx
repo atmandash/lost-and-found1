@@ -74,11 +74,11 @@ const ItemDetails = () => {
                 {},
                 { headers: { 'x-auth-token': token } }
             );
-            // Update item with new vote counts
+            // Update item with new vote counts and user lists
             setItem(prev => ({
                 ...prev,
-                upvotes: Array(res.data.upvotes).fill(null),
-                downvotes: Array(res.data.downvotes).fill(null)
+                upvotes: res.data.upvotes,
+                downvotes: res.data.downvotes
             }));
         } catch (err) {
             console.error('Error voting:', err);
@@ -93,6 +93,10 @@ const ItemDetails = () => {
     const itemUserId = item.user?._id || item.user;
     const currentUserId = user?._id || user?.id;
     const isMyItem = user && itemUserId && currentUserId && String(itemUserId) === String(currentUserId);
+
+    // Check if current user has voted
+    const isUpvoted = item.upvotes?.some(id => String(id) === String(currentUserId));
+    const isDownvoted = item.downvotes?.some(id => String(id) === String(currentUserId));
 
     return (
         <div className="max-w-6xl mx-auto px-4 space-y-6">
@@ -363,17 +367,23 @@ const ItemDetails = () => {
                                 <button
                                     onClick={() => handleVote('upvote')}
                                     disabled={voting}
-                                    className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 border-2 rounded-lg transition-colors disabled:opacity-50 ${isDarkMode ? 'border-green-700 text-green-400 hover:bg-green-900/30' : 'border-green-200 text-green-700 hover:bg-green-50'}`}
+                                    className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 border-2 rounded-lg transition-colors disabled:opacity-50 ${isUpvoted
+                                            ? 'bg-green-100 border-green-600 text-green-700 dark:bg-green-900/50 dark:border-green-500 dark:text-green-300'
+                                            : isDarkMode ? 'border-green-700 text-green-400 hover:bg-green-900/30' : 'border-green-200 text-green-700 hover:bg-green-50'
+                                        }`}
                                 >
-                                    <ThumbsUp className="w-4 h-4" />
+                                    <ThumbsUp className={`w-4 h-4 ${isUpvoted ? 'fill-current' : ''}`} />
                                     <span className="font-medium">{item.upvotes?.length || 0}</span>
                                 </button>
                                 <button
                                     onClick={() => handleVote('downvote')}
                                     disabled={voting}
-                                    className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 border-2 rounded-lg transition-colors disabled:opacity-50 ${isDarkMode ? 'border-red-700 text-red-400 hover:bg-red-900/30' : 'border-red-200 text-red-700 hover:bg-red-50'}`}
+                                    className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 border-2 rounded-lg transition-colors disabled:opacity-50 ${isDownvoted
+                                            ? 'bg-red-100 border-red-600 text-red-700 dark:bg-red-900/50 dark:border-red-500 dark:text-red-300'
+                                            : isDarkMode ? 'border-red-700 text-red-400 hover:bg-red-900/30' : 'border-red-200 text-red-700 hover:bg-red-50'
+                                        }`}
                                 >
-                                    <ThumbsDown className="w-4 h-4" />
+                                    <ThumbsDown className={`w-4 h-4 ${isDownvoted ? 'fill-current' : ''}`} />
                                     <span className="font-medium">{item.downvotes?.length || 0}</span>
                                 </button>
                             </div>

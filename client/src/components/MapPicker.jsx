@@ -83,8 +83,8 @@ const MapPicker = ({ onLocationSelect, initialPosition }) => {
                 scrollWheelZoom={true}
                 dragging={true}
                 style={{ height: '100%', width: '100%' }}
-                maxBounds={[[6, 68], [36, 98]]} // Approximate India Bounds
-                minZoom={4}
+                maxBounds={[[12.8350, 80.1450], [12.8500, 80.1650]]} // VIT Chennai Campus Only
+                minZoom={15}
                 maxZoom={19} // Prevent grey tiles
             >
                 {/* Esri World Imagery (Satellite) */}

@@ -187,7 +187,7 @@ exports.upvoteItem = async (req, res) => {
         }
 
         await item.save();
-        res.json({ upvotes: item.upvotes.length, downvotes: item.downvotes.length });
+        res.json({ upvotes: item.upvotes, downvotes: item.downvotes });
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server Error');
@@ -213,7 +213,7 @@ exports.downvoteItem = async (req, res) => {
         }
 
         await item.save();
-        res.json({ upvotes: item.upvotes.length, downvotes: item.downvotes.length });
+        res.json({ upvotes: item.upvotes, downvotes: item.downvotes });
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server Error');
