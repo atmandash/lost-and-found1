@@ -5,8 +5,13 @@ const authMiddleware = require('../middleware/auth');
 const { authLimiter, passwordResetLimiter } = require('../middleware/rateLimiter');
 const { validateRegistration, validateLogin, handleValidationErrors } = require('../middleware/sanitize');
 
+// @route   POST api/auth/request-otp
+// @desc    Request OTP for registration
+// @access  Public
+router.post('/request-otp', authLimiter, authController.requestOTP);
+
 // @route   POST api/auth/register
-// @desc    Register user (Direct - No OTP)
+// @desc    Register user (with OTP)
 // @access  Public
 router.post('/register', authLimiter, validateRegistration, handleValidationErrors, authController.register);
 

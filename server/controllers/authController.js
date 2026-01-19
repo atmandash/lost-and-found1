@@ -110,10 +110,20 @@ exports.requestOTP = async (req, res) => {
     }
 };
 
-// Register User (Direct - No OTP)
+// Register User (with OTP Verification)
 exports.register = async (req, res) => {
     try {
-        const { name, email, phone, password } = req.body;
+        const { name, email, phone, password, otp } = req.body;
+
+        // Verify OTP first
+        if (!otp) {
+            return res.status(400).json({ message: 'OTP is required' });
+        }
+
+        const validOTP = await OTP.findOne({ email, otp });
+        if (!validOTP) {
+            return res.status(400).json({ message: 'Invalid or expired OTP' });
+        }
 
         // Validate VIT email
         if (!email.endsWith('@vitstudent.ac.in')) {
@@ -135,10 +145,13 @@ exports.register = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, salt);
 
         user = new User({
-            name, email, phone, password: hashedPassword, verifiedPhone: true
+            name, email, phone, password: hashedPassword, verifiedPhone: true // Email verified via OTP
         });
 
         await user.save();
+
+        // Delete used OTP
+        await OTP.deleteOne({ _id: validOTP._id });
 
         // Create Token
         const payload = { user: { id: user.id } };
