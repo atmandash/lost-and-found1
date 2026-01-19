@@ -22,6 +22,10 @@ export const AuthProvider = ({ children }) => {
             (error) => {
                 if (error.response && error.response.status === 401) {
                     console.warn('Session expired or invalid token. Logging out...');
+                    // DEBUG: Alert the user why they are being logged out
+                    // This is critical to finding the root cause of the "random logouts"
+                    const reason = error.response.data?.message || 'Unknown Auth Error';
+                    alert(`LOGGING OUT: ${reason} (Status: 401).`);
                     logout();
                 }
                 return Promise.reject(error);
