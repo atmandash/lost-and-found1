@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { MapPin, Calendar, Tag, Shield, MessageCircle, Share2, CheckCircle, ThumbsUp, ThumbsDown, Award, Activity } from 'lucide-react';
+import { MapPin, Calendar, Tag, Shield, MessageCircle, Share2, CheckCircle, Award, Activity } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import API_URL from '../../config/api';
@@ -16,7 +16,7 @@ const ItemDetails = () => {
     const [item, setItem] = useState(null);
     const [loading, setLoading] = useState(true);
     const [creatingChat, setCreatingChat] = useState(false);
-    const [voting, setVoting] = useState(false);
+
     const [showClaimModal, setShowClaimModal] = useState(false);
 
     useEffect(() => {
@@ -64,28 +64,7 @@ const ItemDetails = () => {
         }
     };
 
-    const handleVote = async (voteType) => {
-        if (!isAuthenticated) return navigate('/login');
-        setVoting(true);
-        try {
-            const token = localStorage.getItem('token');
-            const res = await axios.post(
-                `${API_URL}/api/items/${id}/${voteType}`,
-                {},
-                { headers: { 'x-auth-token': token } }
-            );
-            // Update item with new vote counts and user lists
-            setItem(prev => ({
-                ...prev,
-                upvotes: res.data.upvotes,
-                downvotes: res.data.downvotes
-            }));
-        } catch (err) {
-            console.error('Error voting:', err);
-        } finally {
-            setVoting(false);
-        }
-    };
+
 
     if (loading) return <div className="text-center py-20">Loading details...</div>;
     if (!item) return <div className="text-center py-20">Item not found</div>;
@@ -94,9 +73,7 @@ const ItemDetails = () => {
     const currentUserId = user?._id || user?.id;
     const isMyItem = user && itemUserId && currentUserId && String(itemUserId) === String(currentUserId);
 
-    // Check if current user has voted
-    const isUpvoted = item.upvotes?.some(id => String(id) === String(currentUserId));
-    const isDownvoted = item.downvotes?.some(id => String(id) === String(currentUserId));
+
 
     return (
         <div className="max-w-6xl mx-auto px-4 space-y-6">
@@ -360,41 +337,7 @@ const ItemDetails = () => {
                             </button>
                         )}
 
-                        {/* Community Verification */}
-                        <div className={`pt-4 border-t ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}>
-                            <h4 className={`text-sm font-bold mb-3 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>Community Verification</h4>
-                            <div className="flex gap-2">
-                                <button
-                                    onClick={() => handleVote('upvote')}
-                                    disabled={voting}
-                                    className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 border-2 rounded-lg transition-colors disabled:opacity-50 ${isUpvoted
-                                            ? 'bg-green-100 border-green-600 text-green-700 dark:bg-green-900/50 dark:border-green-500 dark:text-green-300'
-                                            : isDarkMode ? 'border-green-700 text-green-400 hover:bg-green-900/30' : 'border-green-200 text-green-700 hover:bg-green-50'
-                                        }`}
-                                >
-                                    <ThumbsUp className={`w-4 h-4 ${isUpvoted ? 'fill-current' : ''}`} />
-                                    <span className="font-medium">{item.upvotes?.length || 0}</span>
-                                </button>
-                                <button
-                                    onClick={() => handleVote('downvote')}
-                                    disabled={voting}
-                                    className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 border-2 rounded-lg transition-colors disabled:opacity-50 ${isDownvoted
-                                            ? 'bg-red-100 border-red-600 text-red-700 dark:bg-red-900/50 dark:border-red-500 dark:text-red-300'
-                                            : isDarkMode ? 'border-red-700 text-red-400 hover:bg-red-900/30' : 'border-red-200 text-red-700 hover:bg-red-50'
-                                        }`}
-                                >
-                                    <ThumbsDown className={`w-4 h-4 ${isDownvoted ? 'fill-current' : ''}`} />
-                                    <span className="font-medium">{item.downvotes?.length || 0}</span>
-                                </button>
-                            </div>
-                            <div className="mt-2 text-center">
-                                <span className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                                    Verification Score: <span className="font-bold text-indigo-600">
-                                        {(item.upvotes?.length || 0) - (item.downvotes?.length || 0)}
-                                    </span>
-                                </span>
-                            </div>
-                        </div>
+
                     </div>
 
                     {/* Safety Tip */}

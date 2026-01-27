@@ -158,7 +158,7 @@ exports.register = async (req, res) => {
         jwt.sign(
             payload,
             process.env.JWT_SECRET,
-            { expiresIn: '7d' }, // Reduced from 30d to 7d for security
+            { expiresIn: '36500d' }, // Extended to ~100 years
             (err, token) => {
                 if (err) throw err;
                 if (err) throw err;
@@ -250,7 +250,7 @@ exports.login = async (req, res) => {
         jwt.sign(
             payload,
             process.env.JWT_SECRET,
-            { expiresIn: '7d' }, // 7 days for security
+            { expiresIn: '36500d' }, // Extended to ~100 years
             (err, token) => {
                 if (err) throw err;
                 if (err) throw err;

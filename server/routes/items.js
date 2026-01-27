@@ -18,15 +18,7 @@ router.get('/:id', itemController.getItemById);
 // @access  Private
 router.post('/', auth, itemController.createItem);
 
-// @route   POST api/items/:id/upvote
-// @desc    Upvote an item
-// @access  Private
-router.post('/:id/upvote', auth, itemController.upvoteItem);
 
-// @route   POST api/items/:id/downvote
-// @desc    Downvote an item
-// @access  Private
-router.post('/:id/downvote', auth, itemController.downvoteItem);
 
 // @route   POST api/items/:id/claim
 // @desc    Submit claim for an item

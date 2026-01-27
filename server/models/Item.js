@@ -29,8 +29,7 @@ const itemSchema = new mongoose.Schema({
     status: { type: String, enum: ['active', 'claimed', 'reunited', 'closed', 'resolved'], default: 'active' },
     user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     claimedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-    upvotes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }], // Users who upvoted
-    downvotes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }], // Users who downvoted
+
     claimRequests: [{
         claimant: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
         description: { type: String, required: true },
@@ -42,10 +41,7 @@ const itemSchema = new mongoose.Schema({
     createdAt: { type: Date, default: Date.now }
 });
 
-// Virtual field for verification score
-itemSchema.virtual('verificationScore').get(function () {
-    return (this.upvotes?.length || 0) - (this.downvotes?.length || 0);
-});
+
 
 itemSchema.index({ title: 'text', description: 'text', category: 'text' });
 itemSchema.index({ 'location.main': 1 });

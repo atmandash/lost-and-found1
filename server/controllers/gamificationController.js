@@ -24,7 +24,7 @@ exports.getUserStats = async (req, res) => {
         const userId = req.params.userId || req.user.id;
 
         const user = await User.findById(userId)
-            .select('name points badges level itemsReported itemsReturned helpfulVotes');
+            .select('name points badges level itemsReported itemsReturned');
 
         if (!user) {
             return res.status(404).json({ message: 'User not found' });

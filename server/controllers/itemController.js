@@ -165,60 +165,7 @@ exports.createItem = async (req, res) => {
     }
 };
 
-// Upvote item
-exports.upvoteItem = async (req, res) => {
-    try {
-        const item = await Item.findById(req.params.id);
-        if (!item) return res.status(404).json({ message: 'Item not found' });
 
-        const userId = req.user.id;
-
-        // Remove from downvotes if exists
-        item.downvotes = item.downvotes.filter(id => id.toString() !== userId);
-
-        // Toggle upvote
-        if (item.upvotes.some(id => id.toString() === userId)) {
-            item.upvotes = item.upvotes.filter(id => id.toString() !== userId);
-        } else {
-            item.upvotes.push(userId);
-            // Award 2 points to item owner for receiving upvote
-            const gamificationController = require('./gamificationController');
-            await gamificationController.awardPoints(item.user, 2, 'received upvote on item');
-        }
-
-        await item.save();
-        res.json({ upvotes: item.upvotes, downvotes: item.downvotes });
-    } catch (err) {
-        console.error(err.message);
-        res.status(500).send('Server Error');
-    }
-};
-
-// Downvote item
-exports.downvoteItem = async (req, res) => {
-    try {
-        const item = await Item.findById(req.params.id);
-        if (!item) return res.status(404).json({ message: 'Item not found' });
-
-        const userId = req.user.id;
-
-        // Remove from upvotes if exists
-        item.upvotes = item.upvotes.filter(id => id.toString() !== userId);
-
-        // Toggle downvote
-        if (item.downvotes.some(id => id.toString() === userId)) {
-            item.downvotes = item.downvotes.filter(id => id.toString() !== userId);
-        } else {
-            item.downvotes.push(userId);
-        }
-
-        await item.save();
-        res.json({ upvotes: item.upvotes, downvotes: item.downvotes });
-    } catch (err) {
-        console.error(err.message);
-        res.status(500).send('Server Error');
-    }
-};
 
 // Submit claim for an item
 exports.submitClaim = async (req, res) => {

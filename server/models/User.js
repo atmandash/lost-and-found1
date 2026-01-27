@@ -13,7 +13,7 @@ const userSchema = new mongoose.Schema({
     level: { type: Number, default: 1 },
     itemsReported: { type: Number, default: 0 },
     itemsReturned: { type: Number, default: 0 },
-    helpfulVotes: { type: Number, default: 0 },
+
     lastActive: { type: Date, default: Date.now },
     lastLoginDate: { type: Date },
     loginStreak: { type: Number, default: 0 },
