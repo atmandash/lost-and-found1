@@ -200,6 +200,7 @@ exports.login = async (req, res) => {
         // Check user
         let user = await User.findOne({ email });
         if (!user) {
+            console.warn(`[Auth] Failed login attempt: User not found (${email})`);
             return res.status(404).json({ message: 'Invalid Credentials' });
         }
 
@@ -235,6 +236,7 @@ exports.login = async (req, res) => {
             await user.save();
 
             const attemptsLeft = 5 - user.loginAttempts;
+            console.warn(`[Auth] Failed login attempt: Invalid password for ${email}. Attempts left: ${attemptsLeft}`);
             return res.status(400).json({
                 message: `Invalid Credentials. ${attemptsLeft} attempt${attemptsLeft !== 1 ? 's' : ''} remaining before account lockout.`
             });

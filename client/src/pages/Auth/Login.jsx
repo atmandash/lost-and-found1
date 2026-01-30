@@ -23,7 +23,20 @@ const Login = () => {
             await login(formData.email, formData.password);
             navigate('/');
         } catch (err) {
-            setError(err.response?.data?.message || 'Login failed');
+            console.error('Login error:', err);
+            if (!err.response) {
+                // Network error (Server down, CORS, or Internet issue)
+                setError('Unable to connect to the server. Please check your connection.');
+            } else if (err.response.status === 401 || err.response.status === 400 || err.response.status === 404) {
+                // Auth error
+                setError(err.response.data?.message || 'Invalid email or password.');
+            } else if (err.response.status === 429) {
+                // Rate limit
+                setError(err.response.data?.message || 'Too many attempts. Please try again later.');
+            } else {
+                // Generic error
+                setError('Something went wrong. Please try again.');
+            }
         }
     };
 
