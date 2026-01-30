@@ -98,7 +98,9 @@ const connectDB = async () => {
 connectDB();
 
 const initExpirationCron = require('./cron/expirationCron');
+const keepAlive = require('./cron/keepAlive');
 initExpirationCron();
+keepAlive();
 
 // Routes
 app.use('/api/auth', require('./routes/auth'));
@@ -153,11 +155,9 @@ process.on('uncaughtException', (err) => {
 });
 
 process.on('unhandledRejection', (err) => {
-    console.error('❌ UNHANDLED REJECTION! Shutting down...');
+    console.error('⚠️ UNHANDLED REJECTION! Logging error but keeping server alive...');
     console.error(err.name, err.message);
-    server.close(() => {
-        process.exit(1);
-    });
+    // server.close(() => process.exit(1)); // Don't crash on promise rejections
 });
 
 server.listen(PORT, '0.0.0.0', () => {
