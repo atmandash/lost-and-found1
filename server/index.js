@@ -41,7 +41,9 @@ const corsOptions = {
         const allowedOrigins = [
             'http://localhost:5173',
             'http://localhost:3000',
-            'https://lost-and-found-six-zeta.vercel.app' // Add production URL if known
+            'https://lost-and-found-six-zeta.vercel.app',
+            'https://lost-and-found1-liard.vercel.app', // Explicitly added
+            'https://lostandfound-2wn8.onrender.com'
         ];
         // Allow requests with no origin (like mobile apps or curl requests)
         if (!origin) return callback(null, true);
