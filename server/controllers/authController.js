@@ -5,6 +5,7 @@ const bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
 
 // Email Transporter (Configure with your credentials)
+// Email Transporter (Configure with your credentials)
 const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
     port: 465,
@@ -15,6 +16,10 @@ const transporter = nodemailer.createTransport({
     },
     // Force IPv4 as a safety measure
     family: 4,
+    // TIMEOUTS: Critical for Failsafe to work on blocked networks
+    connectionTimeout: 5000, // 5 seconds
+    greetingTimeout: 5000,   // 5 seconds
+    socketTimeout: 5000,     // 5 seconds
     logger: true,
     debug: false // Reduce noise unless needed
 });
