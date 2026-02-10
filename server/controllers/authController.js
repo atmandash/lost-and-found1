@@ -87,26 +87,19 @@ exports.requestOTP = async (req, res) => {
 
         const sent = await sendOTP(email, otp);
 
-        // If sending failed but we are in dev mode, it returns true but logs error
-        // We really want to know if it REALLY sent or fell back. 
-        // For now, let's assume if it returns true, we proceed.
-        // But we can refine the message to be helpful.
-
-        if (!sent && process.env.NODE_ENV !== 'development') {
-            return res.status(500).json({ message: 'Failed to send OTP. Please check email address.' });
+        if (!sent) {
+            console.error(`Failed to send OTP to ${email}`);
+            // Return specific error for debugging
+            return res.status(500).json({ message: 'Failed to send OTP. Email service returned false. Check server logs.' });
         }
 
-        // Check logs to see if it fell back (we can't easily pass that flag back from sendOTP without changing signature, 
-        // so let's just be explicit in the message for Devs)
         res.json({
-            message: process.env.NODE_ENV === 'development'
-                ? 'OTP sent! (If not in inbox, check Server Console or use: 123456)'
-                : 'Verification code sent to your email',
+            message: 'Verification code sent to your email',
             email
         });
     } catch (err) {
-        console.error(err.message);
-        res.status(500).json({ message: 'Server error. Please try again.' });
+        console.error('OTP Request Error:', err);
+        res.status(500).json({ message: `Server error: ${err.message}` });
     }
 };
 
