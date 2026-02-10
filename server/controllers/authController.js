@@ -5,10 +5,11 @@ const bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
 
 // Email Transporter (Configure with your credentials)
+// Email Transporter (Configure with your credentials)
 const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
-    port: 465,
-    secure: true, // true for 465, false for other ports
+    port: 587,
+    secure: false, // true for 465, false for other ports
     auth: {
         user: process.env.EMAIL_USER || 'websitedeve5@gmail.com',
         pass: process.env.EMAIL_APP_PASSWORD || '' // Gmail App Password
@@ -17,50 +18,39 @@ const transporter = nodemailer.createTransport({
 // Helper: Send OTP
 const sendOTP = async (email, otp) => {
     try {
-        // Always try to send real email if credentials exist
-        if (process.env.EMAIL_APP_PASSWORD) {
-            await transporter.sendMail({
-                from: `Lost & Found <${process.env.EMAIL_USER}>`,
-                to: email,
-                subject: 'Your Verification Code - Lost & Found',
-                html: `
-          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-            <h2 style="color: #4F46E5;">Your OTP Code</h2>
-            <p>Your verification code is:</p>
-            <div style="background: #F3F4F6; padding: 20px; text-align: center; font-size: 32px; font-weight: bold; letter-spacing: 8px; color: #4F46E5;">
-              ${otp}
-            </div>
-            <p style="color: #6B7280; font-size: 14px; margin-top: 20px;">This code expires in 5 minutes.</p>
-            <p style="color: #6B7280; font-size: 12px; margin-top: 30px;">If you didn't request this code, please ignore this email.</p>
-          </div>
-        `
-            });
-            console.log(`✅ OTP email sent to ${email}`);
-            return true;
+        // Check credentials first
+        if (!process.env.EMAIL_APP_PASSWORD) {
+            console.error('❌ Missing EMAIL_APP_PASSWORD environment variable');
+            if (process.env.NODE_ENV === 'development') {
+                console.log(`\n=== OTP FOR ${email} (Dev Mode) ===`);
+                console.log(`CODE: ${otp}`);
+                return { success: true, message: 'Dev mode: OTP logged to console' };
+            }
+            return { success: false, error: 'Server missing email credentials' };
         }
 
-        // Development mode: log to console
-        if (process.env.NODE_ENV === 'development') {
-            console.log(`\n=== OTP FOR ${email} ===`);
-            console.log(`CODE: ${otp}`);
-            console.log(`=== VALID FOR 5 MINUTES ===\n`);
-            console.log(`=== VALID FOR 5 MINUTES ===\n`);
-            return false; // Return false so we know it didn't strictly "send" via email
-        }
+        await transporter.sendMail({
+            from: `Lost & Found <${process.env.EMAIL_USER}>`,
+            to: email,
+            subject: 'Your Verification Code - Lost & Found',
+            html: `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <h2 style="color: #4F46E5;">Your OTP Code</h2>
+        <p>Your verification code is:</p>
+        <div style="background: #F3F4F6; padding: 20px; text-align: center; font-size: 32px; font-weight: bold; letter-spacing: 8px; color: #4F46E5;">
+          ${otp}
+        </div>
+        <p style="color: #6B7280; font-size: 14px; margin-top: 20px;">This code expires in 5 minutes.</p>
+        <p style="color: #6B7280; font-size: 12px; margin-top: 30px;">If you didn't request this code, please ignore this email.</p>
+      </div>
+    `
+        });
+        console.log(`✅ OTP email sent to ${email}`);
+        return { success: true };
 
-        return false;
     } catch (err) {
         console.error('❌ EMAIL SENDING FAILED:', err);
-        console.error('Stack:', err.stack);
-        // Fallback to console in dev mode
-        if (process.env.NODE_ENV === 'development') {
-            console.log(`\n=== OTP FOR ${email} (Email failed, showing here) ===`);
-            console.log(`CODE: ${otp}`);
-            console.log(`=== VALID FOR 5 MINUTES ===\n`);
-            console.log(`=== VALID FOR 5 MINUTES ===\n`);
-            return false; // Return false indicates "Email failed (even if fallback worked)"
-        }
-        return false;
+        return { success: false, error: err.message };
     }
 };
 
@@ -85,12 +75,14 @@ exports.requestOTP = async (req, res) => {
         await OTP.findOneAndDelete({ email }); // Clear old OTPs
         await new OTP({ email, otp }).save();
 
-        const sent = await sendOTP(email, otp);
+        const result = await sendOTP(email, otp);
 
-        if (!sent) {
-            console.error(`Failed to send OTP to ${email}`);
-            // Return specific error for debugging
-            return res.status(500).json({ message: 'Failed to send OTP. Email service returned false. Check server logs.' });
+        if (!result.success) {
+            console.error(`Failed to send OTP to ${email}: ${result.error}`);
+            return res.status(500).json({
+                message: `Failed to send OTP. Error: ${result.error}`,
+                debug: 'Check Render Environment Variables (EMAIL_USER, EMAIL_APP_PASSWORD) and SMTP Ports'
+            });
         }
 
         res.json({
