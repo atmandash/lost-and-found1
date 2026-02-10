@@ -6,22 +6,20 @@ const nodemailer = require('nodemailer');
 
 // Email Transporter (Configure with your credentials)
 // Email Transporter (Configure with your credentials)
+// Email Transporter (Configure with your credentials)
 const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 465,
-    secure: true, // true for 465, false for other ports
+    service: 'gmail',
     auth: {
         user: process.env.EMAIL_USER || 'websitedeve5@gmail.com',
         pass: process.env.EMAIL_APP_PASSWORD || '' // Gmail App Password
     },
+    tls: {
+        rejectUnauthorized: false // Bypass SSL verification for Render/Cloud environments
+    },
     // Force IPv4 as a safety measure
     family: 4,
-    // TIMEOUTS: Critical for Failsafe to work on blocked networks
-    connectionTimeout: 5000, // 5 seconds
-    greetingTimeout: 5000,   // 5 seconds
-    socketTimeout: 5000,     // 5 seconds
     logger: true,
-    debug: false // Reduce noise unless needed
+    debug: true // Enable debug logs to catch specific SMTP errors
 });
 // Helper: Send OTP
 const sendOTP = async (email, otp) => {
