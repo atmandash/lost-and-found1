@@ -5,7 +5,6 @@ const bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
 
 // Email Transporter (Configure with your credentials)
-// Email Transporter (Configure with your credentials)
 const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
     port: 587,
@@ -13,7 +12,16 @@ const transporter = nodemailer.createTransport({
     auth: {
         user: process.env.EMAIL_USER || 'websitedeve5@gmail.com',
         pass: process.env.EMAIL_APP_PASSWORD || '' // Gmail App Password
-    }
+    },
+    tls: {
+        ciphers: 'SSLv3'
+    },
+    // Force IPv4 and add timeouts to fix connection issues on Render
+    family: 4,
+    connectionTimeout: 10000, // 10 seconds
+    socketTimeout: 10000,     // 10 seconds
+    logger: true,             // Log to console
+    debug: true               // Include SMTP traffic in logs
 });
 // Helper: Send OTP
 const sendOTP = async (email, otp) => {
