@@ -4,36 +4,35 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
 
-// Email Transporter (Configure with your credentials)
-// Email Transporter (Configure with your credentials)
-// Email Transporter (Configure with your credentials)
-const transporter = nodemailer.createTransport({
+// Email Transporter — NO connection pooling (causes hangs in PM2)
+const createTransporter = () => nodemailer.createTransport({
     service: 'gmail',
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true,
     auth: {
         user: process.env.EMAIL_USER || 'websitedeve5@gmail.com',
-        pass: process.env.EMAIL_APP_PASSWORD || '' // Gmail App Password
+        pass: process.env.EMAIL_APP_PASSWORD || ''
     },
-    tls: {
-        rejectUnauthorized: false // Bypass SSL verification for Render/Cloud environments
-    },
-    // Force IPv4 as a safety measure
+    tls: { rejectUnauthorized: false },
     family: 4,
-    logger: true,
-    debug: true // Enable debug logs to catch specific SMTP errors
+    connectionTimeout: 5000, // 5s to connect
+    greetingTimeout: 5000,   // 5s for SMTP greeting
+    socketTimeout: 10000     // 10s for socket inactivity
 });
-// Helper: Send OTP
+
+// Helper: Send OTP (with fresh transporter each time to avoid stale connections)
 const sendOTP = async (email, otp) => {
     try {
-        // Check credentials first
         if (!process.env.EMAIL_APP_PASSWORD) {
             console.error('❌ Missing EMAIL_APP_PASSWORD environment variable');
-            if (process.env.NODE_ENV === 'development') {
-                console.log(`\n=== OTP FOR ${email} (Dev Mode) ===`);
-                console.log(`CODE: ${otp}`);
-                return { success: true, message: 'Dev mode: OTP logged to console' };
-            }
-            return { success: false, error: 'Server missing email credentials' };
+            console.log(`\n=== OTP FOR ${email} ===`);
+            console.log(`CODE: ${otp}`);
+            return { success: true, message: 'OTP logged to console (no email password)' };
         }
+
+        console.log(`📧 Sending OTP email to ${email}...`);
+        const transporter = createTransporter();
 
         await transporter.sendMail({
             from: `Lost & Found <${process.env.EMAIL_USER}>`,
@@ -51,6 +50,8 @@ const sendOTP = async (email, otp) => {
       </div>
     `
         });
+
+        transporter.close(); // Close connection immediately after sending
         console.log(`✅ OTP email sent to ${email}`);
         return { success: true };
 
@@ -81,24 +82,23 @@ exports.requestOTP = async (req, res) => {
         await OTP.findOneAndDelete({ email }); // Clear old OTPs
         await new OTP({ email, otp }).save();
 
-        const result = await sendOTP(email, otp);
-
-        if (!result.success) {
-            console.error(`⚠️ Failed to send OTP via email to ${email}: ${result.error}`);
-            console.log(`🔑 FALLBACK OTP FOR ${email}: ${otp}`);
-
-            // Allow registration to proceed even if email fails (Network blocking workaround)
-            return res.json({
-                message: 'Verification code generated. If email arrives, use it. Otherwise, check server logs.',
-                email,
-                debug_otp: otp // TEMPORARY: Allow frontend inspection for debugging
-            });
-        }
-
+        // Respond immediately, send email in background so the UI never hangs
         res.json({
             message: 'Verification code sent to your email',
             email
         });
+
+        // Fire-and-forget email dispatch
+        sendOTP(email, otp).then(result => {
+            if (!result.success) {
+                console.error(`⚠️ Failed to send OTP to ${email}: ${result.error}`);
+                console.log(`🔑 FALLBACK OTP FOR ${email}: ${otp}`);
+            }
+        }).catch(err => {
+            console.error(`⚠️ OTP email error for ${email}:`, err.message);
+            console.log(`🔑 FALLBACK OTP FOR ${email}: ${otp}`);
+        });
+
     } catch (err) {
         console.error('OTP Request Error:', err);
         res.status(500).json({ message: `Server error: ${err.message}` });
@@ -289,13 +289,21 @@ exports.forgotPassword = async (req, res) => {
         await OTP.findOneAndDelete({ email });
         await new OTP({ email, otp }).save();
 
-        // Send enhanced password reset email
-        try {
-            await transporter.sendMail({
-                from: `Lost & Found <${process.env.EMAIL_USER}>`,
-                to: email,
-                subject: '🔐 Password Reset - Lost & Found',
-                html: `
+        // Respond immediately
+        res.json({
+            message: 'Password reset code sent to your email. Please check your inbox.',
+            email: email.replace(/(.{2})(.*)(@.*)/, '$1***$3')
+        });
+
+        // Fire-and-forget email dispatch
+        (async () => {
+            try {
+                const transporter = createTransporter();
+                await transporter.sendMail({
+                    from: `Lost & Found <${process.env.EMAIL_USER}>`,
+                    to: email,
+                    subject: '🔐 Password Reset - Lost & Found',
+                    html: `
                     <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
                         <div style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); padding: 30px; border-radius: 16px 16px 0 0; text-align: center;">
                             <h1 style="color: white; margin: 0; font-size: 28px;">🔐 Password Reset</h1>
@@ -324,27 +332,15 @@ exports.forgotPassword = async (req, res) => {
                         </div>
                     </div>
                 `
-            });
-            console.log(`✅ Password reset OTP sent to ${email}`);
-            res.json({
-                message: 'Password reset code sent to your email. Please check your inbox.',
-                email: email.replace(/(.{2})(.*)(@.*)/, '$1***$3') // Mask email for response
-            });
-        } catch (emailError) {
-            console.error('❌ Failed to send password reset email:', emailError);
-            // Fallback for development
-            if (process.env.NODE_ENV === 'development') {
-                console.log(`\n=== PASSWORD RESET OTP FOR ${email} ===`);
-                console.log(`CODE: ${otp}`);
-                console.log(`=== VALID FOR 5 MINUTES ===\n`);
-                res.json({
-                    message: 'OTP generated (check server console in development mode)',
-                    email
                 });
-            } else {
-                res.status(500).json({ message: 'Failed to send reset email. Please try again later.' });
+                transporter.close();
+                console.log(`✅ Password reset OTP sent to ${email}`);
+            } catch (emailError) {
+                console.error('❌ Failed to send password reset email:', emailError.message);
+                console.log(`🔑 FALLBACK RESET OTP FOR ${email}: ${otp}`);
             }
-        }
+        })();
+
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server Error');
