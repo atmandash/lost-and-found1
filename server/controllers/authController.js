@@ -4,80 +4,110 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
 
-// SMTP strategies — tries multiple configs until one works (Gmail blocked on some clouds)
-const SMTP_STRATEGIES = [
-    {
-        name: 'Gmail 587 STARTTLS',
-        config: {
-            host: 'smtp.gmail.com',
-            port: 587,
-            secure: false,
-            requireTLS: true,
-            auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_APP_PASSWORD },
-            tls: { rejectUnauthorized: false },
-            connectionTimeout: 5000,
-            greetingTimeout: 5000,
-            socketTimeout: 10000
-        }
-    },
-    {
-        name: 'Gmail 465 SSL',
-        config: {
-            host: 'smtp.gmail.com',
-            port: 465,
-            secure: true,
-            auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_APP_PASSWORD },
-            tls: { rejectUnauthorized: false },
-            connectionTimeout: 5000,
-            greetingTimeout: 5000,
-            socketTimeout: 10000
-        }
-    }
-];
+// ===== EMAIL SENDING: Brevo HTTP API (primary) + Gmail SMTP (fallback) =====
 
-// Try sending with each strategy until one succeeds
-const sendWithRetry = async (mailOptions) => {
-    for (const strategy of SMTP_STRATEGIES) {
-        try {
-            console.log(`📧 Trying: ${strategy.name}...`);
-            const transporter = nodemailer.createTransport(strategy.config);
-            const info = await transporter.sendMail(mailOptions);
-            transporter.close();
-            console.log(`✅ Sent via ${strategy.name} (${info.messageId})`);
-            return { success: true, strategy: strategy.name };
-        } catch (err) {
-            console.error(`❌ ${strategy.name} failed: ${err.message}`);
+// Strategy 1: Brevo HTTP API — works on ALL cloud platforms (uses HTTPS, not SMTP)
+const sendViaBrevo = async (to, subject, htmlContent) => {
+    const apiKey = process.env.BREVO_API_KEY;
+    if (!apiKey) return { success: false, error: 'No BREVO_API_KEY configured' };
+
+    try {
+        console.log(`📧 Trying: Brevo HTTP API...`);
+        const res = await fetch('https://api.brevo.com/v3/smtp/email', {
+            method: 'POST',
+            headers: {
+                'accept': 'application/json',
+                'api-key': apiKey,
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify({
+                sender: { name: 'Lost & Found', email: process.env.EMAIL_USER || 'websitedeve5@gmail.com' },
+                to: [{ email: to }],
+                subject,
+                htmlContent
+            })
+        });
+        const data = await res.json();
+        if (res.ok) {
+            console.log(`✅ Sent via Brevo API (messageId: ${data.messageId})`);
+            return { success: true, strategy: 'Brevo API' };
         }
+        console.error(`❌ Brevo API failed: ${JSON.stringify(data)}`);
+        return { success: false, error: data.message || 'Brevo API error' };
+    } catch (err) {
+        console.error(`❌ Brevo API failed: ${err.message}`);
+        return { success: false, error: err.message };
     }
-    return { success: false, error: 'All SMTP strategies failed' };
 };
 
-// OTP email template
-const otpMailOptions = (email, otp) => ({
-    from: `Lost & Found <${process.env.EMAIL_USER}>`,
-    to: email,
-    subject: 'Your Verification Code - Lost & Found',
-    html: `
-      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-        <h2 style="color: #4F46E5;">Your OTP Code</h2>
-        <p>Your verification code is:</p>
-        <div style="background: #F3F4F6; padding: 20px; text-align: center; font-size: 32px; font-weight: bold; letter-spacing: 8px; color: #4F46E5;">
-          ${otp}
-        </div>
-        <p style="color: #6B7280; font-size: 14px; margin-top: 20px;">This code expires in 5 minutes.</p>
-        <p style="color: #6B7280; font-size: 12px; margin-top: 30px;">If you didn't request this code, please ignore this email.</p>
-      </div>
-    `
-});
+// Strategy 2: Gmail SMTP (works locally, blocked on most clouds)
+const sendViaGmail = async (to, subject, htmlContent) => {
+    if (!process.env.EMAIL_APP_PASSWORD) {
+        return { success: false, error: 'No EMAIL_APP_PASSWORD configured' };
+    }
+
+    const configs = [
+        { name: 'Gmail 587', port: 587, secure: false, requireTLS: true },
+        { name: 'Gmail 465', port: 465, secure: true }
+    ];
+
+    for (const cfg of configs) {
+        try {
+            console.log(`📧 Trying: ${cfg.name}...`);
+            const transporter = nodemailer.createTransport({
+                host: 'smtp.gmail.com',
+                port: cfg.port,
+                secure: cfg.secure,
+                requireTLS: cfg.requireTLS,
+                auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_APP_PASSWORD },
+                tls: { rejectUnauthorized: false },
+                connectionTimeout: 5000,
+                greetingTimeout: 5000,
+                socketTimeout: 10000
+            });
+            const info = await transporter.sendMail({
+                from: `Lost & Found <${process.env.EMAIL_USER}>`,
+                to, subject, html: htmlContent
+            });
+            transporter.close();
+            console.log(`✅ Sent via ${cfg.name} (${info.messageId})`);
+            return { success: true, strategy: cfg.name };
+        } catch (err) {
+            console.error(`❌ ${cfg.name} failed: ${err.message}`);
+        }
+    }
+    return { success: false, error: 'All Gmail SMTP strategies failed' };
+};
+
+// Send email — tries Brevo first, then Gmail SMTP
+const sendEmail = async (to, subject, htmlContent) => {
+    // Try Brevo HTTP API first (works on cloud)
+    let result = await sendViaBrevo(to, subject, htmlContent);
+    if (result.success) return result;
+
+    // Fallback to Gmail SMTP (works locally)
+    result = await sendViaGmail(to, subject, htmlContent);
+    if (result.success) return result;
+
+    return { success: false, error: 'All email strategies failed' };
+};
+
+// OTP email template HTML
+const otpEmailHtml = (otp) => `
+  <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+    <h2 style="color: #4F46E5;">Your OTP Code</h2>
+    <p>Your verification code is:</p>
+    <div style="background: #F3F4F6; padding: 20px; text-align: center; font-size: 32px; font-weight: bold; letter-spacing: 8px; color: #4F46E5;">
+      ${otp}
+    </div>
+    <p style="color: #6B7280; font-size: 14px; margin-top: 20px;">This code expires in 5 minutes.</p>
+    <p style="color: #6B7280; font-size: 12px; margin-top: 30px;">If you didn't request this code, please ignore this email.</p>
+  </div>
+`;
 
 // Helper: Send OTP
 const sendOTP = async (email, otp) => {
-    if (!process.env.EMAIL_APP_PASSWORD) {
-        console.error('❌ Missing EMAIL_APP_PASSWORD');
-        console.log(`🔑 OTP FOR ${email}: ${otp}`);
-        return { success: false, error: 'No email password configured' };
-    }
-    return sendWithRetry(otpMailOptions(email, otp));
+    return sendEmail(email, 'Your Verification Code - Lost & Found', otpEmailHtml(otp));
 };
 
 // Step 1: Request OTP for Registration
@@ -315,11 +345,7 @@ exports.forgotPassword = async (req, res) => {
         });
 
         // Fire-and-forget email dispatch
-        sendWithRetry({
-            from: `Lost & Found <${process.env.EMAIL_USER}>`,
-            to: email,
-            subject: '🔐 Password Reset - Lost & Found',
-            html: `
+        sendEmail(email, '🔐 Password Reset - Lost & Found', `
                     <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
                         <div style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); padding: 30px; border-radius: 16px 16px 0 0; text-align: center;">
                             <h1 style="color: white; margin: 0; font-size: 28px;">🔐 Password Reset</h1>
@@ -348,7 +374,7 @@ exports.forgotPassword = async (req, res) => {
                         </div>
                     </div>
                 `
-        }).then(result => {
+        ).then(result => {
             if (result.success) {
                 console.log(`✅ Password reset OTP sent to ${email}`);
             } else {
