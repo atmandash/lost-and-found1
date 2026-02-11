@@ -4,41 +4,60 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
 
-// Email Transporter — NO connection pooling (causes hangs in PM2)
-const createTransporter = () => nodemailer.createTransport({
-    service: 'gmail',
-    host: 'smtp.gmail.com',
-    port: 465,
-    secure: true,
-    auth: {
-        user: process.env.EMAIL_USER || 'websitedeve5@gmail.com',
-        pass: process.env.EMAIL_APP_PASSWORD || ''
-    },
-    tls: { rejectUnauthorized: false },
-    family: 4,
-    connectionTimeout: 5000, // 5s to connect
-    greetingTimeout: 5000,   // 5s for SMTP greeting
-    socketTimeout: 10000     // 10s for socket inactivity
-});
-
-// Helper: Send OTP (with fresh transporter each time to avoid stale connections)
-const sendOTP = async (email, otp) => {
-    try {
-        if (!process.env.EMAIL_APP_PASSWORD) {
-            console.error('❌ Missing EMAIL_APP_PASSWORD environment variable');
-            console.log(`\n=== OTP FOR ${email} ===`);
-            console.log(`CODE: ${otp}`);
-            return { success: true, message: 'OTP logged to console (no email password)' };
+// SMTP strategies — tries multiple configs until one works (Gmail blocked on some clouds)
+const SMTP_STRATEGIES = [
+    {
+        name: 'Gmail 587 STARTTLS',
+        config: {
+            host: 'smtp.gmail.com',
+            port: 587,
+            secure: false,
+            requireTLS: true,
+            auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_APP_PASSWORD },
+            tls: { rejectUnauthorized: false },
+            connectionTimeout: 5000,
+            greetingTimeout: 5000,
+            socketTimeout: 10000
         }
+    },
+    {
+        name: 'Gmail 465 SSL',
+        config: {
+            host: 'smtp.gmail.com',
+            port: 465,
+            secure: true,
+            auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_APP_PASSWORD },
+            tls: { rejectUnauthorized: false },
+            connectionTimeout: 5000,
+            greetingTimeout: 5000,
+            socketTimeout: 10000
+        }
+    }
+];
 
-        console.log(`📧 Sending OTP email to ${email}...`);
-        const transporter = createTransporter();
+// Try sending with each strategy until one succeeds
+const sendWithRetry = async (mailOptions) => {
+    for (const strategy of SMTP_STRATEGIES) {
+        try {
+            console.log(`📧 Trying: ${strategy.name}...`);
+            const transporter = nodemailer.createTransport(strategy.config);
+            const info = await transporter.sendMail(mailOptions);
+            transporter.close();
+            console.log(`✅ Sent via ${strategy.name} (${info.messageId})`);
+            return { success: true, strategy: strategy.name };
+        } catch (err) {
+            console.error(`❌ ${strategy.name} failed: ${err.message}`);
+        }
+    }
+    return { success: false, error: 'All SMTP strategies failed' };
+};
 
-        await transporter.sendMail({
-            from: `Lost & Found <${process.env.EMAIL_USER}>`,
-            to: email,
-            subject: 'Your Verification Code - Lost & Found',
-            html: `
+// OTP email template
+const otpMailOptions = (email, otp) => ({
+    from: `Lost & Found <${process.env.EMAIL_USER}>`,
+    to: email,
+    subject: 'Your Verification Code - Lost & Found',
+    html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
         <h2 style="color: #4F46E5;">Your OTP Code</h2>
         <p>Your verification code is:</p>
@@ -49,16 +68,16 @@ const sendOTP = async (email, otp) => {
         <p style="color: #6B7280; font-size: 12px; margin-top: 30px;">If you didn't request this code, please ignore this email.</p>
       </div>
     `
-        });
+});
 
-        transporter.close(); // Close connection immediately after sending
-        console.log(`✅ OTP email sent to ${email}`);
-        return { success: true };
-
-    } catch (err) {
-        console.error('❌ EMAIL SENDING FAILED:', err.message);
-        return { success: false, error: err.message };
+// Helper: Send OTP
+const sendOTP = async (email, otp) => {
+    if (!process.env.EMAIL_APP_PASSWORD) {
+        console.error('❌ Missing EMAIL_APP_PASSWORD');
+        console.log(`🔑 OTP FOR ${email}: ${otp}`);
+        return { success: false, error: 'No email password configured' };
     }
+    return sendWithRetry(otpMailOptions(email, otp));
 };
 
 // Step 1: Request OTP for Registration
@@ -296,14 +315,11 @@ exports.forgotPassword = async (req, res) => {
         });
 
         // Fire-and-forget email dispatch
-        (async () => {
-            try {
-                const transporter = createTransporter();
-                await transporter.sendMail({
-                    from: `Lost & Found <${process.env.EMAIL_USER}>`,
-                    to: email,
-                    subject: '🔐 Password Reset - Lost & Found',
-                    html: `
+        sendWithRetry({
+            from: `Lost & Found <${process.env.EMAIL_USER}>`,
+            to: email,
+            subject: '🔐 Password Reset - Lost & Found',
+            html: `
                     <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
                         <div style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); padding: 30px; border-radius: 16px 16px 0 0; text-align: center;">
                             <h1 style="color: white; margin: 0; font-size: 28px;">🔐 Password Reset</h1>
@@ -332,14 +348,17 @@ exports.forgotPassword = async (req, res) => {
                         </div>
                     </div>
                 `
-                });
-                transporter.close();
+        }).then(result => {
+            if (result.success) {
                 console.log(`✅ Password reset OTP sent to ${email}`);
-            } catch (emailError) {
-                console.error('❌ Failed to send password reset email:', emailError.message);
+            } else {
+                console.error(`❌ Failed to send reset email: ${result.error}`);
                 console.log(`🔑 FALLBACK RESET OTP FOR ${email}: ${otp}`);
             }
-        })();
+        }).catch(err => {
+            console.error('❌ Reset email error:', err.message);
+            console.log(`🔑 FALLBACK RESET OTP FOR ${email}: ${otp}`);
+        });
 
     } catch (err) {
         console.error(err.message);
