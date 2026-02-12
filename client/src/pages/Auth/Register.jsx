@@ -50,29 +50,15 @@ const Register = () => {
 
         setLoading(true);
         try {
-            const res = await axios.post(`${API_URL}/api/auth/request-otp`, {
+            await axios.post(`${API_URL}/api/auth/request-otp`, {
                 email: formData.email,
                 phone: formData.phone
             });
 
-            const { emailSent, otp } = res.data;
-
-            if (emailSent) {
-                setSuccess(`OTP sent to ${formData.email}. Check your inbox & spam folder.`);
-            } else if (otp) {
-                // Email failed — show OTP directly and auto-fill
-                setFormData(prev => ({ ...prev, otp }));
-                setSuccess(`Your verification code is: ${otp}`);
-            } else {
-                setSuccess(`OTP sent to ${formData.email}`);
-            }
+            setSuccess(`OTP sent to ${formData.email}. Check your inbox & spam folder.`);
             setStep(2);
         } catch (err) {
             console.error('OTP Request Failed:', err);
-            if (err.response) {
-                console.log('Error Response Data:', err.response.data);
-                console.log('Error Status:', err.response.status);
-            }
             const msg = err.response?.data?.message || 'Failed to send OTP. Please try again.';
             setError(msg);
         } finally {

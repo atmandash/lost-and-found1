@@ -147,19 +147,14 @@ exports.requestOTP = async (req, res) => {
             console.log(`✅ OTP email sent to ${email} via ${emailResult.strategy}`);
             return res.json({
                 message: 'Verification code sent to your email. Check your inbox (and spam folder).',
-                email,
-                emailSent: true
+                email
             });
         }
 
-        // Email failed — return OTP directly so user can still register
+        // Email failed
         console.error(`⚠️ All email strategies failed for ${email}: ${emailResult.error}`);
-        console.log(`🔑 Returning OTP directly for ${email}: ${otp}`);
-        return res.json({
-            message: 'Could not send email. Use the code shown below to verify.',
-            email,
-            emailSent: false,
-            otp: otp // Return OTP directly when email fails
+        return res.status(500).json({
+            message: 'Failed to send verification email. Please try again in a moment.'
         });
 
     } catch (err) {
