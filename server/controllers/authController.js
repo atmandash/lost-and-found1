@@ -92,18 +92,60 @@ const sendEmail = async (to, subject, htmlContent) => {
     return { success: false, error: 'All email strategies failed' };
 };
 
-// OTP email template HTML
-const otpEmailHtml = (otp) => `
-  <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-    <h2 style="color: #4F46E5;">Your OTP Code</h2>
-    <p>Your verification code is:</p>
-    <div style="background: #F3F4F6; padding: 20px; text-align: center; font-size: 32px; font-weight: bold; letter-spacing: 8px; color: #4F46E5;">
-      ${otp}
+// OTP email template HTML — premium design
+const otpEmailHtml = (otp) => {
+    const digits = otp.toString().split('');
+    const digitBoxes = digits.map(d =>
+        `<td style="width: 48px; height: 56px; background: #ffffff; border: 2px solid #e0e7ff; border-radius: 12px; text-align: center; font-size: 28px; font-weight: 700; color: #4338ca; font-family: 'Segoe UI', Arial, sans-serif;">${d}</td>`
+    ).join('<td style="width: 8px;"></td>');
+
+    return `
+    <div style="background: #f0f0f5; padding: 40px 20px; font-family: 'Segoe UI', Arial, sans-serif;">
+      <div style="max-width: 480px; margin: 0 auto; background: #ffffff; border-radius: 20px; overflow: hidden; box-shadow: 0 4px 24px rgba(0,0,0,0.08);">
+
+        <!-- Header -->
+        <div style="background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #6366f1 100%); padding: 40px 30px; text-align: center;">
+          <div style="font-size: 40px; margin-bottom: 8px;">🔍</div>
+          <h1 style="color: #ffffff; margin: 0; font-size: 22px; font-weight: 700; letter-spacing: 0.5px;">Lost & Found</h1>
+          <p style="color: rgba(255,255,255,0.8); margin: 6px 0 0; font-size: 13px; font-weight: 400;">VIT Chennai Campus</p>
+        </div>
+
+        <!-- Body -->
+        <div style="padding: 36px 30px 20px;">
+          <h2 style="color: #1e1b4b; margin: 0 0 8px; font-size: 20px; font-weight: 700;">Verify your email</h2>
+          <p style="color: #6b7280; font-size: 14px; line-height: 1.6; margin: 0 0 28px;">
+            Enter the code below to complete your registration. This code is valid for <strong style="color: #4338ca;">5 minutes</strong>.
+          </p>
+
+          <!-- OTP Code -->
+          <div style="text-align: center; margin: 0 0 28px;">
+            <table cellpadding="0" cellspacing="0" style="margin: 0 auto;">
+              <tr>${digitBoxes}</tr>
+            </table>
+          </div>
+
+          <!-- Warning -->
+          <div style="background: #fef3c7; border-left: 4px solid #f59e0b; border-radius: 0 8px 8px 0; padding: 12px 16px; margin: 0 0 24px;">
+            <p style="margin: 0; color: #92400e; font-size: 13px; line-height: 1.5;">
+              🔒 Never share this code. Our team will never ask you for it.
+            </p>
+          </div>
+
+          <p style="color: #9ca3af; font-size: 12px; line-height: 1.5; margin: 0;">
+            If you didn't request this code, you can safely ignore this email.
+          </p>
+        </div>
+
+        <!-- Footer -->
+        <div style="border-top: 1px solid #f3f4f6; padding: 20px 30px; text-align: center;">
+          <p style="margin: 0; color: #c4b5fd; font-size: 11px;">
+            © ${new Date().getFullYear()} Lost & Found — VIT Chennai
+          </p>
+        </div>
+      </div>
     </div>
-    <p style="color: #6B7280; font-size: 14px; margin-top: 20px;">This code expires in 5 minutes.</p>
-    <p style="color: #6B7280; font-size: 12px; margin-top: 30px;">If you didn't request this code, please ignore this email.</p>
-  </div>
-`;
+  `;
+};
 
 // Helper: Send OTP
 const sendOTP = async (email, otp) => {
