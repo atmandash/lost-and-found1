@@ -114,7 +114,7 @@ const sendOTP = async (email, otp) => {
 exports.requestOTP = async (req, res) => {
     try {
         const { email, phone } = req.body;
-        console.log(`Attempting to send OTP to ${email}. Has Password: ${!!process.env.EMAIL_APP_PASSWORD}`);
+        console.log(`Attempting to send OTP to ${email}. Has Password: ${!!process.env.EMAIL_APP_PASSWORD}. Has Brevo: ${!!process.env.BREVO_API_KEY}`);
 
         let user = await User.findOne({ email });
         if (user) return res.status(400).json({ message: 'Email already registered. Please login instead.' });
@@ -131,21 +131,35 @@ exports.requestOTP = async (req, res) => {
         await OTP.findOneAndDelete({ email }); // Clear old OTPs
         await new OTP({ email, otp }).save();
 
-        // Respond immediately, send email in background so the UI never hangs
-        res.json({
-            message: 'Verification code sent to your email',
-            email
-        });
+        // Try sending email (with timeout so it doesn't hang forever)
+        const emailTimeout = new Promise((_, reject) =>
+            setTimeout(() => reject(new Error('Email send timed out after 15s')), 15000)
+        );
 
-        // Fire-and-forget email dispatch
-        sendOTP(email, otp).then(result => {
-            if (!result.success) {
-                console.error(`⚠️ Failed to send OTP to ${email}: ${result.error}`);
-                console.log(`🔑 FALLBACK OTP FOR ${email}: ${otp}`);
-            }
-        }).catch(err => {
-            console.error(`⚠️ OTP email error for ${email}:`, err.message);
-            console.log(`🔑 FALLBACK OTP FOR ${email}: ${otp}`);
+        let emailResult;
+        try {
+            emailResult = await Promise.race([sendOTP(email, otp), emailTimeout]);
+        } catch (err) {
+            emailResult = { success: false, error: err.message };
+        }
+
+        if (emailResult.success) {
+            console.log(`✅ OTP email sent to ${email} via ${emailResult.strategy}`);
+            return res.json({
+                message: 'Verification code sent to your email. Check your inbox (and spam folder).',
+                email,
+                emailSent: true
+            });
+        }
+
+        // Email failed — return OTP directly so user can still register
+        console.error(`⚠️ All email strategies failed for ${email}: ${emailResult.error}`);
+        console.log(`🔑 Returning OTP directly for ${email}: ${otp}`);
+        return res.json({
+            message: 'Could not send email. Use the code shown below to verify.',
+            email,
+            emailSent: false,
+            otp: otp // Return OTP directly when email fails
         });
 
     } catch (err) {
