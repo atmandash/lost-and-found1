@@ -14,7 +14,7 @@ const Footer = () => {
                     {/* Credits */}
                     <div className="flex flex-col gap-2 items-center md:items-start">
                         <div className="flex items-center justify-center md:justify-start gap-2 text-sm font-medium">
-                            <span>Made by Atman Dash, Alok Singh & Shreyansh Jha</span>
+                            <span>Made by Atman Dash & Shreyansh Jha</span>
                         </div>
                         <p className="text-xs opacity-70">
                             &copy; {currentYear} Lost & Found. All rights reserved.
