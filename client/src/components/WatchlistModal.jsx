@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import ReactDOM from 'react-dom';
 import { X, Bell, Loader, ChevronDown } from 'lucide-react';
 import axios from 'axios';
 import { useTheme } from '../context/ThemeContext';
@@ -73,7 +74,7 @@ const WatchlistModal = ({ isOpen, onClose, type, prefillItem }) => {
 
     const categories = ['Electronics', 'Wallet', 'Phone', 'Keys', 'Clothing', 'ID Card', 'Notebook', 'Other'];
 
-    return (
+    return ReactDOM.createPortal(
         <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/50" style={{ backdropFilter: 'none', WebkitBackdropFilter: 'none' }}>
             {console.log('Rendering WatchlistModal', { isOpen, isDarkMode })}
             <div
@@ -155,7 +156,8 @@ const WatchlistModal = ({ isOpen, onClose, type, prefillItem }) => {
                     </div>
                 </form>
             </div>
-        </div>
+        </div>,
+        document.body
     );
 };
 
