@@ -176,8 +176,7 @@ const ItemsPage = ({ type }) => {
                 </div>
 
                 <div className="flex items-center gap-3">
-                    {/* Create Alert Button - Only for Lost Items & Users with Active Reports */}
-                    {type === 'lost' && isAuthenticated && activeReportItem && (
+                    {/* Create Alert Button - Visible if user has active lost report */}{isAuthenticated && activeReportItem && (
                         <button
                             onClick={() => setIsWatchlistOpen(true)}
                             className={`flex items-center gap-2 px-4 py-2 rounded-xl font-medium border transition-colors ${isDarkMode ? 'bg-gray-800 border-gray-600 text-gray-300 hover:bg-gray-700' : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'}`}

@@ -18,15 +18,7 @@ exports.createAlert = async (req, res) => {
 
         // REQUIREMENT: Must have a lost item reported
         const Item = require('../models/Item');
-        const hasLostItem = await Item.findOne({
-            user: req.user.id,
-            type: 'lost',
-            status: { $in: ['active', 'resolved', 'open'] } // Check if they EVER raised one? Or strictly active?
-        });
-        // User said "users who raise a lost report" (active or historical?)
-        // Usually you alert for something active. But let's verify if they have ANY lost record.
-        // Actually, if they resolved it, they don't need an alert anymore.
-        // So I will check for 'active' status.
+        // Check for 'active' status lost item
         const activeLostItem = await Item.findOne({
             user: req.user.id,
             type: 'lost',
@@ -36,6 +28,7 @@ exports.createAlert = async (req, res) => {
         if (!activeLostItem) {
             return res.status(403).json({ message: 'You must report a Lost Item first before creating an alert.' });
         }
+
 
         const alert = new Watchlist({
             user: req.user.id,
