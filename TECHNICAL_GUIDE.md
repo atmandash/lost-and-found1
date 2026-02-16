@@ -1,125 +1,134 @@
-# 📘 Lost & Found: Technical Guide & Development Log
+# 📘 Lost & Found: The Ultimate Technical Guide
 
-This document is a detailed explanation of the codebase, designed to help you understand exactly how the project works, why specific decisions were made, and how we solved the major challenges encountered during development.
+**Access**: Personal Document for [User Name]
+**Status**: Confidential / Do Not Push
 
----
-
-## 🏗️ 1. Project Architecture
-
-The project is a **MERN Stack** application (MongoDB, Express, React, Node.js) split into two distinct parts:
-
-### **Client (`/client`)**
-- **Framework**: React (using Vite for fast builds)
-- **Styling**: Tailwind CSS (utility-first styling for rapid UI development)
-- **Maps**: Leaflet & React-Leaflet (OpenStreetMap integration)
-- **State Management**: React Context API (`AuthContext`, `ThemeContext`)
-
-### **Server (`/server`)**
-- **Runtime**: Node.js & Express.js
-- **Database**: MongoDB (managed via Mongoose)
-- **Real-time**: Socket.io (for chat functionality)
-- **Email**: Nodemailer + Brevo API (critical for OTPs)
-- **File Uploads**: Multer + Cloudinary (for storing item images)
+This guide is your personal "brain dump" of the entire project. It explains every major component, why we built it that way, and how we solved the trickiest bugs. Use this to master the codebase or explain it to anyone who asks.
 
 ---
 
-## 🔑 2. Authentication & OTP System (The Biggest Challenge)
+## 🏗️ 1. The High-Level Architecture
 
-Authentication is the most complex part of this application because we need to verify that users are actual VIT students.
+We built a **MERN Stack** application. Here's why and how the parts connect:
 
-### **The Flow:**
-1.  **Registration**: User enters details + `@vitstudent.ac.in` email.
-2.  **Validation**: We check password strength (8+ chars, uppercase, lowercase, number) *before* sending OTP to save resources.
-3.  **OTP Generation**: A 6-digit code is generated and stored in MongoDB (expires in 5 mins).
-4.  **Email Delivery**: The system sends the code to the user's email.
-5.  **Verification**: User enters code -> Server verifies -> Account created.
+### **The Backend (`/server`)**
+*   **Node.js & Express**: The brain of the operation. It handles API requests, talks to the database, and manages real-time chats.
+*   **MongoDB (Atlas)**: Our cloud database. We chose NoSQL because data like "Lost Items" can have flexible fields (sometimes images, sometimes not).
+*   **Socket.io**: The magic behind the real-time chat. It keeps a persistent connection open so messages fly instantly without refreshing the page.
 
-### **🔥 The Email Delivery Saga (Problem Solving Log)**
-
-We faced a significant issue with sending emails on the **Render** deployment. Here's exactly what happened and how we fixed it:
-
-*   **The Problem**: Code worked perfectly on `localhost`, but failed silently on Render.
-*   **The Diagnosis**:
-    *   We were initially using standard **Gmail SMTP** (port 465/587).
-    *   **Cloud platforms (like Render, AWS, DigitalOcean) are blocked by Google** from using SMTP to prevent spam.
-    *   This is why it worked on your local machine (home IP) but failed on the server.
-*   **The Fix**:
-    1.  We switched to **Brevo (formerly Sendinblue)**, which provides an **HTTP API**.
-    2.  Unlike SMTP, HTTP requests look like normal web traffic and are **never blocked** by cloud providers.
-    3.  We implemented a **Failover Strategy** in `authController.js`:
-        *   **Primary**: Try sending via Brevo API (Reliable on Cloud).
-        *   **Fallback**: If that fails (or no API key), try Gmail SMTP (Reliable on Localhost).
-*   **Outcome**: Emails now work reliable on both your laptop and the deployed site.
+### **The Frontend (`/client`)**
+*   **React (Vite)**: We used Vite instead of Create-React-App because it's 10x faster.
+*   **Tailwind CSS**: For styling. It allowed us to build the "Glassmorphism" UI and responsive layouts without writing thousands of lines of custom CSS files.
+*   **Leaflet Maps**: Google Maps API costs money ($200/month credit runs out fast). Leaflet is free, open-source, and works perfectly for campus maps.
 
 ---
 
-## 🗺️ 3. Map Implementation
+## 🔥 2. The Great Email Delivery Saga (And How We Fixed It)
 
-We used **Leaflet** (free, open-source) instead of Google Maps API (expensive).
+**The Problem**:
+You successfully tested the email OTPs on `localhost`. Then you deployed to Render, and suddenly—silence. No emails. No errors. Just spinning loaders.
 
-*   **`MapView.jsx`**: Renders the map using `react-leaflet`.
-*   **Custom Markers**: We use custom icons to differentiate "Lost" (Red) vs "Found" (Green) items.
-*   **Location Picking**: When reporting an item, users can drag a marker to pinpoint exact locations. The coordinates (`lat`, `lng`) are then saved to MongoDB.
+**The Diagnosis**:
+*   We were using **Nodemailer with Gmail SMTP** (port 465/587).
+*   **Crucial Learning**: Cloud hosting providers (Render, AWS, DigitalOcean) **BLOCK** standard SMTP ports to prevent hackers from using their servers to send spam.
+*   So, your requests were hitting a firewall and timing out.
 
----
+**The Solution: Switching protocols**
+We moved from **SMTP** (Email Protocol) to **HTTP** (Web Protocol).
+1.  **Brevo (ex-Sendinblue)**: They offer an API that sends emails via a minimal HTTP Request.
+2.  **Why it works**: To Render, sending an email via Brevo looks just like loading a webpage. It’s never blocked.
 
-## 💬 4. Real-time Chat
+**The Code (`authController.js`)**:
+We built a robust "Failover System" to handle this:
+```javascript
+// 1. Try Brevo HTTP API (Best for Render/Cloud)
+let result = await sendViaBrevo(to, subject, htmlContent);
+if (result.success) return result;
 
-We implemented a chat system so students can coordinate returning items without sharing phone numbers (privacy).
-
-*   **Socket.io**: Enables real-time, bi-directional communication.
-*   **Flow**:
-    1.  User A finds User B's item.
-    2.  User A clicks "Chat" on the item page.
-    3.  A socket room is created (`roomId = item_id + user_ids`).
-    4.  Messages are saved to MongoDB (`Chat` model) for history.
-    5.  When a message is sent, it's pushed instantly to the other user via Socket.io.
-
----
-
-## 🏆 5. Gamification System
-
-To encourage people to report found items, we added a points system:
-*   **Reporting an Item**: +10 points
-*   **Returning an Item**: +50 points (verified by the owner)
-*   **Badges**: Users earn titles like "Scout", "Detective", and "Sherlock" based on points.
-
-**Code Location**: `gamificationController.js` handles point calculation and badge assignment.
+// 2. Fallback to Gmail SMTP (Best for Localhost)
+// Only runs if Brevo fails or API key is missing
+result = await sendViaGmail(to, subject, htmlContent);
+```
+*Result*: Reliable emails everywhere. Localhost uses SMTP, Render uses Brevo.
 
 ---
 
-## 🚀 6. Deployment Strategy
+## � 3. Authentication & Security
 
-We split the deployment to optimize performance and costs:
+We didn't just use "admin/admin". We built a secure, verify-first system.
 
-*   **Backend (Render)**:
-    *   Hosted as a Web Service.
-    *   Running `node index.js`.
-    *   Environment variables (`MONGO_URI`, `BREVO_API_KEY`) secure sensitive keys.
-*   **Frontend (Vercel)**:
-    *   Hosted as a Static Site.
-    *   Connects to the backend via `VITE_API_URL`.
+### **Password Validation (Pre-OTP)**
+*   **Issue**: Users were requesting OTPs, *then* finding out their password was too weak. Wasted OTPs.
+*   **Fix**: We added Regex validation in `Register.jsx` *before* the API call:
+    ```javascript
+    if (!/[A-Z]/.test(password)) setError("Need uppercase letter");
+    if (!/[0-9]/.test(password)) setError("Need a number");
+    ```
 
----
-
-## 🛠️ Key Files to Know
-
-*   **`server/controllers/authController.js`**:
-    *   Contains the `requestOTP`, `register`, `login`, and email sending logic.
-    *   Look here if you need to change OTP expiry or email templates.
-*   **`client/src/pages/Auth/Register.jsx`**:
-    *   Frontend registration form.
-    *   Contains the password validation logic we added (`/[A-Z]/`, `/[0-9]/`, etc.).
-*   **`server/models/Item.js`**:
-    *   Database schema for lost/found items.
-    *   Defines fields like `title`, `description`, `location`, `images`.
+### **OTP Security**
+*   **Hashed Passwords**: We use `bcrypt` to hash passwords. Even if the DB is hacked, they only see gibberish (`$2b$10$Xy...`), not real passwords.
+*   **VIT Email Only**: The regex `/@vitstudent\.ac\.in$/` ensures only campus students can sign up.
 
 ---
 
-## 🔮 Future Improvements (If you continue working)
+## 📡 4. Keeping the Server Alive (The "Sleep" Fix)
 
-1.  **Push Notifications**: Using standard Web Push API for browser notifications.
-2.  **AI Image Recognition**: Auto-tagging uploaded images (e.g., "black wallet").
-3.  **PWA Support**: Making the site installable as a mobile app.
+**The Problem**:
+Free tier on Render "sleeps" after 15 minutes of inactivity. The first person to visit the site would have to wait 50+ seconds for it to wake up.
 
-This project is built on solid foundations. Keep this guide handy when explaining the project to evaluators or future teammates! 🚀
+**The Solution (`server/cron/keepAlive.js`)**:
+We wrote a script that "pokes" the server every 14 minutes.
+```javascript
+cron.schedule('*/14 * * * *', () => {
+    https.get('https://lostandfound-2wn8.onrender.com'); // Self-ping
+});
+```
+*Result*: The server stays awake 24/7, even on the free tier.
+
+---
+
+## 🗺️ 5. The Map Feature (`MapView.jsx`)
+
+We needed a way to show *where* items were lost.
+*   **Library**: `react-leaflet`
+*   **Custom Icons**: We replaced the default blue pin with custom colored markers:
+    *   🔴 Red = Lost Item
+    *   🟢 Green = Found Item
+*   **Coordinate system**: Defaults to VIT Chennai (`[12.84..., 80.15...]`) if no location is provided.
+
+---
+
+## �️ 6. Deployment Setup (Secrets)
+
+### **Backend (Render)**
+*   **Build Command**: `npm install`
+*   **Start Command**: `node index.js`
+*   **Environment vars**:
+    *   `BREVO_API_KEY`: The secret key for emails.
+    *   `MONGO_URI`: The connection string to Atlas.
+
+### **Frontend (Vercel)**
+*   **Build Command**: `vite build`
+*   **Output Directory**: `dist`
+*   **Environment vars**:
+    *   `VITE_API_URL`: Points to your Render backend (`https://lostandfound-2wn8.onrender.com`).
+
+---
+
+## � 7. Code Walkthrough: Key Files
+
+| File | What it does |
+| :--- | :--- |
+| **`server/index.js`** | The entry point. Connects DB, starts Socket.io, and runs the Keep-Alive cron. |
+| **`authController.js`** | The "Security Guard". Handles Login, Register, OTP sending, and password resets. |
+| **`items.js`** (Routes) | The "Trafficker". directing requests like `GET /items` or `POST /items` to the right controller. |
+| **`itemController.js`**| The "Manager". Handles logic for creating items, image uploads (Cloudinary), and claiming items. |
+| **`Footer.jsx`** | Updated to credit "Atman Dash & Shreyansh Jha". |
+
+---
+
+## � Pro Tips for You
+*   **Resetting Data**: There's a script `scripts/reset_stats.js`. Run `node scripts/reset_stats.js` if you ever want to clear the "Total Items" count for a demo.
+*   **Logs**: Use `pm2 logs` on the server to see real-time errors if something breaks.
+
+This codebase is your portfolio piece. It handles real-world problems (email delivery, deployment sleep, map integration) that most student projects skip. Be proud of it! 🚀

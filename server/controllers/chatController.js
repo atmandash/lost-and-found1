@@ -134,7 +134,9 @@ exports.sendMessage = async (req, res) => {
     try {
         const { content } = req.body;
         const userId = req.user.id.toString();
-        const chat = await Chat.findById(req.params.id);
+        const chat = await Chat.findById(req.params.id)
+            .populate('participants', 'name email')
+            .populate('itemId', 'title');
 
         if (!chat) return res.status(404).json({ message: 'Chat not found' });
 
@@ -168,21 +170,42 @@ exports.sendMessage = async (req, res) => {
 
         // Create notification for the other participant
         try {
-            const otherParticipant = chat.participants.find(p => p.toString() !== userId);
+            const otherParticipant = chat.participants.find(p => p._id.toString() !== userId);
+
             if (otherParticipant) {
+                // 1. Create In-App Notification
                 const Notification = require('../models/Notification');
-                const item = await Item.findById(chat.itemId);
+                // chat.itemId is now a populated object, so we access ._id for the notification link
+                // checking if populated, if not fall back to direct access (though we populate it above)
+                const itemTitle = chat.itemId?.title || 'your item';
+                const itemId = chat.itemId?._id || chat.itemId;
 
                 await Notification.create({
-                    user: otherParticipant,
+                    user: otherParticipant._id,
                     type: 'message',
-                    message: `New message about "${item?.title || 'your item'}"`,
+                    message: `New message about "${itemTitle}"`,
                     link: `/chats/${chat._id}`,
-                    relatedItem: chat.itemId
+                    relatedItem: itemId
                 });
+
+                // 2. Send Email Notification
+                // Only send if we have the email (which we should from populate)
+                if (otherParticipant.email) {
+                    const emailService = require('../utils/emailService');
+                    const senderName = req.user.name || 'A user'; // req.user is set in auth middleware
+
+                    // We don't await this to keep the response fast, or we catch errors so it doesn't fail the request
+                    emailService.sendNewMessageEmail(
+                        otherParticipant.email,
+                        otherParticipant.name,
+                        senderName,
+                        itemTitle,
+                        content.substring(0, 50) + (content.length > 50 ? '...' : '') // Preview
+                    ).catch(err => console.error('Failed to send chat email:', err.message));
+                }
             }
         } catch (notifErr) {
-            console.error('Error creating notification:', notifErr);
+            console.error('Error creating notification/email:', notifErr);
             // Don't fail the message send if notification fails
         }
 
