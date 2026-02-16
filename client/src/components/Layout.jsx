@@ -30,7 +30,7 @@ const Navbar = () => {
 
     return (
         <nav className={`fixed bottom-0 w-full md:relative z-50 bg-gray-900/90 backdrop-blur-md border-t border-white/5 ${!isAuthenticated ? 'hidden md:block' : ''}`}>
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="w-full px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between md:justify-start h-14 items-center">
                     {/* Logo */}
                     <Link to="/" className="hidden md:flex items-center text-2xl font-extrabold mr-10 tracking-tight">
