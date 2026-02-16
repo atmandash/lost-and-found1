@@ -74,8 +74,16 @@ const WatchlistModal = ({ isOpen, onClose, type, prefillItem }) => {
     const categories = ['Electronics', 'Wallet', 'Phone', 'Keys', 'Clothing', 'ID Card', 'Notebook', 'Other'];
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-            <div className={`w-full max-w-md p-6 rounded-2xl shadow-2xl opaque-card ${isDarkMode ? 'bg-gray-800 border border-gray-700' : 'bg-white'}`}>
+        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/70 backdrop-blur-md">
+            <div
+                className="w-full max-w-md p-6 rounded-2xl shadow-2xl relative"
+                style={{
+                    backgroundColor: isDarkMode ? '#1e293b' : '#ffffff',
+                    border: isDarkMode ? '1px solid #374151' : 'none',
+                    opacity: 1,
+                    transform: 'none'
+                }}
+            >
 
                 {/* Header */}
                 <div className="flex justify-between items-center mb-6">
